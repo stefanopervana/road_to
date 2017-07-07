@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Lifting State</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-lifting-state">Lifting State</h3>
+
+<p className="it">Sólo el componente de aplicación es un componente ES6 con estado de tu aplicación. Se maneja una gran cantidad de estado de la aplicación y la lógica (métodos). Tal vez usted ha notado que se pasa una gran cantidad de propiedades a su componente Tabla. La mayor parte de los apoyos se utilizan sólo en el componente. No tiene sentido que el componente de aplicación sabe acerca de ellos.</p>
+
+
+<p>Only the App component is a stateful ES6 component in your application. It handles a lot of application state and logic (methods). Maybe you have noticed that you pass a lot of properties to your Table component. Most of the props are only used in the component. It makes no sense that the App component knows about them.</p>
+
+<p className="it">La funcionalidad de ordenación es tratado sólo en el componente Tabla. Se podía moverlo más cerca de la componente Tabla. El componente de aplicación no necesita saber acerca de ella en absoluto. El proceso de subestado refactorización de un componente a otro se conoce como <em>elevación estado</em>. En su caso desea mover estado que no se utiliza en el componente de aplicación más cerca de la componente Tabla. El estado se mueve hacia abajo de padre al componente secundario.</p>
+
+
+<p>The sort functionality is only handled in the Table component. You could move it closer to the Table component. The App component doesn’t need to know about it at all. The process of refactoring substate from one component to another is known as <em>lifting state</em>. In your case you want to move state that isn’t used in the App component closer to the Table component. The state moves down from parent to child component.</p>
+
+<p className="it">Con el fin de hacer frente a los métodos del estado y en el componente de la tabla, tiene que convertirse en un componente de clase ES6. La refactorización del componente sin estado funcional al componente de clase ES6 es sencillo.</p>
+
+
+<p>In order to deal with state and methods in the Table component, it has to become an ES6 class component. The refactoring from functional stateless component to ES6 class component is straight forward.</p>
+
+<p className="it">Su componente Tabla como un componente sin estado funcional:</p>
+
+
+<p>Your Table component as a functional stateless component:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">Table</code> <code class="o">=</code> <code class="p">(&#123;</code>
+  <code class="nx">list</code><code class="p">,</code>
+  <code class="nx">sortKey</code><code class="p">,</code>
+  <code class="nx">isSortReverse</code><code class="p">,</code>
+  <code class="nx">onSort</code><code class="p">,</code>
+  <code class="nx">onDismiss</code>
+<code class="p">&#125;)</code> <code class="o">=&gt;</code> <code class="p">&#123;</code>
+  <code class="kr">const</code> <code class="nx">sortedList</code> <code class="o">=</code> <code class="nx">SORTS</code><code class="p">[</code><code class="nx">sortKey</code><code class="p">](</code><code class="nx">list</code><code class="p">);</code>
+  <code class="kr">const</code> <code class="nx">reverseSortedList</code> <code class="o">=</code> <code class="nx">isSortReverse</code>
+    <code class="o">?</code> <code class="nx">sortedList</code><code class="p">.</code><code class="nx">reverse</code><code class="p">()</code>
+    <code class="o">:</code> <code class="nx">sortedList</code><code class="p">;</code>
+
+  <code class="k">return</code><code class="p">(</code>
+    <code class="p">...</code>
+  <code class="p">);</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">podes llegar a estar refactorizado a un componente de clase ES6:</p>
+
+
+<p>Can get refactored to an ES6 class component:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">class Table extends Component &#123;
+</code><code class="uil">
+</code><code class="uil">  render() &#123;
+</code><code class="uil">    const &#123;
+</code><code class="uil">      list,
+</code><code class="uil">      sortKey,
+</code><code class="uil">      isSortReverse,
+</code><code class="uil">      onSort,
+</code><code class="uil">      onDismiss
+</code><code class="uil">    &#125; = this.props;
+</code><code class="uil">
+</code><code class="uil">    const sortedList = SORTS[sortKey](list);
+</code><code class="uil">    const reverseSortedList = isSortReverse
+</code><code class="uil">      ? sortedList.reverse()
+</code><code class="uil">      : sortedList;
+</code><code class="uil">
+</code><code class="uil">    return(
+</code><code class="uil">      ...
+</code><code class="uil">    );
+</code><code class="uil">  &#125;
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Puesto que usted queres tratar con el estado y los métodos de su componente, hay que añadir un constructor y el estado inicial.</p>
+
+
+<p>Since you want to deal with state and methods in your component, you have to add a constructor and initial state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Table extends Component &#123;
+
+<code class="uil">  constructor(props) &#123;
+</code><code class="uil">    super(props);
+</code><code class="uil">
+</code><code class="uil">    this.state = &#123;&#125;;
+</code><code class="uil">  &#125;
+</code>
+  render() &#123;
+    ...
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora podes mover el estado y los métodos de su componente de aplicación reduce a su componente Tabla.</p>
+
+
+<p>Now you can move state and methods from your App component down to your Table component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Table extends Component &#123;
+
+  constructor(props) &#123;
+    super(props);
+
+<code class="uil">    this.state = &#123;
+</code><code class="uil">      sortKey: 'NONE',
+</code><code class="uil">      isSortReverse: false,
+</code><code class="uil">    &#125;;
+</code><code class="uil">
+</code><code class="uil">    this.onSort = this.onSort.bind(this);
+</code>  &#125;
+
+<code class="uil">  onSort(sortKey) &#123;
+</code><code class="uil">    const isSortReverse = this.state.sortKey === sortKey &amp;&amp; !this.state.isSortRe\
+</code><code class="uil">verse;
+</code><code class="uil">    this.setState(&#123; sortKey, isSortReverse &#125;);
+</code><code class="uil">  &#125;
+</code>
+  render() &#123;
+    ...
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">No se olvide de quitar el estado movido y <code>onSort()</code> método de su componente de aplicación.</p>
+
+
+<p>Don’t forget to remove the moved state and <code>onSort()</code> method from your App component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">class</code> <code class="nx">App</code> <code class="kr">extends</code> <code class="nx">Component</code> <code class="p">&#123;</code>
+
+  <code class="nx">constructor</code><code class="p">(</code><code class="nx">props</code><code class="p">)</code> <code class="p">&#123;</code>
+    <code class="kr">super</code><code class="p">(</code><code class="nx">props</code><code class="p">);</code>
+
+    <code class="k">this</code><code class="p">.</code><code class="nx">state</code> <code class="o">=</code> <code class="p">&#123;</code>
+      <code class="nx">results</code><code class="o">:</code> <code class="kc">null</code><code class="p">,</code>
+      <code class="nx">searchKey</code><code class="o">:</code> <code class="s1">''</code><code class="p">,</code>
+      <code class="nx">searchTerm</code><code class="o">:</code> <code class="nx">DEFAULT_QUERY</code><code class="p">,</code>
+      <code class="nx">isLoading</code><code class="o">:</code> <code class="kc">false</code><code class="p">,</code>
+    <code class="p">&#125;;</code>
+
+    <code class="k">this</code><code class="p">.</code><code class="nx">setSearchTopstories</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">setSearchTopstories</code><code class="p">.</code><code class="nx">bind</code><code class="p">(</code><code class="k">this</code><code class="p">);</code>
+    <code class="k">this</code><code class="p">.</code><code class="nx">fetchSearchTopstories</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">fetchSearchTopstories</code><code class="p">.</code><code class="nx">bind</code><code class="p">(</code><code class="k">this</code><code class="p">);</code>
+    <code class="k">this</code><code class="p">.</code><code class="nx">onDismiss</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">onDismiss</code><code class="p">.</code><code class="nx">bind</code><code class="p">(</code><code class="k">this</code><code class="p">);</code>
+    <code class="k">this</code><code class="p">.</code><code class="nx">onSearchSubmit</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">onSearchSubmit</code><code class="p">.</code><code class="nx">bind</code><code class="p">(</code><code class="k">this</code><code class="p">);</code>
+    <code class="k">this</code><code class="p">.</code><code class="nx">onSearchChange</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">onSearchChange</code><code class="p">.</code><code class="nx">bind</code><code class="p">(</code><code class="k">this</code><code class="p">);</code>
+    <code class="k">this</code><code class="p">.</code><code class="nx">needsToSearchTopstories</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">needsToSearchTopstories</code><code class="p">.</code><code class="nx">bind</code><code class="p">(</code><code class="k">this</code><code class="p">);</code>
+  <code class="p">&#125;</code>
+
+  <code class="p">...</code>
+
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Además, podes renderizar  el API de componente Tabla más ligero. Quitar los apoyos que se manejan internamente en el componente Tabla.</p>
+
+
+<p>Additionally you can make the Table component API more lightweight. Remove the props which are handled internally in the Table component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+<code class="uil">    const &#123;
+</code><code class="uil">      searchTerm,
+</code><code class="uil">      results,
+</code><code class="uil">      searchKey,
+</code><code class="uil">      isLoading
+</code><code class="uil">    &#125; = this.state;
+</code>
+    const page = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].page
+    ) || 0;
+
+    const list = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].hits
+    ) || [];
+
+    return (
+      &lt;div className="page"&gt;
+        ...
+<code class="uil">        &lt;Table
+</code><code class="uil">          list=&#123;list&#125;
+</code><code class="uil">          onDismiss=&#123;this.onDismiss&#125;
+</code><code class="uil">        /&gt;
+</code>        ...
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En su componente Tabla se podes utilizar la interna <code>onSort()</code> método y el estado de la tabla interna.</p>
+
+
+<p>Now in your Table component you can use the internal <code>onSort()</code> method and the internal Table state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Table extends Component &#123;
+
+  ...
+
+  render() &#123;
+<code class="uil">    const &#123;
+</code><code class="uil">      list,
+</code><code class="uil">      onDismiss
+</code><code class="uil">    &#125; = this.props;
+</code><code class="uil">
+</code><code class="uil">    const &#123;
+</code><code class="uil">      sortKey,
+</code><code class="uil">      isSortReverse,
+</code><code class="uil">    &#125; = this.state;
+</code>
+    const sortedList = SORTS[sortKey](list);
+    const reverseSortedList = isSortReverse
+      ? sortedList.reverse()
+      : sortedList;
+
+    return(
+      &lt;div className="table"&gt;
+        &lt;div className="table-header"&gt;
+          &lt;span style=&#123;&#123; width: '40%' &#125;&#125;&gt;
+            &lt;Sort
+              sortKey=&#123;'TITLE'&#125;
+<code class="uil">              onSort=&#123;this.onSort&#125;
+</code>              activeSortKey=&#123;sortKey&#125;
+            &gt;
+              Title
+            &lt;/Sort&gt;
+          &lt;/span&gt;
+          &lt;span style=&#123;&#123; width: '30%' &#125;&#125;&gt;
+            &lt;Sort
+              sortKey=&#123;'AUTHOR'&#125;
+<code class="uil">              onSort=&#123;this.onSort&#125;
+</code>              activeSortKey=&#123;sortKey&#125;
+            &gt;
+              Author
+            &lt;/Sort&gt;
+          &lt;/span&gt;
+          &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+            &lt;Sort
+              sortKey=&#123;'COMMENTS'&#125;
+<code class="uil">              onSort=&#123;this.onSort&#125;
+</code>              activeSortKey=&#123;sortKey&#125;
+            &gt;
+              Comments
+            &lt;/Sort&gt;
+          &lt;/span&gt;
+          &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+            &lt;Sort
+              sortKey=&#123;'POINTS'&#125;
+<code class="uil">              onSort=&#123;this.onSort&#125;
+</code>              activeSortKey=&#123;sortKey&#125;
+            &gt;
+              Points
+            &lt;/Sort&gt;
+          &lt;/span&gt;
+          &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+            Archive
+          &lt;/span&gt;
+        &lt;/div&gt;
+        &#123; reverseSortedList.map((item) =&gt;
+          ...
+        )&#125;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Su aplicación deberías funcionar. Pero usted hizo una refactorización crucial. Ha movido la funcionalidad y el estado más cerca de un componente. Otros componentes se hicieron más ligeros de nuevo. Además, el API de los componentes de la mesa dieron más ligero, porque se trata internamente con la funcionalidad de ordenación.</p>
+
+
+<p>Your application should still work. But you made a crucial refactoring. You moved functionality and state closer to a component. Other components got more lightweight again. Additionally the component API of the Table got more lightweight because it deals internally with the sort functionality.</p>
+
+<p className="it">El proceso de levantamiento de estado podes ir a otro lado, así: de niño a componente padre - el levantamiento del estado Arriba. Imagine que se trataba de estado interno en un componente secundario. Ahora queres cumplir con un requisito para mostrar el estado en el que su componente principal también. Tendrías que levantar el estado de su componente principal. Pero va más allá. Imagine que desea mostrar el estado de un componente hermano de su componente secundario. Una vez más se tendría que levantar el estado hasta que su componente principal. El padre componente tiene que ver con el estado interno, pero expone a los dos componentes hijos.</p>
+
+
+<p>The process of lifting state can go the other way as well: from child to parent component - lifting state up. Imagine you were dealing with internal state in a child component. Now you want to fulfill a requirement to show the state in your parent component as well. You would have to lift up the state to your parent component. But it goes even further. Imagine you want to show the state in a sibling component of your child component. Again you would have to lift the state up to your parent component. The parent component deals with the internal state, but exposes it to both child components.</p>
+
+<h4 id="leanpub-auto-exercises-36">Exercises:</h4>
+
+<ul>
+<li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/lifting-state-up.html">el levantamiento del estado en React</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/lifting-state-up.html">lifting state in React</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

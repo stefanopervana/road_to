@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Lifecycle Methods</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-lifecycle-methods">Lifecycle Methods</h3>
+
+<p className="it">Se necesitarás el conocimiento sobre React métodos de ciclo de vida antes de poder empezar a obtener los datos. Estos métodos son un gancho en el ciclo de vida de un componente React. pueden  ser utilizados en los componentes de clase ES6, pero no en los componentes funcionales sin estado.</p>
+
+
+<p>You will need the knowledge about React lifecycle methods before you can start to fetch data. These methods are a hook into the lifecycle of React  component. They can be used in ES6 class components, but not in functional stateless components.</p>
+
+<p className="it">¿Recuerdas cuando un capítulo anterior que enseña acerca de JavaScript clases ES6 y la forma en que se utilizan en React? Aparte del <code>render()</code> método, he mencionado varios métodos que se pueden  sobrescribir en un componente React ES6 clase. Todos estos son los métodos de ciclo de vida. Vamos a bucear en ellos:</p>
+
+
+<p>Do you remember when a previous chapter taught you about JavaScript ES6 classes and how they are used in React? Apart from the <code>render()</code> method, I mentioned several methods that can be overwritten in React  ES6 class component. All of these are the lifecycle methods. Let’s dive into them:</p>
+
+<p className="it">Vos ya conoce dos métodos de ciclo de vida de un componente de clase ES6: <code>constructor()</code> y <code>render()</code>.</p>
+
+
+<p>You already know two lifecycle methods in a ES6 class component: <code>constructor()</code> and <code>render()</code>.</p>
+
+<p className="it">El constructor sólo se te llama cuando se crea una instancia del componente y se inserta en el DOM. El componente se crea una instancia. Ese proceso se llama montaje del componente.</p>
+
+
+<p>The constructor is only called when an instance of the component is created and inserted in the DOM. The component gets instantiated. That process is called mounting of the component.</p>
+
+<p className="it">El <code>render()</code> método se llama durante el proceso de montaje también, pero también cuando las actualizaciones de componentes. Cada vez que el estado o los puntales de un cambio de componentes, el <code>render()</code> método se llama.</p>
+
+
+<p>The <code>render()</code> method is called during the mount process too, but also when the component updates. Each time when the state or the props of a component change, the <code>render()</code> method is called.</p>
+
+<p className="it">Ahora usted sabe más sobre los dos métodos de ciclo de vida y cuando se les llama. Que ya las utilizan también. Pero hay más de ellos.</p>
+
+
+<p>Now you know more about the two lifecycle methods and when they are called. You already used them as well. But there are more of them.</p>
+
+<p className="it">El montaje de un componente tiene dos más métodos de ciclo de vida: <code>componentWillMount()</code> y <code>componentDidMount()</code>. El constructor se llama en primer lugar, <code>componentWillMount()</code> se llama antes de que el <code>render()</code> método y <code>componentDidMount()</code> se llama después de que el <code>render()</code> método.</p>
+
+
+<p>The mounting of a component has two more lifecycle methods: <code>componentWillMount()</code> and <code>componentDidMount()</code>. The constructor is called first, <code>componentWillMount()</code> gets called before the <code>render()</code> method and <code>componentDidMount()</code> is called after the <code>render()</code> method.</p>
+
+<p className="it">En general, el proceso de montaje tiene 4 métodos de ciclo de vida. Se invocan en el orden siguiente:</p>
+
+
+<p>Overall the mounting process has 4 lifecycle methods. They are invoked in the following order:</p>
+
+<ul>
+  <li>constructor()</li>
+  <li>componentWillMount()</li>
+  <li>render()</li>
+  <li>componentDidMount()</li>
+</ul>
+
+<p className="it">Pero, ¿qué acerca de la actualización del ciclo de vida de un componente que se produce cuando el estado o los puntales cambian? En general, cuenta con 5 métodos de ciclo de vida en el siguiente orden:</p>
+
+
+<p>But what about the update lifecycle of a component that happens when the state or the props change? Overall it has 5 lifecycle methods in the following order:</p>
+
+<ul>
+  <li>componentWillReceiveProps()</li>
+  <li>shouldComponentUpdate()</li>
+  <li>componentWillUpdate()</li>
+  <li>render()</li>
+  <li>componentDidUpdate()</li>
+</ul>
+
+<p className="it">Por último, pero no menos importante es el ciclo de vida de desmontaje. Tiene sólo un método de ciclo de vida: <code>componentWillUnmount()</code>.</p>
+
+
+<p>Last but not least there is the unmounting lifecycle. It has only one lifecycle method: <code>componentWillUnmount()</code>.</p>
+
+<p className="it">Después de todo, usted no necesita saber todos estos métodos de ciclo de vida desde el principio. podes ser intimidante sin embargo, no va a utilizar todos ellos - incluso en un maduro React aplicación. Sin embargo, es bueno saber que cada método de ciclo de vida se podes utilizar para los casos de uso específicos:</p>
+
+
+<p>After all, you don’t need to know all of these lifecycle methods from the beginning. It can be intimidating yet you will not use all of them - even in a mature React application. Still, it is good to know that each lifecycle method can be used for specific use cases:</p>
+
+<ul>
+  <li className="it"> <strong>constructor (apoyos)</strong> - Se llama cuando el componente se inicializa. Se podes establecer un estado de componente inicial y se unen métodos clase útil durante ese método ciclo de vida.</li>
+
+  <li>
+<strong>constructor(props)</strong> - It is called when the component gets initialized. You can set an initial component state and bind useful class methods during that lifecycle method.</li>
+  <li className="it"> <strong>componentWillMount ()</strong> - Se llama antes de que el <code>render()</code> método de ciclo de vida. Es por eso que se podría utilizar para establecer el estado del componente interno, porque no va a desencadenar una segunda versión del componente. Por lo general, se recomienda usar el <code>constructor()</code> de establecer el estado inicial.</li>
+
+  <li>
+<strong>componentWillMount()</strong> - It is called before the <code>render()</code> lifecycle method. That’s why it could be used to set internal component state, because it will not trigger a second rendering of the component. Generally it is recommend to use the <code>constructor()</code> to set the initial state.</li>
+  <li className="it"> <strong>render ()</strong> - El método de ciclo de vida es obligatoria y devuelve los elementos como una salida del componente. El método debes ser puro y por lo tanto no debes modificar el estado del componente. Se pone una entrada como accesorios y el estado y devuelve un elemento.</li>
+
+  <li>
+<strong>render()</strong> - The lifecycle method is mandatory and returns the elements as an output of the component. The method should be pure and therefore shouldn’t modify the component state. It gets an input as props and state and returns an element.</li>
+  <li className="it"> <strong>componentDidMount ()</strong> - Se llama sólo una vez cuando el componente montado. Ese es el momento perfecto para hacer una solicitud asincrónica para obtener los datos de un API. Los datos captados se almacenan en obtener el estado de los componentes internos para mostrarla en el <code>render()</code> método de ciclo de vida.</li>
+
+  <li>
+<strong>componentDidMount()</strong> - It is called only once when the component mounted. That’s the perfect time to do an asynchronous request to fetch data from an API. The fetched data would get stored in the internal component state to display it in the <code>render()</code> lifecycle method.</li>
+  <li className="it"> <strong>componentWillReceiveProps (nextProps)</strong> - El método se llama ciclo de vida durante un ciclo de vida de actualización. Como entrada a obtener los siguientes accesorios. podes diff los siguientes apoyos con los apoyos anteriores ( <code>this.props</code>) para aplicar un comportamiento diferente en función de la diferenciación. Además, podes definir el estado en base a los siguientes accesorios.</li>
+
+  <li>
+<strong>componentWillReceiveProps(nextProps)</strong> - The lifecycle method is called during an update lifecycle. As input you get the next props. You can diff the next props with the previous props (<code>this.props</code>) to apply a different behavior based on the diff. Additionally you can set state based on the next props.</li>
+  <li className="it"> <strong>shouldComponentUpdate (nextProps, del estado siguiente)</strong> - Siempre se llama cuando las actualizaciones de los componentes debido a otro o de los apoyos de los cambios. Lo va a usar en aplicaciones madurReact  para optimizaciones de rendimiento. En función de un valor lógico que regrese de este método de ciclo de vida, el componente y todos tus hijos se hacen o no se hacen en un ciclo de vida de actualización. podes evitar que el método de ciclo de vida de procesamiento de un componente.</li>
+
+  <li>
+<strong>shouldComponentUpdate(nextProps, nextState)</strong> - It is always called when the component updates due to state or props changes. You will use it in mature React applications for performance optimizations. Depending on a boolean that you return from this lifecycle method, the component and all its children will render or will not render on an update lifecycle. You can prevent the render lifecycle method of a component.</li>
+  <li className="it"> <strong>componentWillUpdate (nextProps, del estado siguiente)</strong> - El método de ciclo de vida se invoca inmediatamente antes del <code>render()</code> método. Ya tiene los siguientes accesorios y siguiente estado a su disposición. Podes utilizar el método como última oportunidad para realizar los preparativos antes de que el método render es ejecutado. Tenga en cuenta que no se podes desencadenar <code>setState()</code> más. Si desea calcular el estado en base a los siguientes apoyos, tenes que utilizar <code>componentWillReceiveProps()</code>.</li>
+
+  <li>
+<strong>componentWillUpdate(nextProps, nextState)</strong> - The lifecycle method is immediately invoked before the <code>render()</code> method. You already have the next props and next state at your disposal. You can use the method as last opportunity to perform preparations before the render method gets executed. Note that you cannot trigger <code>setState()</code> anymore. If you want to compute state based on the next props, you have to use <code>componentWillReceiveProps()</code>.</li>
+  <li className="it"> <strong>componentDidUpdate (prevProps, prevState)</strong> - El método de ciclo de vida se invoca inmediatamente después de la <code>render()</code> método. Se podes utilizar como una oportunidad para llevar a cabo operaciones DOM o para realizar otras peticiones asincrónicas.</li>
+
+  <li>
+<strong>componentDidUpdate(prevProps, prevState)</strong> - The lifecycle method is immediately invoked after the <code>render()</code> method. You can use it as opportunity to perform DOM operations or to perform further asynchronous requests.</li>
+  <li className="it"> <strong>componentWillUnmount ()</strong> - Se llama antes de destruir su componente. Se podes utilizar el método de ciclo de vida para llevar a cabo las tareas de limpieza.</li>
+
+  <li>
+<strong>componentWillUnmount()</strong> - It is called before you destroy your component. You can use the lifecycle method to perform any clean up tasks.</li>
+</ul>
+
+<p className="it">Las <code>constructor()</code> y <code>render()</code> los métodos de ciclo de vida que ya son utilizados por usted. Estos son los métodos de ciclo de vida de uso común para los componentes de clase ES6. En realidad, el <code>render()</code> se requiere método, de lo contrario no devolver una instancia de componente.</p>
+
+
+<p>The <code>constructor()</code> and <code>render()</code> lifecycle methods are already used by you. These are the commonly used lifecycle methods for ES6 class components. Actually the <code>render()</code> method is required, otherwise you wouldn’t return a component instance.</p>
+
+<h4 id="leanpub-auto-exercises-21">Exercises:</h4>
+
+<ul>
+<li className="it">leer más acerca de <a href="https://facebook.github.io/react/docs/react-component.html">los métodos de ciclo de vida en React</a>
+</li>
+
+  <li>read more about <a href="https://facebook.github.io/react/docs/react-component.html">lifecycle methods in React</a>
+</li>
+<li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/state-and-lifecycle.html">el estado relacionada con los métodos de ciclo de vida en React</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/state-and-lifecycle.html">the state related to lifecycle methods in React</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

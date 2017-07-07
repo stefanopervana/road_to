@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Component Interface with PropTypes</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-component-interface-with-proptypes">Component Interface with PropTypes</h3>
+
+<p className="it">Podes saber <a href="https://www.typescriptlang.org/">mecanografiado</a> o <a href="https://flowtype.org/">flujo</a> de introducir un tipo de interfaz de JavaScript. Un lenguaje escrito es menos propenso a errores, debido a que el código se valida con base en su texto del programa. Editores y otros servicios públicos pueden  atrapar a estos errores antes de que acabe el programa. Esto hace que su programa sea más robusto.</p>
+
+<p>You may know <a href="https://www.typescriptlang.org/">TypeScript</a> or <a href="https://flowtype.org/">Flow</a> to introduce a type interface to JavaScript. A typed language is less error prone, because the code gets validated based on its program text. Editors and other utilities can catch these errors before the program runs. It makes your program more robust.</p>
+
+<p className="it">React viene con un comprobador de tipos incorporada para evitar que los insectos. podes utilizar PropTypes para describir la interfaz de componente. Todos los accesorios que van pasando de un componente principal de un componente hijo a obtener validados sobre la base de la interfaz PropTypes asignado al componente secundario.</p>
+
+<p>React comes with a built-in type checker to prevent bugs. You can use PropTypes to describe your component interface. All the props that get passed from a parent component to a child component get validated based on the PropTypes interface assigned to the child component.</p>
+
+<p className="it">El capítulo te mostrará cómo se podes hacer todo tipo de componentes de su seguro con PropTypes. Voy a omitir los cambios para los siguientes capítulos, porque añaden refactorizaciones de código innecesarias. Sin embargo, Debes mantener y actualizar a lo largo de la manera de mantener su tipo de interfaz componentes de seguridad.</p>
+
+<p>The chapter will show you how you can make all your components type safe with PropTypes. I will omit the changes for the following chapters, because they add unnecessary code refactorings. But you should keep and update them along the way to keep your components interface type safe.</p>
+
+<p className="it">Inicialmente podes importar PropTypes. Vos tiene que ser consciente de su versión React, ya que en la versión 15.5 React cambió la importación. Compruebe su <em>package.json</em> para su versión React.</p>
+
+<p>Initially you can import PropTypes. You have to be aware of your React version, because in React version 15.5 the import changed. Check your <em>package.json</em> for your React version.</p>
+
+<p className="it">Si se trata de 15,5 o superior, tenes que instalar un paquete independiente.</p>
+
+<p>If it is 15.5 or above, you have to install an independent package.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save prop-types
+</pre></div>
+
+</figure>
+
+<p className="it">Si su versión es 15,4 o por debajo, se podes utilizar el paquete ya instalado React.</p>
+
+<p>If your version is 15.4 or below, you can use the already installed React package.</p>
+
+<p className="it">Ahora, dependiendo de la versión, podes importar los PropTypes.</p>
+
+<p>Now, depending on your version, you can import the PropTypes.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">// React 15.5 and above
+</code><code class="uil">import PropTypes from 'prop-types';
+</code><code class="uil">
+</code><code class="uil">// React 15.4 and below
+</code><code class="uil">import React, &#123; Component, PropTypes &#125; from 'react';
+</code></pre></div>
+
+</figure>
+
+<p className="it">Vamos a empezar a asignar una interfaz de apoyos a los componentes:</p>
+
+<p>Let’s start to assign a props interface to the components:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Button = (&#123; onClick, className = '', children &#125;) =&gt;
+  &lt;button
+    onClick=&#123;onClick&#125;
+    className=&#123;className&#125;
+    type="button"
+  &gt;
+    &#123;children&#125;
+  &lt;/button&gt;
+
+<code class="uil">Button.propTypes = &#123;
+</code><code class="uil">  onClick: PropTypes.func,
+</code><code class="uil">  className: PropTypes.string,
+</code><code class="uil">  children: PropTypes.node,
+</code><code class="uil">&#125;;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Eso es. Se toma cada argumento de la firma de la función y asignar una PropType a ella. Los PropTypes básicos para primitivas y objetos complejos son:</p>
+
+<p>That’s it. You take every argument from the function signature and assign a PropType to it. The basic PropTypes for primitives and complex objects are:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">array</code>
+<code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">bool</code>
+<code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">func</code>
+<code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">number</code>
+<code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">object</code>
+<code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">string</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Además tiene dos PropTypes más para definir un fragmento renderizable (nodo), por ejemplo una cadena, y un elemento de React.</p>
+
+<p>Additionally you have two more PropTypes to define a renderable fragment (node), e.g. a string, and React  element.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">node</code>
+<code class="o">*</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">element</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Que ya utilizó el <code>node</code>PropType para el componente Button. En general hay más definiciones PropType que se pueden  leer en el funcionario React documentación.</p>
+
+<p>You already used the <code>node</code> PropType for the Button component. Overall there are more PropType definitions that you can read up in the official React documentation.</p>
+
+<p className="it">Por el momento todos los PropTypes definidas para el botón son opcionales. Los parámetros pueden  ser nulos o indefinido. Pero desde hace varios puntales desea exigir que se definen. podes que sea un requisito de que estos apoyos se pasan al componente.</p>
+
+<p>At the moment all of the defined PropTypes for the Button are optional. The parameters can be null or undefined. But for several props you want to enforce that they are defined. You can make it a requirement that these props are passed to the component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>Button.propTypes = &#123;
+<code class="uil">  onClick: PropTypes.func.isRequired,
+</code>  className: PropTypes.string,
+<code class="uil">  children: PropTypes.node.isRequired,
+</code>&#125;;
+</pre></div>
+
+</figure>
+
+<p className="it">El <code>className</code> no es necesario, ya que podes por defecto a una cadena vacía. A continuación, deberá definir una interfaz PropType para el componente de tabla:</p>
+
+<p>The <code>className</code> is not required, because it can default to an empty string. Next you will define a PropType interface for the Table component:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">Table.propTypes = &#123;
+</code><code class="uil">  list: PropTypes.array.isRequired,
+</code><code class="uil">  onDismiss: PropTypes.func.isRequired,
+</code><code class="uil">&#125;;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Se podes definir el contenido de un PropType gama más explícito:</p>
+
+<p>You can define the content of an array PropType more explicit:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nx">Table</code><code class="p">.</code><code class="nx">propTypes</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">list</code><code class="o">:</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">arrayOf</code><code class="p">(</code>
+    <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">shape</code><code class="p">(&#123;</code>
+      <code class="nx">objectID</code><code class="o">:</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">string</code><code class="p">.</code><code class="nx">isRequired</code><code class="p">,</code>
+      <code class="nx">author</code><code class="o">:</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">string</code><code class="p">,</code>
+      <code class="nx">url</code><code class="o">:</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">string</code><code class="p">,</code>
+      <code class="nx">num_comments</code><code class="o">:</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">number</code><code class="p">,</code>
+      <code class="nx">points</code><code class="o">:</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">number</code><code class="p">,</code>
+    <code class="p">&#125;)</code>
+  <code class="p">).</code><code class="nx">isRequired</code><code class="p">,</code>
+  <code class="nx">onDismiss</code><code class="o">:</code> <code class="nx">PropTypes</code><code class="p">.</code><code class="nx">func</code><code class="p">.</code><code class="nx">isRequired</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Sólo el <code>objectID</code> que se requiere, porque usted sabe que algunos de tu código depende de ello. Las otras propiedades sólo se muestran, por lo que no se requiere necesariamente. Por otra parte no se podes estar seguro de que el Hacker News API tiene siempre una propiedad definida para cada objeto de la array.</p>
+
+<p>Only the <code>objectID</code> is required, because you know that some of your code depends on it. The other properties are only displayed, thus they are not necessarily required. Moreover you cannot be sure that the Hacker News API has always a defined property for each object in the array.</p>
+
+<p className="it">Eso es todo por PropTypes. Pero hay un aspecto más. Se pueden  definir los apoyos por defecto en su componente. Vamos a tomar de nuevo el componente Button. La <code>className</code> propiedad tiene un parámetro predeterminado ES6 en la firma de componentes.</p>
+
+<p>That’s it for PropTypes. But there is one more aspect. You can define default props in your component. Let’s take again the Button component. The <code>className</code> property has an ES6 default parameter in the component signature.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">Button</code> <code class="o">=</code> <code class="p">(&#123;</code> <code class="nx">onClick</code><code class="p">,</code> <code class="nx">className</code> <code class="o">=</code> <code class="s1">''</code><code class="p">,</code> <code class="nx">children</code> <code class="p">&#125;)</code> <code class="o">=&gt;</code>
+  <code class="p">...</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Se podría sustituirlo por el React prop interna de incumplimiento:</p>
+
+<p>You could replace it with the internal React default prop:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const Button = (&#123; onClick, className, children &#125;) =&gt;
+</code>  &lt;button
+    onClick=&#123;onClick&#125;
+    className=&#123;className&#125;
+    type="button"
+  &gt;
+    &#123;children&#125;
+  &lt;/button&gt;
+
+<code class="uil">Button.defaultProps = &#123;
+</code><code class="uil">  className: '',
+</code><code class="uil">&#125;;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Igual que el parámetro por defecto ES6, el puntal predeterminado garantiza que la propiedad se establece en un valor predeterminado cuando el componente padre no especificó ella. La comprobación de tipo PropType sucede después se evalúa la prop predeterminado.</p>
+
+<p>Same as the ES6 default parameter, the default prop ensures that the property is set to a default value when the parent component didn’t specify it. The PropType type check happens after the default prop is evaluated.</p>
+
+<h4 id="leanpub-auto-exercises-29">Exercises:</h4>
+
+<ul><li className="it">responder a sí mismo la siguiente pregunta
+    </li>
+  <li>answer yourself the following question
+    <ul><li className="it">no el componente de aplicación tiene una interfaz PropType?</li>
+      <li>does the App component have a PropType interface?</li>
+    </ul>
+  </li><li className="it">definir la interfaz PropType para el componente de Búsqueda</li>
+  <li>define the PropType interface for the Search component</li> <li className="it">añadir y actualizar las interfaces PropType cuando se agrega y la actualización de los componentes en los próximos capítulos</li>
+  <li>add and update the PropType interfaces when you add and update components in the next chapters</li><li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/typechecking-with-proptypes.html">React PropTypes</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/typechecking-with-proptypes.html">React PropTypes</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>
+
+
+
+      
+    </ul>
+  </li>
+  
+ 
+  

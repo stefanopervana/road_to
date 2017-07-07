@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Unidirectional Data Flow</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-unidirectional-data-flow">Unidirectional Data Flow</h3>
+
+<p className="it">Ahora tenes algún estado interno en el componente de aplicación. Sin embargo, no se ha manipulado el estado interno todavía. El estado es estático y por lo tanto es el componente. Una buena manera de experimentar la manipulación del estado es tener algún tipo de interacción de los componentes.</p>
+
+<p>Now you have some internal state in your App component. However, you have not manipulated the internal state yet. The state is static and thus is the component. A good way to experience state manipulation is to have some component interaction.</p>
+
+<p className="it">Vamos a añadir un botón para cada elemento de la lista que se muestra. El botón dice “Descartar” y se eliminará el elemento de la lista. Podría ser útil, finalmente, cuando sólo se desea mantener una lista de elementos no leídos.</p>
+
+<p>Let’s add a button for each item in the displayed list. The button says “Dismiss” and will remove the item from the list. It could be useful eventually when you only want to keep a list of unread items.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    return (
+      &lt;div className="App"&gt;
+        &#123; this.state.list.map(item =&gt;
+          &lt;div key=&#123;item.objectID&#125;&gt;
+            &lt;span&gt;
+              &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;
+            &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;
+            &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;
+<code class="uil">            &lt;span&gt;
+</code><code class="uil">              &lt;button
+</code><code class="uil">                onClick=&#123;() =&gt; this.onDismiss(item.objectID)&#125;
+</code><code class="uil">                type="button"
+</code><code class="uil">              &gt;
+</code><code class="uil">                Dismiss
+</code><code class="uil">              &lt;/button&gt;
+</code><code class="uil">            &lt;/span&gt;
+</code>          &lt;/div&gt;
+        )&#125;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Como se podes ver el <code>onDismiss()</code> método en la <code>onClick</code> función queda encerrado por otra función. Sólo de esa manera podes colarse en la <code>objectID</code> propiedad. De lo contrario se tendría que definir la función fuera. Sin embargo, mediante el uso de una función de flecha ES6 podes inline ella.</p>
+
+<p>As you can see the <code>onDismiss()</code> method in the <code>onClick</code> function gets enclosed by another function. Only that way you can sneak in the <code>objectID</code> property. Otherwise you would have to define the function outside. However, by using an ES6 arrow function you can inline it.</p>
+
+<p className="it">Tenga en cuenta que los elementos con múltiples atributos se ponen complicadas como una línea en algún momento. Es por eso que el elemento de botón ya se utiliza con líneas múltiples y el sangrado que siga siendo legible. Pero no es obligatorio. Es sólo una recomendación estilo de código.</p>
+
+<p>Note that elements with multiple attributes get messy as one line at some point. That’s why the button element is already used with multilines and indentation to keep it readable. But it is not mandatory. It is only a code style recommendation.</p>
+
+<p className="it">Ahora tenes que poner en práctica la <code>onDismiss()</code> funcionalidad. Se necesita un ID de elemento para identificar el elemento de descartar. La función está ligada a la clase y por lo tanto se convierte en un método de clase. Vos tiene que obligar a los métodos de clase en el constructor. Además tiene que definir tus funciones en su clase.</p>
+
+<p>Now you have to implement the <code>onDismiss()</code> functionality. It takes an item id to identify the item to dismiss. The function is bound to the class and thus becomes a class method. You have to bind class methods in the constructor. Additionally you have to define its functionality in your class.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  constructor(props) &#123;
+    super(props);
+
+    this.state = &#123;
+      list,
+    &#125;;
+
+<code class="uil">    this.onDismiss = this.onDismiss.bind(this);
+</code>  &#125;
+
+<code class="uil">  onDismiss(id) &#123;
+</code><code class="uil">    ...
+</code><code class="uil">  &#125;
+</code>
+  render() &#123;
+    ...
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se podes definir lo que ocurre en el interior del método de clase. Puesto que usted queres quitar el elemento de la lista se ha hecho clic, se podes hacer eso con la funcionalidad de filtro de serie incorporado. La función de filtro tiene una función para evaluar cada elemento de la lista. Si la evaluación de un artículo es true, el elemento se queda en la lista. De lo contrario, se eliminan. Además, la función devuelve una nueva lista y no muta la lista de edad. Se mantiene la estructura de datos inmutables.</p>
+
+<p>Now you can define what happens inside of the class method. Since you want to remove the clicked item from your list, you can do that with the built-in array filter functionality. The filter function takes a function to evaluate each item in the list. If the evaluation for an item is true, the item stays in the list. Otherwise it will get removed. Additionally the function returns a new list and doesn’t mutate the old list. It keeps the immutable data structure.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onDismiss(id) &#123;
+<code class="uil">
+</code><code class="uil">  function isNotId(item) &#123;
+</code><code class="uil">    return item.objectID !== id;
+</code><code class="uil">  &#125;
+</code><code class="uil">
+</code><code class="uil">  const updatedList = this.state.list.filter(isNotId);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">podes hacerlo de forma más concisa mediante el uso de una función de flecha ES6 nuevo.</p>
+
+<p>You can do it more concise by using an ES6 arrow function again.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onDismiss(id) &#123;
+<code class="uil">  const isNotId = item =&gt; item.objectID !== id;
+</code><code class="uil">  const updatedList = this.state.list.filter(isNotId);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Incluso se podes inline que - como lo hicimos en el <code>onClick()</code> controlador del botón - pero podes ser que consiga menos legible.</p>
+
+<p>You could even inline it - like we did in the <code>onClick()</code> handler of the button - but it might get less readable.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onDismiss(id) &#123;
+<code class="uil">  const updatedList = this.state.list.filter(item =&gt; item.objectID !== id);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">La lista elimina el elemento se ha hecho clic ahora. Sin embargo, el estado no se actualiza todavía. Por lo tanto, que finalmente podes utilizar el <code>setState()</code> método de clase para actualizar la lista en el estado de los componentes internos.</p>
+
+<p>The list removes the clicked item now. However the state isn’t updated yet. Therefore you can finally use the <code>setState()</code> class method to update the list in the internal component state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onDismiss(id) &#123;
+  const isNotId = item =&gt; item.objectID !== id;
+  const updatedList = this.state.list.filter(isNotId);
+<code class="uil">  this.setState(&#123; list: updatedList &#125;);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora ejecute de nuevo la aplicación y probar el botón “Descartar”. Deberia de funcionar. Lo que experimentas ahora es el <strong>flujo de datos unidireccional</strong> en React. Se dispara una acción en su opinión - con <code>onClick()</code>- una función o método de clase modifica el estado de los componentes internos y el <code>render()</code> método del componente se ejecuta de nuevo para actualizar la vista.</p>
+
+<p>Now run again your application and try the “Dismiss” button. It should work. What you experience now is the <strong>unidirectional data flow</strong> in React. You trigger an action in your view - with <code>onClick()</code> - a function or class method modifies the internal component state and the <code>render()</code> method of the component runs again to update the view.</p>
+
+
+<figure class="image center">
+  <img src="images/set-state-to-render-unidirectional.png" alt="Internal state update with unidirectional data flow" />
+  <figcaption>Internal state update with unidirectional data flow</figcaption>
+</figure>
+
+
+<h4 id="leanpub-auto-exercises-13">Exercises:</h4>
+
+<ul>
+<li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/state-and-lifecycle.html">el estado del ciclo de vida y en React</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/state-and-lifecycle.html">the state and lifecycle in React</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

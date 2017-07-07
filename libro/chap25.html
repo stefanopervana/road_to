@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ES6 Destructuring</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-es6-destructuring">ES6 Destructuring</h3>
+
+<p className="it">Hay una manera de acceder a la ES6 propiedades de los objetos y las matrices más fácil. Se llama desestructuración. Compare el siguiente fragmento de JavaScript ES5 y ES6.</p>
+
+
+<p>There is a way in ES6 to access properties in objects and arrays easier. It’s called destructuring. Compare the following snippet in JavaScript ES5 and ES6.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">user</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">firstname</code><code class="o">:</code> <code class="s1">'Robin'</code><code class="p">,</code>
+  <code class="nx">lastname</code><code class="o">:</code> <code class="s1">'Wieruch'</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="c1">// ES5</code>
+<code class="kd">var</code> <code class="nx">firstname</code> <code class="o">=</code> <code class="nx">user</code><code class="p">.</code><code class="nx">firstname</code><code class="p">;</code>
+<code class="kd">var</code> <code class="nx">lastname</code> <code class="o">=</code> <code class="nx">user</code><code class="p">.</code><code class="nx">lastname</code><code class="p">;</code>
+
+<code class="c1">// ES6</code>
+<code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">firstname</code><code class="p">,</code> <code class="nx">lastname</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="nx">user</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">firstname</code> <code class="o">+</code> <code class="s1">' '</code> <code class="o">+</code> <code class="nx">lastname</code><code class="p">);</code>
+<code class="c1">// output: Robin Wieruch</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Si bien hay que añadir una línea adicional cada vez que desee acceder a una propiedad de objeto en ES5, podes hacerlo en una línea en ES6. Además usted no tiene que tener nombres de propiedades duplicadas. Una buena práctica para facilitar la lectura es utilizar líneas múltiples cuando desestructurar un objeto en varias propiedades.</p>
+
+
+<p>While you have to add an extra line each time you want to access an object property in ES5, you can do it in one line in ES6. Additionally you don’t have to have duplicated property names. A best practice for readability is to use multilines when you destructure an object into multiple properties.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="p">&#123;</code>
+  <code class="nx">firstname</code><code class="p">,</code>
+  <code class="nx">lastname</code>
+<code class="p">&#125;</code> <code class="o">=</code> <code class="nx">user</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Lo mismo ocurre con las matrices. podes desestructurar ellos también, pero que sea más fácil de leer con líneas múltiples.</p>
+
+
+<p>The same goes for arrays. You can destructure them too, but keep it more readable with multilines.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">users</code> <code class="o">=</code> <code class="p">[</code><code class="s1">'Robin'</code><code class="p">,</code> <code class="s1">'Andrew'</code><code class="p">,</code> <code class="s1">'Dan'</code><code class="p">];</code>
+<code class="kr">const</code> <code class="p">[</code>
+  <code class="nx">userOne</code><code class="p">,</code>
+  <code class="nx">userTwo</code><code class="p">,</code>
+  <code class="nx">userThree</code>
+<code class="p">]</code> <code class="o">=</code> <code class="nx">users</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">userOne</code><code class="p">,</code> <code class="nx">userTwo</code><code class="p">,</code> <code class="nx">userThree</code><code class="p">);</code>
+<code class="c1">// output: Robin Andrew Dan</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Tal vez usted ha notado que el estado en el componente de aplicación podes obtener desestructurado de la misma manera. podes acortar la línea de filtros y mapa de código.</p>
+
+
+<p>Perhaps you have noticed that the state in the App component can get destructured the same way. You can shorten the filter and map line of code.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>  render() &#123;
+<code class="uil">    const &#123; searchTerm, list &#125; = this.state;
+</code>    return (
+      &lt;div className="App"&gt;
+        ...
+<code class="uil">        &#123; list.filter(isSearched(searchTerm)).map(item =&gt;
+</code>          ...
+        )&#125;
+      &lt;/div&gt;
+    );
+</pre></div>
+
+</figure>
+
+<p className="it">podes hacerlo de la manera ES5 ES6 o:</p>
+
+
+<p>You can do it the ES5 or ES6 way:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// ES5</code>
+<code class="kd">var</code> <code class="nx">searchTerm</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">state</code><code class="p">.</code><code class="nx">searchTerm</code><code class="p">;</code>
+<code class="kd">var</code> <code class="nx">list</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">state</code><code class="p">.</code><code class="nx">list</code><code class="p">;</code>
+
+<code class="c1">// ES6</code>
+<code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">searchTerm</code><code class="p">,</code> <code class="nx">list</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">state</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Pero ya que el libro utiliza JavaScript ES6 mayor parte del tiempo, Debes pegarse a ES6.</p>
+
+
+<p>But since the book uses JavaScript ES6 most of the time, you should stick to ES6.</p>
+
+<h4 id="leanpub-auto-exercises-15">Exercises:</h4>
+
+<ul><li className="it">leer más sobre <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">ES6 desestructuración</a>
+</li>
+  <li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">ES6 destructuring</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

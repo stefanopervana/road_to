@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ES6 Object Initializer</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-es6-object-initializer">ES6 Object Initializer</h3>
+
+<p className="it">En JavaScript ES6 podes utilizar una sintaxis propiedad abreviada para inicializar los objetos más concisa. Imagine la siguiente inicialización de objetos:</p>
+
+<p>In JavaScript ES6 you can use a shorthand property syntax to initialize your objects more concise. Imagine the following object initialization:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">name</code> <code class="o">=</code> <code class="s1">'Robin'</code><code class="p">;</code>
+
+<code class="kr">const</code> <code class="nx">user</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">name</code><code class="o">:</code> <code class="nx">name</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Cuando el nombre de la propiedad en su objeto podes ser el mismo que el nombre de la variable, podes hacer lo siguiente:</p>
+
+<p>When the property name in your object can be the same as your variable name, you can do the following:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">name</code> <code class="o">=</code> <code class="s1">'Robin'</code><code class="p">;</code>
+
+<code class="kr">const</code> <code class="nx">user</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">name</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">En tu aplicaciónse podes hacer lo mismo. La lista de nombres de variable y el nombre de la propiedad del Estado comparten el mismo nombre.</p>
+
+<p>In your application you can do the same. The list variable name and the state property name share the same name.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// ES5</code>
+<code class="k">this</code><code class="p">.</code><code class="nx">state</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">list</code><code class="o">:</code> <code class="nx">list</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="c1">// ES6</code>
+<code class="k">this</code><code class="p">.</code><code class="nx">state</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">list</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Otro ayudante ordenada son los nombres de métodos abreviados. En ES6 podes inicializar métodos en un objeto más concisa.</p>
+
+<p>Another neat helper are shorthand method names. In ES6 you can initialize methods in an object more concise.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// ES5</code>
+<code class="kd">var</code> <code class="nx">userService</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">getUserName</code><code class="o">:</code> <code class="kd">function</code> <code class="p">(</code><code class="nx">user</code><code class="p">)</code> <code class="p">&#123;</code>
+    <code class="k">return</code> <code class="nx">user</code><code class="p">.</code><code class="nx">firstname</code> <code class="o">+</code> <code class="s1">' '</code> <code class="o">+</code> <code class="nx">user</code><code class="p">.</code><code class="nx">lastname</code><code class="p">;</code>
+  <code class="p">&#125;,</code>
+<code class="p">&#125;;</code>
+
+<code class="c1">// ES6</code>
+<code class="kr">const</code> <code class="nx">userService</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">getUserName</code><code class="p">(</code><code class="nx">user</code><code class="p">)</code> <code class="p">&#123;</code>
+    <code class="k">return</code> <code class="nx">user</code><code class="p">.</code><code class="nx">firstname</code> <code class="o">+</code> <code class="s1">' '</code> <code class="o">+</code> <code class="nx">user</code><code class="p">.</code><code class="nx">lastname</code><code class="p">;</code>
+  <code class="p">&#125;,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Por último, pero no menos importante, se te permite utilizar nombres de las propiedades calculadas en ES6.</p>
+
+<p>Last but not least, you are allowed to use computed property names in ES6.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// ES5</code>
+<code class="kd">var</code> <code class="nx">user</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">name</code><code class="o">:</code> <code class="s1">'Robin'</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="c1">// ES6</code>
+<code class="kr">const</code> <code class="nx">key</code> <code class="o">=</code> <code class="s1">'name'</code><code class="p">;</code>
+<code class="kr">const</code> <code class="nx">user</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="p">[</code><code class="nx">key</code><code class="p">]</code><code class="o">:</code> <code class="s1">'Robin'</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">nombres de las propiedades calculadas podrían no tener sentido todavía. ¿Por qué en caso de necesitarla? En otro capítulo en el libro se llega a un punto en el que se podes utilizar.</p>
+
+<p>Computed property names might make no sense yet. Why should you need it? In a future chapter in the book you will come to a point where you can use it.</p>
+
+<h4 id="leanpub-auto-exercises-12">Exercises:</h4>
+
+<ul><li className="it">experimento con ES6 objeto inicializador</li>
+  
+  <li>experiment with ES6 object initializer</li>
+
+  <li className="it">leer más sobre <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer">ES6 objeto inicializador</a>
+</li>
+  <li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer">ES6 object initializer</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

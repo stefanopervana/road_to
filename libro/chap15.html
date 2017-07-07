@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ReactDOM</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-reactdom">ReactDOM</h3>
+
+<p className="it"> Antes de continuar con el componente App, es posible que desees ver dónde se utiliza. Se encuentra en tu punto de entrada al mundo React: el archivo <em>src/index.js</em>. </p>
+
+<p className="p">Before you continue with the App component, you might want to see where it is used. It is located in your entry point to the React world: the <em>src/index.js</em> file.</p>
+
+<figure class="code">
+  <figcaption>src/index.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">React</code> <code class="nx">from</code> <code class="s1">'react'</code><code class="p">;</code>
+<code class="kr">import</code> <code class="nx">ReactDOM</code> <code class="nx">from</code> <code class="s1">'react-dom'</code><code class="p">;</code>
+<code class="kr">import</code> <code class="nx">App</code> <code class="nx">from</code> <code class="s1">'./App'</code><code class="p">;</code>
+<code class="kr">import</code> <code class="s1">'./index.css'</code><code class="p">;</code>
+
+<code class="nx">ReactDOM</code><code class="p">.</code><code class="nx">render</code><code class="p">(</code>
+  <code class="o">&lt;</code><code class="nx">App</code> <code class="o">/&gt;</code><code class="p">,</code>
+  <code class="nb">document</code><code class="p">.</code><code class="nx">getElementById</code><code class="p">(</code><code class="s1">'root'</code><code class="p">)</code>
+<code class="p">);</code>
+</pre></div>
+
+</figure>
+<p className = "it"> Básicamente <code>ReactDOM.render()</code> utiliza un nodo DOM en su HTML para reemplazarlo con su JSX. Así es como puede integrar fácilmente React en cualquier aplicación extranjera. No está prohibido usar <code>ReactDOM.render()</code> varias veces en tu aplicación. Podes usarlo en varios lugares para iniciar la sintaxis simple de JSX, el componente React, varios componentes React o una aplicación completa. </p>
+
+<p className="p">Basically <code>ReactDOM.render()</code> uses a DOM node in your HTML to replace it with your JSX. That’s how you can easily integrate React in every foreign application. It is not forbidden to use <code>ReactDOM.render()</code> multiple times across your application. You can use it at multiple places to bootstrap simple JSX syntax, React  component, multiple React components or a whole application.</p>
+
+<p className="p"><code>ReactDOM.render()</code> expects two arguments.</p>
+
+<p className = "it"> El primer argumento que se renderiza es JSX. El segundo argumento especifica el lugar donde la aplicación de React se insertará en tu HTML. Espera un elemento con un <code>id='root'</code>. Podes abrir el archivo <em>public/index.html</em> para encontrar el atributo id. </p>
+
+<p className="p">The first argument is JSX that gets rendered. The second argument specifies the place where the React application hooks into your HTML. It expects an element with an <code>id='root'</code>. You can open your <em>public/index.html</em> file to find the id attribute.</p>
+
+<p className = "it"> En la implementación <code>ReactDOM.render()</code> ya toma tu componente App. Sin embargo, sería bueno pasar JSX más simple, siempre y cuando sea JSX. No tiene que ser una instancia de un componente. </p>
+
+<p className="p">In the implementation <code>ReactDOM.render()</code> already takes your App component. However, it would be fine to pass simpler JSX as long as it is JSX. It doesn’t have to be an instantiation of a component.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nx">ReactDOM</code><code class="p">.</code><code class="nx">render</code><code class="p">(</code>
+  <code class="o">&lt;</code><code class="nx">h1</code><code class="o">&gt;</code><code class="nx">Hello</code> <code class="nx">React</code> <code class="nx">World</code><code class="o">&lt;</code><code class="err">/h1&gt;,</code>
+  <code class="nb">document</code><code class="p">.</code><code class="nx">getElementById</code><code class="p">(</code><code class="s1">'root'</code><code class="p">)</code>
+<code class="p">);</code>
+</pre></div>
+
+</figure>
+
+<h4 id="leanpub-auto-exercises-6">Exercises:</h4>
+
+<ul>
+<li>Abrí el <em>public/index.html</em> para ver dónde se conectan las aplicaciones React en tu HTML </li>
+  <li>open the <em>public/index.html</em> to see where the React applications hooks into your HTML</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/rendering-elements.html">rendering elements in React</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

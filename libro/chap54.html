@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Taming the State</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-taming-the-state">Taming the State</h3>
+
+<p className="it">Los capítulos anteriores han demostrado que la administración de estado podes ser un tema crucial en tu aplicación. En general, no sólo React, pero una gran cantidad de frameworks de SPA luchar con ella. Las aplicaciones se hicieron más compleja en los últimos años. Un gran reto en las aplicaciones web hoy en día es de dominar y controlar el estado.</p>
+
+<p>The previous chapters have shown you that state management can be a crucial topic in your application. In general, not only React but a lot of SPA frameworks struggle with it. Applications got more complex in the recent years. One big challenge in web applications nowadays is to tame and control the state.</p>
+
+<p className="it">En comparación con otras soluciones yReact  dado un gran paso hacia adelante. El flujo de datos unidireccional y una API simple para administrar el estado en un componente son indispensables. Estos conceptos hacen que sea más fácil de razonar acerca de su estado y tus cambios de estado. Esto hace que sea más fácil razonar sobre ello en un nivel de componentes y hasta cierto punto en un nivel de aplicación.</p>
+
+<p>Compared to other solutions React already made a big step forward. The unidirectional data flow and a simple API to manage state in a component are indispensable. These concepts make it easier to reason about your state and your state changes. It makes it easier to reason about it on a component level and to a certain degree on a application level.</p>
+
+<p className="it">En una aplicación cada vez mayor se vuelve más difícil de razonar acerca de los cambios de estado. podes introducir errores mediante una operación en estado rancio cuando se utiliza un objeto más de una función en <code>setState()</code>. Vos tiene que levantar el estado en torno a compartir necesario o innecesario ocultar el estado a través de los componentes. podes suceder que un componente necesario para levantar el estado, debido a su componente de hermanos depende de ello. Quizás el componente está muy lejos del árbol de componentes y tiene que compartir el estado a través de todo el árbol de componentes. Sucede que los componentes se involucren en mayor medida en la gestión de estado. Pero después de todo, la responsabilidad principal de los componentes debes ser que representa la interfaz de usuario, no?</p>
+
+<p>In a growing application it gets harder to reason about state changes. You can introduce bugs by operating on stale state when using an object over a function in <code>setState()</code>. You have to lift state around to share necessary or hide unnecessary state across components. It can happen that a component needs to lift up state, because its sibling component depends on it. Perhaps the component is far away in the component tree and you have to share the state across the whole component tree. It happens that components get involved to a greater extent in state management. But after all the main responsibility of components should be representing the UI, shouldn’t it?</p>
+
+<p className="it">Debido a todas estas razones, existen soluciones independientes para hacerse cargo de la state management. Estas soluciones no sólo se utilizan en React. Sin embargo, eso es lo que hace que el ecosistemReact  un lugar tan poderosa. Se pueden  utilizar diferentes soluciones para resolver tus problemas. Para abordar el problema de escalar la state management, es posible que haya oído hablar de las bibliotecas <a href="http://redux.js.org/docs/introduction/">Redux</a> o <a href="https://mobx.js.org/">MOBX</a>. podes utilizar cualquiera de estas soluciones en una aplicación React. Vienen con extensiones, <a href="https://github.com/reactjs/react-redux">React-redux</a> y <a href="https://github.com/mobxjs/mobx-react">MOBX-React</a> , para integrarse con React.</p>
+
+<p>Because of all these reasons, there exist standalone solutions to take care of the state management. These solutions are not only used in React. However, that’s what makes the React ecosystem such a powerful place. You can use different solutions to solve your problems. To address the problem of scaling state management, you might have heard of the libraries <a href="http://redux.js.org/docs/introduction/">Redux</a> or <a href="https://mobx.js.org/">MobX</a>. You can use either of these solutions in React  application. They come with extensions, <a href="https://github.com/reactjs/react-redux">react-redux</a> and <a href="https://github.com/mobxjs/mobx-react">mobx-react</a>, to integrate with React.</p>
+
+<p className="it">Redux y MOBX están fuera del alcance de este libro. Cuando haya terminado el libro, recibirá orientación sobre cómo se podes seguir aprendiendo React y su ecosistema. Una ruta de aprendizaje podría ser aprender Redux. Antes de sumergirse en el tema de la gestión externa del Estado, recomiendo leer este <a href="https://www.robinwieruch.de/redux-mobx-confusion/">artículo</a>. Su objetivo es darle una mejor comprensión de cómo aprender la state management externo.</p>
+
+<p>Redux and MobX are outside of the scope of this book. When you have finished the book, you will get guidance on how you can continue to learn React and its ecosystem. One learning path could be to learn Redux. Before you dive into the topic of external state management, I can recommend to read this <a href="https://www.robinwieruch.de/redux-mobx-confusion/">article</a>. It aims to give you a better understanding of how to learn external state management.</p>
+
+<h4 id="leanpub-auto-exercises-37">Exercises:</h4>
+
+<ul>
+<li className="it">leer más acerca de <a href="https://www.robinwieruch.de/redux-mobx-confusion/">la gestión externa del Estado y cómo aprenderlo</a>
+</li>
+  <li>read more about <a href="https://www.robinwieruch.de/redux-mobx-confusion/">external state management and how to learn it</a>
+</li>
+</ul>
+
+<div class="page-break"></div>
+<p className="it">Vos ha aprendido gestión avanzado estado en React! Recapitulemos los últimos capítulos:</p>
+
+<p>You have learned advanced state management in React! Let’s recap the last chapters:</p>
+
+<ul>
+  <li>React
+    <ul><li className="it">levantar la gestión de seguridad del estado y hacia abajo a los componentes adecuados</li>
+      <li>lift state management up and down to suitable components</li>
+<li className="it">setstate podes utilizar una función para evitar que los insectos estatales rancios</li>
+      <li>setState can use a function to prevent stale state bugs</li>
+       <li className="it">soluciones externas que te ayudan a domesticar el estado existente</li>
+      <li>existing external solutions that help you to tame the state</li>
+    </ul>
+  </li>
+</ul>
+
+<p className="it">podes encontrar el código fuente en el <a href="https://github.com/rwieruch/hackernews-client/tree/72a0828790f365af9d68a9f529c8ebe5db2e9c7f">repositorio oficial</a>.</p>
+
+<p>You can find the source code in the <a href="https://github.com/rwieruch/hackernews-client/tree/72a0828790f365af9d68a9f529c8ebe5db2e9c7f">official repository</a>.</p>
+
+
+
+</div>
+</body>
+</html>
+
+
+      
+     

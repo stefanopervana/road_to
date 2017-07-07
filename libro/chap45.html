@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Unit Tests with Enzyme</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-unit-tests-with-enzyme">Unit Tests with Enzyme</h3>
+
+<p className="it"><a href="https://github.com/airbnb/enzyme">Enzyme</a> es una utilidad de las pruebas de Airbnb para afirmar, manipular y recorrer tus componentes React. Se podes utilizar para llevar a cabo las pruebas de unidad para complementar tus pruebas instantáneas.</p>
+
+<p><a href="https://github.com/airbnb/enzyme">Enzyme</a> is a testing utility by Airbnb to assert, manipulate and traverse your React components. You can use it to conduct unit tests to complement your snapshot tests.</p>
+
+<p className="it">Vamos a ver cómo se podes utilizar la Enzyme. En primer lugar hay que instalarlo ya que no viene con <em>crear una aplicación React</em>.</p>
+
+<p>Let’s see how you can use enzyme. First you have to install it since it doesn’t come with <em>create-react-app</em>.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save-dev enzyme react-addons-test-utils
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora Podes escribir su primera prueba de la unidad en la tabla describir bloque. Que va a utilizar <code>shallow()</code> para renderizar  su componente y afirmar que la tabla tiene dos elementos.</p>
+
+<p>Now you can write your first unit test in the Table describe block. You will use <code>shallow()</code> to render your component and assert that the Table has two items.</p>
+
+<figure class="code">
+  <figcaption>src/App.test.js</figcaption>
+
+<div class="highlight"><pre>import React from 'react';
+import ReactDOM from 'react-dom';
+import renderer from 'react-test-renderer';
+<code class="uil">import &#123; shallow &#125; from 'enzyme';
+</code> import App, &#123; Search, Button, Table &#125; from './App';
+
+describe('Table', () =&gt; &#123;
+
+  const props = &#123;
+    list: [
+      &#123; title: '1', author: '1', num_comments: 1, points: 2, objectID: 'y' &#125;,
+      &#123; title: '2', author: '2', num_comments: 1, points: 2, objectID: 'z' &#125;,
+    ],
+  &#125;;
+
+  ...
+
+<code class="uil">  it('shows two items in list', () =&gt; &#123;
+</code><code class="uil">    const element = shallow(
+</code><code class="uil">      &lt;Table &#123; ...props &#125; /&gt;
+</code><code class="uil">    );
+</code><code class="uil">
+</code><code class="uil">    expect(element.find('.table-row').length).toBe(2);
+</code><code class="uil">  &#125;);
+</code>
+&#125;);
+</pre></div>
+
+</figure>
+
+<p className="it">Shallow renders el componente sin componentes niño. Se podes hacer la prueba muy dedicado a uno de los componentes.</p>
+
+<p>Shallow renders the component without child components. You can make the test very dedicated to one component.</p>
+
+<p className="it">Enzyme tiene tres mecanismos generales de representación en su API. Vos ya sabe <code>shallow()</code>, pero también existen <code>mount()</code> y <code>render()</code>. Tanto instanciar instancias del componente de los padres y todos los componentes hijos. Además <code>mount()</code> le da más acceso a los métodos del ciclo de vida de los componentes. Pero cuando usar que hacen que el mecanismo? Aquí algunas reglas básicas:</p>
+
+<p>Enzyme has overall three rendering mechanisms in its API. You already know <code>shallow()</code>, but there also exist <code>mount()</code> and <code>render()</code>. Both instantiate instances of the parent component and all child components. Additionally <code>mount()</code> gives you more access to the component lifecycle methods. But when to use which render mechanism? Here some rules of thumb:</p>
+
+  
+ 
+ 
+<ul><li className="it">Comience siempre con una prueba de poca profundidad</li>
+  <li>Always begin with a shallow test</li><li className="it">Si <code>componentDidMount()</code> o <code>componentDidUpdate()</code> debe ser probado, el uso<code>mount()</code>
+</li>
+  <li>If <code>componentDidMount()</code> or <code>componentDidUpdate()</code> should be tested, use <code>mount()</code>
+</li> <li className="it">Si desea probar el ciclo de vida de los componentes y el comportamiento de los niños, utilizar <code>mount()</code>
+</li>
+  <li>If you want to test component lifecycle and children behavior, use <code>mount()</code>
+</li> <li className="it">Si desea probar los niños de representación con menos sobrecarga que <code>mount()</code> y usted no está interesado en métodos de ciclo de vida, el uso<code>render()</code>
+</li>
+  <li>If you want to test children rendering with less overhead than <code>mount()</code> and you are not interested in lifecycle methods, use <code>render()</code>
+</li>
+</ul>
+
+<p className="it">Se podría seguir unidad de prueba de tus componentes. Pero asegúrese de mantener las pruebas sencilla y fácil de mantener. De lo contrario, tendrás que refactorizar ellos una vez que cambie tus componentes. Es por eso que Facebook introdujo pruebas instantáneas con la broma en el primer lugar.</p>
+
+<p>You could continue to unit test your components. But make sure to keep the tests simple and maintainable. Otherwise you will have to refactor them once you change your components. That’s why Facebook introduced Snapshot tests with Jest in the first place.</p>
+
+<h4 id="leanpub-auto-exercises-31">Exercises:</h4>
+
+<ul><li className="it">mantener tus pruebas unitarias al día durante los siguientes capítulos</li>
+  
+  <li>keep your unit tests up to date during the following chapters</li>
+  <li className="it">leer más acerca de <a href="https://github.com/airbnb/enzyme">Enzyme y su API de renderizado</a>
+</li>
+  <li>read more about <a href="https://github.com/airbnb/enzyme">enzyme and its rendering API</a>
+</li>
+</ul>
+
+<div class="page-break"></div>
+<p className="it">Vos ha aprendido cómo organizar tu código y cómo probarla! Recapitulemos los últimos capítulos:</p>
+
+<p>You have learned how to organize your code and how to test it! Let’s recap the last chapters:</p>
+
+<ul>
+  <li>React
+    <ul><li className="it">PropTypes permiten definir los controles de tipo de componentes</li>
+          
+      <li>PropTypes let you define type checks for components</li>
+      <li className="it">La broma te permite escribir pruebas instantáneas de tus componentes</li>
+      <li>Jest allows you to write snapshot tests for your components</li>
+      <li className="it">Enzyme permite escribir pruebas unitarias para tus componentes</li>
+      <li>Enzyme allows you to write unit tests for your components</li>
+    </ul>
+  </li>
+  <li>ES6
+    <ul>
+    <li className="it">declaraciones de importación y exportación te ayudan a organizar el código</li>
+      <li>import and export statements help you to organize your code</li>
+    </ul>
+  </li>
+  <li>General
+    <ul>
+    <li className="it">organización del código te permite escalar tu aplicacióncon las mejores prácticas</li>
+      <li>code organization allows you to scale your application with best practices</li>
+    </ul>
+  </li>
+</ul>
+
+<p className="it">podes encontrar el código fuente en el <a href="https://github.com/rwieruch/hackernews-client/tree/393ce5a350aa34b1c7ae056333f7bb7b0807caef">repositorio oficial</a>.</p>
+
+<p>You can find the source code in the <a href="https://github.com/rwieruch/hackernews-client/tree/393ce5a350aa34b1c7ae056333f7bb7b0807caef">official repository</a>.</p>
+
+
+
+</div>
+</body>
+</html>

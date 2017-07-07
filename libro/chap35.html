@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ES6 Spread Operators</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-es6-spread-operators">ES6 Spread Operators</h3>
+
+<p className="it">El botón “Descartar” no funciona debido a que el <code>onDismiss()</code> método no es consciente del objeto resultado complejo. Vamos a cambiar eso:</p>
+
+<p>The “Dismiss” button doesn’t work because the <code>onDismiss()</code> method is not aware of the complex result object. Let’s change that:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onDismiss(id) &#123;
+  const isNotId = item =&gt; item.objectID !== id;
+<code class="uil">  const updatedHits = this.state.result.hits.filter(isNotId);
+</code><code class="uil">  this.setState(&#123;
+</code><code class="uil">    ...
+</code><code class="uil">  &#125;);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Pero lo que sucede en el <code>setState()</code> ahora? Por desgracia, el resultado es un objeto complejo. La lista de éxitos es sólo una de las múltiples propiedades del objeto. Sin embargo, sólo la lista se actualiza, cuando un elemento se elimina en el objeto de resultado, mientras que las otras propiedades permanecen igual.</p>
+
+<p>But what happens in <code>setState()</code> now? Unfortunately the result is a complex object. The list of hits is only one of multiple properties in the object. However, only the list gets updated, when an item gets removed in the result object, while the other properties stay the same.</p>
+
+<p className="it">Un enfoque podría mutar a los golpes en el objeto de resultado. Voy a demostrar, pero no vamos a hacerlo de esa manera.</p>
+
+<p>One approach could be to mutate the hits in the result object. I will demonstrate it, but we won’t do it that way.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="k">this</code><code class="p">.</code><code class="nx">state</code><code class="p">.</code><code class="nx">result</code><code class="p">.</code><code class="nx">hits</code> <code class="o">=</code> <code class="nx">updatedHits</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">React abarca la programación funcional. Por lo tanto usted no debes mutar un objeto (o mutar el estado directamente). Un mejor enfoque es generar un nuevo objeto en base a la información que tiene. Por lo tanto ninguno de los objetos obtener alterada. vas a mantener las estructuras de datos inmutables. Siempre se devolverá un nuevo objeto y nunca alterar un objeto.</p>
+
+<p>React embraces functional programming. Thus you shouldn’t mutate an object (or mutate the state directly). A better approach is to generate a new object based on information you have. Thereby none of the objects get altered. You will keep the immutable data structures. You will always return a new object and never alter an object.</p>
+
+<p className="it">Vamos a hacerlo en JavaScript ES5. <code>Object.assign()</code> toma como primer argumento un objeto de destino. Todos los siguientes argumentos son objetos de origen. Estos objetos se fusionan en el objeto de destino. El objeto de destino podes ser un objeto vacío. Abarca la inmutabilidad, porque ningún objeto de origen se mutó. Se vería similar al siguiente:</p>
+
+<p>Let’s do it in JavaScript ES5. <code>Object.assign()</code> takes as first argument a target object. All following arguments are source objects. These objects are merged into the target object. The target object can be an empty object. It embraces immutability, because no source object gets mutated. It would look similar to the following:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">updatedHits</code> <code class="o">=</code> <code class="p">&#123;</code> <code class="nx">hits</code><code class="o">:</code> <code class="nx">updatedHits</code> <code class="p">&#125;;</code>
+<code class="kr">const</code> <code class="nx">updatedResult</code> <code class="o">=</code> <code class="nb">Object</code><code class="p">.</code><code class="nx">assign</code><code class="p">(&#123;&#125;,</code> <code class="k">this</code><code class="p">.</code><code class="nx">state</code><code class="p">.</code><code class="nx">result</code><code class="p">,</code> <code class="nx">updatedHits</code><code class="p">);</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora vamos a hacerlo en el <code>onDismiss()</code> método:</p>
+
+<p>Now let’s do it in the <code>onDismiss()</code> method:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onDismiss(id) &#123;
+  const isNotId = item =&gt; item.objectID !== id;
+  const updatedHits = this.state.result.hits.filter(isNotId);
+  this.setState(&#123;
+<code class="uil">    result: Object.assign(&#123;&#125;, this.state.result, &#123; hits: updatedHits &#125;)
+</code>  &#125;);
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Eso es todo en JavaScript ES5. Hay una solución más simple en ES6 y el futuro JavaScript libera. ¿Puedo introducir el operador se extendió a usted? Sólo consta de tres puntos: <code>...</code>Cuando se usa, todos los valores de una array o un objeto se copia a otra array o un objeto.</p>
+
+<p>That’s it in JavaScript ES5. There is a simpler solution in ES6 and future JavaScript releases. May I introduce the spread operator to you? It only consists of three dots: <code>...</code> When it is used, every value from an array or object gets copied to another array or object.</p>
+
+<p className="it">Vamos a examinar la ES6 <strong>gama</strong> operador de difusión a pesar de que no lo necesita todavía.</p>
+
+<p>Let’s examine the ES6 <strong>array</strong> spread operator even though you don’t need it yet.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">userList</code> <code class="o">=</code> <code class="p">[</code><code class="s1">'Robin'</code><code class="p">,</code> <code class="s1">'Andrew'</code><code class="p">,</code> <code class="s1">'Dan'</code><code class="p">];</code>
+<code class="kr">const</code> <code class="nx">additionalUser</code> <code class="o">=</code> <code class="s1">'Jordan'</code><code class="p">;</code>
+<code class="kr">const</code> <code class="nx">allUsers</code> <code class="o">=</code> <code class="p">[</code> <code class="p">...</code><code class="nx">userList</code><code class="p">,</code> <code class="nx">additionalUser</code> <code class="p">];</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">allUsers</code><code class="p">);</code>
+<code class="c1">// output: ['Robin', 'Andrew', 'Dan', 'Jordan']</code>
+</pre></div>
+
+</figure>
+
+<p className="it">La <code>allUsers</code> variable es un completamente nueva array. Las otras variables <code>userList</code> y <code>additionalUser</code> siguen siendo los mismos. podes incluso combinar dos matrices de esa manera en una nueva array.</p>
+
+<p>The <code>allUsers</code> variable is a completely new array. The other variables <code>userList</code> and <code>additionalUser</code> stay the same. You can even merge two arrays that way into a new array.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">oldUsers</code> <code class="o">=</code> <code class="p">[</code><code class="s1">'Robin'</code><code class="p">,</code> <code class="s1">'Andrew'</code><code class="p">];</code>
+<code class="kr">const</code> <code class="nx">newUsers</code> <code class="o">=</code> <code class="p">[</code><code class="s1">'Dan'</code><code class="p">,</code> <code class="s1">'Jordan'</code><code class="p">];</code>
+<code class="kr">const</code> <code class="nx">allUsers</code> <code class="o">=</code> <code class="p">[</code> <code class="p">...</code><code class="nx">oldUsers</code><code class="p">,</code> <code class="p">...</code><code class="nx">newUsers</code> <code class="p">];</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">allUsers</code><code class="p">);</code>
+<code class="c1">// output: ['Robin', 'Andrew', 'Dan', 'Jordan']</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora vamos a echar un vistazo al operador objeto propagación. No se ES6! Se trata de una <a href="https://github.com/sebmarkbage/ecmascript-rest-spread">propuesta para una futura versión ES</a> sin embargo, ya utilizado por la comunidad React. Es por eso que <em>crear una aplicación React</em> incorpora la función de la configuración.</p>
+
+<p>Now let’s have a look at the object spread operator. It is not ES6! It is a <a href="https://github.com/sebmarkbage/ecmascript-rest-spread">proposal for a future ES version</a> yet already used by the React community. That’s why <em>create-react-app</em> incorporated the feature in the configuration.</p>
+
+<p className="it">Básicamente es el mismo que el operador de gama propagación JavaScript ES6 pero con objetos. Se copia a cada par de valores clave en un nuevo objeto.</p>
+
+<p>Basically it is the same as the JavaScript ES6 array spread operator but with objects. It copies each key value pair into a new object.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">userNames</code> <code class="o">=</code> <code class="p">&#123;</code> <code class="nx">firstname</code><code class="o">:</code> <code class="s1">'Robin'</code><code class="p">,</code> <code class="nx">lastname</code><code class="o">:</code> <code class="s1">'Wieruch'</code> <code class="p">&#125;;</code>
+<code class="kr">const</code> <code class="nx">age</code> <code class="o">=</code> <code class="mi">28</code><code class="p">;</code>
+<code class="kr">const</code> <code class="nx">user</code> <code class="o">=</code> <code class="p">&#123;</code> <code class="p">...</code><code class="nx">userNames</code><code class="p">,</code> <code class="nx">age</code> <code class="p">&#125;;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">user</code><code class="p">);</code>
+<code class="c1">// output: &#123; firstname: 'Robin', lastname: 'Wieruch', age: 28 &#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Varios objetos pueden  ser distribuidas como en el ejemplo gama propagación.</p>
+
+<p>Multiple objects can be spread like in the array spread example.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">userNames</code> <code class="o">=</code> <code class="p">&#123;</code> <code class="nx">firstname</code><code class="o">:</code> <code class="s1">'Robin'</code><code class="p">,</code> <code class="nx">lastname</code><code class="o">:</code> <code class="s1">'Wieruch'</code> <code class="p">&#125;;</code>
+<code class="kr">const</code> <code class="nx">userAge</code> <code class="o">=</code> <code class="p">&#123;</code> <code class="nx">age</code><code class="o">:</code> <code class="mi">28</code> <code class="p">&#125;;</code>
+<code class="kr">const</code> <code class="nx">user</code> <code class="o">=</code> <code class="p">&#123;</code> <code class="p">...</code><code class="nx">userNames</code><code class="p">,</code> <code class="p">...</code><code class="nx">userAge</code> <code class="p">&#125;;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">user</code><code class="p">);</code>
+<code class="c1">// output: &#123; firstname: 'Robin', lastname: 'Wieruch', age: 28 &#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Después de todo lo que podes ser usado para reemplazar ES5 <code>Object.assign()</code>.</p>
+
+<p>After all it can be used to replace ES5 <code>Object.assign()</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onDismiss(id) &#123;
+  const isNotId = item =&gt; item.objectID !== id;
+  const updatedHits = this.state.result.hits.filter(isNotId);
+  this.setState(&#123;
+<code class="uil">    result: &#123; ...this.state.result, hits: updatedHits &#125;
+</code>  &#125;);
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El botón “Descartar” deberías funcionar de nuevo.</p>
+
+<p>The “Dismiss” button should work again.</p>
+
+<h4 id="leanpub-auto-exercises-23">Exercises:</h4>
+
+<ul>
+
+<li className="it">leer más sobre <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign ()</a>
+</li>
+  <li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign()</a>
+</li>
+<li className="it">leer más sobre el <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Spread_operator">operador ES6 gama propagación</a>
+    </li>
+  <li>read more about the <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Spread_operator">ES6 array spread operator</a>
+    <ul>
+    <li className="it">el operador objeto propagación se menciona brevemente</li>
+      <li>the object spread operator is briefly mentioned</li>
+    </ul>
+  </li>
+</ul>
+
+
+</div>
+</body>
+</html>
+
+  
+      

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Internal Component State</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-internal-component-state">Internal Component State</h3>
+
+<p className="it">el estado del componente interno te permite almacenar, modificar y borrar propiedades de su componente. El componente de clase ES6 podes utilizar un constructor para inicializar el estado del componente interno. El constructor se llama sólo una vez cuando el componente inicializa.</p>
+
+<p>Internal component state allows you to store, modify and delete properties of your component. The ES6 class component can use a constructor to initialize internal component state. The constructor is called only once when the component initializes.</p>
+
+<p className="it">Vamos a introducir un constructor de la clase donde se podes establecer el estado inicial de los componentes internos.</p>
+
+<p>Let’s introduce a class constructor where you can set the initial internal component state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+<code class="uil">  constructor(props) &#123;
+</code><code class="uil">    super(props);
+</code><code class="uil">
+</code><code class="uil">    this.state = &#123;
+</code><code class="uil">      list: list,
+</code><code class="uil">    &#125;;
+</code><code class="uil">
+</code><code class="uil">  &#125;
+</code>
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En su caso el estado inicial es la lista de elementos artificiales. Tenga en cuenta que tenes que llamar <code>super(props);</code> a llamar al constructor de la clase de componentes extendida. Es obligatorio, ya que establece <code>this.props</code> en su constructor. Debe seguir la mejor práctica, de lo contrario podría encontrarse con errores en el futuro.</p>
+
+<p>In your case the initial state is the artificial list of items. Note that you have to call <code>super(props);</code> to call the constructor of the extended Component class. It’s mandatory, because it sets <code>this.props</code> in your constructor. You should follow the best practice, otherwise you might run into bugs in the future.</p>
+
+<p className="it">El estado está obligado a la clase con el <code>this</code> objeto. Se podes acceder al estado de su componente. Por ejemplo, se podes utilizar en el <code>render()</code> método. Antes de que haya asignado una lista estática de artículos. Ahora que está a punto de utilizar la lista de su estado componente interno.</p>
+
+<p>The state is bound to the class with the <code>this</code> object. You can access the state in your component. For instance, it can be used in the <code>render()</code> method. Before you have mapped a static list of items. Now you are about to use the list from your internal component state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;<br></br>
+<br></br>
+  ...<br></br>
+<br></br>
+  render() &#123;<br></br>
+    return (<br></br>
+      &lt;div className="App"&gt;<br></br>
+<code class="uil">        &#123; this.state.list.map(item =&gt;<br></br>
+</code>          &lt;div key=&#123;item.objectID&#125;&gt;<br></br>
+            &lt;span&gt;<br></br>
+              &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;<br></br>
+            &lt;/span&gt;<br></br>
+            &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;<br></br>
+            &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;<br></br>
+            &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;<br></br>
+          &lt;/div&gt;<br></br>
+        )&#125;<br></br>
+      &lt;/div&gt;<br></br>
+    );<br></br>
+  &#125;<br></br>
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">La lista es parte del componente de ahora. Reside en el estado del componente interno. Se podría añadir objetos, cambiar los elementos o eliminar elementos en y desde su lista. Cada vez que cambie su estado de componente, el <code>render()</code> método de su componente se ejecutará de nuevo. Eso es cómo se podes simplemente cambiar de estado de los componentes internos y estar seguro de que el componente vuelve a renderizar.</p>
+
+<p>The list is part of the component now. It resides in the internal component state. You could add items, change items or remove items in and from your list. Every time you change your component state, the <code>render()</code> method of your component will run again. That’s how you can simply change your internal component state and be sure that the component re-renders.</p>
+
+<p className="it">Pero tene cuidado. No mutaes el estado directamente. Vos tiene que utilizar un método llamado <code>setState()</code> de modificar su estado. Se llega a saber que en un capítulo siguiente.</p>
+
+<p>But be careful. Don’t mutate the state directly. You have to use a method called <code>setState()</code> to modify your state. You will get to know it in a following chapter.</p>
+
+<h4 id="leanpub-auto-exercises-11">Exercises:</h4>
+
+<ul><li className="it">experimento con el estado interno</li>
+  <li>experiment with the internal state
+    <ul>
+    <li className="it">definir el estado más inicial en el constructor</li>
+      <li>define more initial state in the constructor</li>
+      <li className="it">utilizar el estado de tu método <code>render()</code></li>
+      <li>use the state in your <code>render()</code> method</li>
+    </ul>
+  </li>
+
+  <li className="it">leer más sobre <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes#Constructor">el constructor de la clase ES6</a>
+</li>
+  <li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes#Constructor">the ES6 class constructor</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>
+
+ 

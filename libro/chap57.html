@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Deploy your App</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-deploy-your-app">Deploy your App</h3>
+
+<p>In the end no application should stay on localhost. You want to go live. Heroku is a platform as a service where you can host your application. They offer a seamless integration with React. To be more specific: It’s possible to deploy a create-react-app in minutes. It is a zero-configuration deployment which follows the philosophy of create-react-app.</p>
+
+<p>You need to fulfill two requirements before you can deploy your application to Heroku:</p>
+
+  
+<ul><li className="it">instalar el <a href="https://devcenter.heroku.com/articles/heroku-command-line">Heroku CLI</a>
+</li>
+  <li>install the <a href="https://devcenter.heroku.com/articles/heroku-command-line">Heroku CLI</a>
+</li><li className="it">crear una <a href="https://www.heroku.com/">cuenta gratuita Heroku</a>
+</li>
+  <li>create a <a href="https://www.heroku.com/">free Heroku account</a>
+</li>
+</ul>
+
+<p>If you have installed Homebrew, you can install the Heroku CLI from command line:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> brew update
+brew install heroku-toolbelt
+</pre></div>
+
+</figure>
+
+<p>Now you can use git and Heroku CLI to deploy your application.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> git init
+heroku create -b https://github.com/mars/create-react-app-buildpack.git
+git add .
+git commit -m "react-create-app on Heroku"
+git push heroku master
+heroku open
+</pre></div>
+
+</figure>
+
+<p>That’s it. I hope your application is up and running now. If you run into problems you can check the following resources:</p>
+
+<ul><li className="it"><a href="https://blog.heroku.com/deploying-react-with-zero-configuration">La implementación de React con la configuración rápida</a></li>
+ 
+  <li><a href="https://blog.heroku.com/deploying-react-with-zero-configuration">Deploying React with Zero Configuration</a></li>
+
+  <li className="it"><a href="https://github.com/mars/create-react-app-buildpack">Heroku Buildpack para crear una aplicación React</a></li>
+  <li><a href="https://github.com/mars/create-react-app-buildpack">Heroku Buildpack for create-react-app</a></li>
+</ul>
+
+<!-- begin backmatter -->
+
+
+</div>
+</body>
+</html>

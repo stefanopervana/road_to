@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ES6 const and let</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-es6-const-and-let">ES6 const and let</h3>
+
+<p className="it">Creo que se ha notado que declaramos la variable <code>helloWorld</code> con <code>var</code>. JavaScript ES6 viene con dos opciones más para declarar tus variables: <code>const</code> e <code>let</code>. En JavaScript ES6 que rara vez se encuentra <code>var</code> más. Vamos a obtener una explicación de <code>const</code> y <code>let</code>:</p>
+
+
+<p>I guess you noticed that we declared the variable <code>helloWorld</code> with <code>var</code>. JavaScript ES6 comes with two more options to declare your variables: <code>const</code> and <code>let</code>. In JavaScript ES6 you will rarely find <code>var</code> anymore. Let’s get some explanation for <code>const</code> and <code>let</code>:</p>
+
+<p className="it">Una variable declarada con <code>const</code> no podes ser reasignado o re-declarado. No podes ser mutado (cambiado, modificado). Abrazas estructuras de datos inmutables mediante el uso de la misma. Una vez definida la estructura de datos, no se podes cambiar.</p>
+
+
+<p>A variable declared with <code>const</code> cannot be re-assigned or re-declared. It cannot get mutated (changed, modified). You embrace immutable data structures by using it. Once the data structure is defined, you cannot change it.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// not allowed</code><br></br>
+<code class="kr">const</code> <code class="nx">helloWorld</code> <code class="o">=</code> <code class="s1">'Welcome to React'</code><code class="p">;</code><br></br>
+<code class="nx">helloWorld</code> <code class="o">=</code> <code class="s1">'Bye Bye React'</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Una variable declarada con <code>let</code> podes conseguir mutado.</p>
+
+
+<p>A variable declared with <code>let</code> can get mutated.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// allowed</code><br></br>
+<code class="kd">let</code> <code class="nx">helloWorld</code> <code class="o">=</code> <code class="s1">'Welcome to React'</code><code class="p">;</code><br></br>
+<code class="nx">helloWorld</code> <code class="o">=</code> <code class="s1">'Bye Bye React'</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Se podría usar cuando se tendría que volver a asignar una variable.</p>
+
+
+<p>You would use it when you would need to re-assign a variable.</p>
+
+<p className="it">Sin embargo, hay que tener cuidado con <code>const</code>. Una variable declarada con <code>const</code> no podes quedar modificado. Pero cuando la variable es una array o un objeto, el valor que posee podes quedar alterado. El valor que posee no es inmutable.</p>
+
+
+<p>However, you have to be careful with <code>const</code>. A variable declared with <code>const</code> cannot get modified. But when the variable is an array or object, the value it holds can get altered. The value it holds is not immutable.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// allowed</code><br></br>
+<code class="kr">const</code> <code class="nx">helloWorld</code> <code class="o">=</code> <code class="p">&#123;</code><br></br>
+  <code class="nx">text</code><code class="o">:</code> <code class="s1">'Welcome to React'</code><br></br>
+<code class="p">&#125;;</code><br></br>
+<code class="nx">helloWorld</code><code class="p">.</code><code class="nx">text</code> <code class="o">=</code> <code class="s1">'Bye Bye React'</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Pero cuando usar cada declaración? Hay diferentes opiniones sobre el uso. Es mejor utilizar <code>const</code> siempre que pueda. Indica que desea mantener la estructura de datos inmutables a pesar de que los valores de los objetos y las matrices pueden  quedar modificado. Si desea modificar la variable, se podes utilizar <code>let</code>.</p>
+
+
+<p>But when to use each declaration? There are different opinions about the usage. I suggest to use <code>const</code> whenever you can. It indicates that you want to keep your data structure immutable even though values in objects and arrays can get modified. If you want to modify your variable, you can use <code>let</code>.</p>
+
+<p className="it">Inmutabilidad es abrazado en React y su ecosistema. Es por eso que <code>const</code> debe ser su opción por defecto cuando se define una variable. Aun así, en objetos complejos los valores dentro pueden  quedar modificado. Tenga cuidado acerca de este comportamiento.</p>
+
+
+<p>Immutability is embraced in React and its ecosystem. That’s why <code>const</code> should be your default choice when you define a variable. Still, in complex objects the values within can get modified. Be careful about this behavior.</p>
+
+<p className="it">En tu aplicaciónse debes utilizar <code>const</code> más <code>var</code>.</p>
+
+
+<p>In your application you should use <code>const</code> over <code>var</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>import React, &#123; Component &#125; from 'react';<br></br>
+import './App.css';<br></br>
+<br></br>
+class App extends Component &#123;<br></br>
+  render() &#123;<br></br>
+<code class="uil">    const helloWorld = 'Welcome to React';<br></br>
+</code>    return (<br></br>
+      &lt;div className="App"&gt;<br></br>
+        &lt;h2&gt;&#123;helloWorld&#125;&lt;/h2&gt;<br></br>
+      &lt;/div&gt;<br></br>
+    );<br></br>
+  &#125;<br></br>
+&#125;<br></br>
+<br></br>
+export default App;
+</pre></div>
+
+</figure>
+
+<h4 id="leanpub-auto-exercises-5">Exercises:</h4>
+
+<ul>
+  <li className="it">leer más sobre ES6 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const">const</a> </li>
+
+  <li>read more about ES6 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const">const</a>
+</li>
+  <li className="it">leer más sobre ES6 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">dejó</a> </li>
+
+  <li>read more about ES6 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">let</a>
+</li>
+  <li className="it">investigar más sobre las estructuras de datos inmutables </li>
+
+  <li>research more about immutable data structures
+    <ul>
+      <li className="it">¿por qué tienen sentido en la programación en general</li>
+
+      <li>why do they make sense in programming in general</li>
+      <li className="it">por qué se utilizan en React y su ecosistema</li>
+
+      <li>why are they used in React and its ecosystem</li>
+    </ul>
+  </li>
+</ul>
+
+
+</div>
+</body>
+</html>

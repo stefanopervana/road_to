@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ES6 Classes</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-es6-classes">ES6 Classes</h3>
+
+<p className="it">JavaScript ES6 introdujo clases. Una clase se utiliza comúnmente en los lenguajes de programación orientados a objetos. JavaScript ha sido y es muy flexible en tus paradigmas de programación. Podes hacer la programación funcional y el lado de programación orientado a objetos al lado del otro por tus casos de uso particulares.</p>
+
+<p>JavaScript ES6 introduced classes. A class is commonly used in object-oriented programming languages. JavaScript was and is very flexible in its programming paradigms. You can do functional programming and object-oriented programming side by side for their particular use cases.</p>
+
+<p className="it">A pesar de que React abarca la programación funcional, por ejemplo, con las estructuras de datos inmutables, las clases se utilizan para declarar componentes. Se llaman los componentes de clase ES6. React mezcla las partes buenas de ambos paradigmas de programación.</p>
+
+<p>Even though React embraces functional programming, for instance with immutable data structures, classes are used to declare components. They are called ES6 class components. React mixes the good parts of both programming paradigms.</p>
+
+<p className="it">Vamos a considerar la siguiente clase de desarrollador para examinar una clase de JavaScript ES6 sin pensar en un componente.</p>
+
+<p>Let’s consider the following Developer class to examine a JavaScript ES6 class without thinking about a component.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">class</code> <code class="nx">Developer</code> <code class="p">&#123;</code><br></br>
+  <code class="nx">constructor</code><code class="p">(</code><code class="nx">firstname</code><code class="p">,</code> <code class="nx">lastname</code><code class="p">)</code> <code class="p">&#123;</code><br></br>
+    <code class="k">this</code><code class="p">.</code><code class="nx">firstname</code> <code class="o">=</code> <code class="nx">firstname</code><code class="p">;</code><br></br>
+    <code class="k">this</code><code class="p">.</code><code class="nx">lastname</code> <code class="o">=</code> <code class="nx">lastname</code><code class="p">;</code><br></br>
+  <code class="p">&#125;</code><br></br>
+<br></br>
+  <code class="nx">getName</code><code class="p">()</code> <code class="p">&#123;</code>
+    <code class="k">return</code> <code class="k">this</code><code class="p">.</code><code class="nx">firstname</code> <code class="o">+</code> <code class="s1">' '</code> <code class="o">+</code> <code class="k">this</code><code class="p">.</code><code class="nx">lastname</code><code class="p">;</code><br></br>
+  <code class="p">&#125;</code><br></br>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Una clase tiene un constructor para que sea instanciable. El constructor podes tomar argumentos para asignarlo a la instancia de clase. Además una clase podes definir funciones. Dado que la función está asociada con una clase, se llama un método. A veces se hace referencia como método de clase.</p>
+
+<p>A class has a constructor to make it instantiable. The constructor can take arguments to assign it to the class instance. Additionally a class can define functions. Because the function is associated with a class, it is called a method. Sometimes it is referenced as class method.</p>
+
+<p className="it">La clase Developer es solamente la declaración de clase. Se pueden  crear múltiples instancias de la clase mediante la invocación de la misma. Es similar al componente de clase ES6, que tiene una declaración, pero hay que usarlo en otro lugar para crear instancias de ella.</p>
+
+<p>The Developer class is only the class declaration. You can create multiple instances of the class by invoking it. It is similar to the ES6 class component, that has a declaration, but you have to use it somewhere else to instantiate it.</p>
+
+<p className="it">Vamos a ver cómo se podes crear una instancia de la clase y cómo se podes utilizar tus métodos.</p>
+
+<p>Let’s see how you can instantiate the class and how you can use its methods.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">robin</code> <code class="o">=</code> <code class="k">new</code> <code class="nx">Developer</code><code class="p">(</code><code class="s1">'Robin'</code><code class="p">,</code> <code class="s1">'Wieruch'</code><code class="p">);</code><br></br>
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">robin</code><code class="p">.</code><code class="nx">getName</code><code class="p">());</code><br></br>
+<code class="c1">// output: Robin Wieruch</code>
+</pre></div>
+
+</figure>
+
+<p className="it">React utiliza clases JavaScript ES6 para los componentes de clase ES6. Ya ha utilizado un componente de clase ES6.</p>
+
+<p>React uses JavaScript ES6 classes for ES6 class components. You already used one ES6 class component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">React</code><code class="p">,</code> <code class="p">&#123;</code> <code class="nx">Component</code> <code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'react'</code><code class="p">;</code><br></br>
+<br></br>
+<code class="p">...</code><br></br>
+<br></br>
+<code class="kr">class</code> <code class="nx">App</code> <code class="kr">extends</code> <code class="nx">Component</code> <code class="p">&#123;</code><br></br>
+  <code class="nx">render</code><code class="p">()</code> <code class="p">&#123;</code><br></br>
+    <code class="p">...</code><br></br>
+  <code class="p">&#125;</code><br></br>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">La clase App extiende desde <code>Component</code>. Básicamente se declara el componente de aplicación, sino que se extiende a partir de otro componente. Lo que se extienden significa? En la programación orientada a objetos que tiene el principio de la herencia. Se utiliza para pasar por encima de las funcionalidades de una clase a otra clase.</p>
+
+<p>The App class extends from <code>Component</code>. Basically you declare the App component, but it extends from another component. What does extend mean? In object-oriented programming you have the principle of inheritance. It is used to pass over functionalities from one class to another class.</p>
+
+<p className="it">La clase App amplía la funcionalidad de la clase de componentes. Para ser más específicos, hereda las funcionalidades de la clase Component. El componente se utiliza para extender una clase básica ES6 a una clase de componente ES6. Tiene todas las funcionalidades de un componente necesita tener. Una de estas funcionalidades, un método, que ya han utilizado: el <code>render()</code> método. Sin embargo, usted aprenderá acerca más funcionalidades.</p>
+
+<p>The App class extends functionality from the Component class. To be more specific, it inherits functionalities from the Component class. The Component is used to extend a basic ES6 class to a ES6 component class. It has all the functionalities a component needs to have. One of these functionalities, a method, you have already used: the <code>render()</code> method. But you will learn about more functionalities.</p>
+
+<p className="it">La <code>Component</code> clase encapsula todas las funcionalidades React que un desarrollador no necesita ver. Se permite a los desarrolladores usar clases como componentes en React.</p>
+
+<p>The <code>Component</code> class encapsulates all the React functionalities that a developer doesn’t need to see. It enables developers to use classes as components in React.</p>
+
+<p className="it">Los métodos de un React <code>Component</code> expone es la interfaz pública. Uno de estos métodos tiene que ser sobrescritos, los otros no necesitan ser sobrescrito. Vos aprenderá acerca de estas últimas cuando el libro llega a métodos de ciclo de vida en un capítulo posterior. El <code>render()</code> método tiene que ser sobrescritos, ya que define la salida de un React <code>Component</code>.</p>
+
+<p>The methods React  <code>Component</code> exposes is the public interface. One of these methods has to be overwritten, the others don’t need to be overwritten. You will learn about the latter ones when the book arrives at lifecycle methods in a later chapter. The <code>render()</code> method has to be overwritten, because it defines the output of React  <code>Component</code>.</p>
+
+<p className="it">Ahora que sabes lo básico alrededor de JavaScript clases ES6 y la forma en que se utilizan en React a extenderlas a los componentes. Como ya he dicho, podrá aprender más acerca de los métodos de componentes cuando el libro se describen React métodos de ciclo de vida.</p>
+
+<p>Now you know the basics around JavaScript ES6 classes and how they are used in React to extend them to components. As I said, you will learn more about the Component methods when the book describes React lifecycle methods.</p>
+
+<h4 id="leanpub-auto-exercises-10">Exercises:</h4>
+
+<ul>
+  <li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes">ES6 classes</a>
+</li>
+</ul>
+
+<div class="page-break"></div>
+<p className="it">Has aprendido a arrancar tu propia aplicación React! Recapitulemos los últimos capítulos:</p>
+
+<p>You have learned to bootstrap your own React application! Let’s recap the last chapters:</p>
+
+<ul>
+  <li>React
+    <ul>
+    <li className="it">Create-React-app bootstraps una aplicación React</li>
+      <li>create-react-app bootstraps React  application</li>
+      <li className="it">JSX se mezcla HTML y JavaScript para definir componentes React</li>
+      <li>JSX mixes up HTML and JavaScript to define React components</li>
+      <li className="it">componentes, instancias y elementos son cosas diferentes</li>
+      <li>components, instances and elements are different things</li>
+      <li className="it">ReactDOM.render () es un punto de entrada para una aplicación React</li>
+      <li>ReactDOM.render() is an entry point for React  application</li>
+      <li className="it">incorporado en JavaScript funcionalidades se pueden  utilizar en JSX</li>
+      <li>built-in JavaScript functionalities can be used in JSX
+        <ul>
+        <li className="it">mapa se podes utilizar para hacer una lista de elementos como elementos HTML</li>
+          <li>map can be used to render a list of items as HTML elements</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>ES6
+    <ul>
+    <li className="it">declaraciones de variables con const y permiten a los casos de uso particulares</li>
+      <li>variable declarations with const and let for particular use cases</li>
+      <li className="it">funciones de dirección se pueden  utilizar para acortar tus declaraciones de funciones</li>
+      <li>arrow functions can be used to shorten your function declarations</li>
+      <li className="it">clases se utilizan para definir los componentes en React</li>
+      <li>classes are used to define components in React</li>
+    </ul>
+  </li>
+</ul>
+
+<p className="it">Tiene sentido hacer una pausa en este punto. Internalizar los aprendizajes y aplicarlos en su propio. Podes experimentar con el código fuente que ha escrito hasta ahora.</p>
+
+<p>It makes sense to take a break at this point. Internalize the learnings and apply them on your own. You can experiment with the source code you have written so far.</p>
+
+<p className="it">podes encontrar el código fuente en el <a href="https://github.com/rwieruch/hackernews-client/tree/0c5a701170dcc72fe68bdd594df3a6522f58fbb3">repositorio oficial</a>.</p>
+
+<p>You can find the source code in the <a href="https://github.com/rwieruch/hackernews-client/tree/0c5a701170dcc72fe68bdd594df3a6522f58fbb3">official repository</a>.</p>
+
+
+
+</div>
+</body>
+</html>
+
+

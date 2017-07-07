@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ES6 Modules: Import and Export</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-es6-modules-import-and-export">ES6 Modules: Import and Export</h3>
+
+<p className="it">En JavaScript ES6 podes importar y funcionalidades de exportación de módulos. Estas funcionalidades pueden  ser funciones, clases, componentes, constantes, etc. Básicamente todo lo que se podes asignar a una variable. Los módulos pueden  ser archivos individuales o carpetas enteras con un archivo de índice como punto de entrada.</p>
+
+<p>In JavaScript ES6 you can import and export functionalities from modules. These functionalities can be functions, classes, components, constants etc. Basically everything that you can assign to a variable. The modules can be single files or whole folders with one index file as entry point.</p>
+
+<p className="it">En el comienzo del libro, después de haber bootstrap tu aplicacióncon <em>crear una aplicación React</em> , que ya tenía varios <code>import</code> y <code>export</code> declaraciones a través de tus archivos iniciales. Ahora es el momento apropiado para explicar estos.</p>
+
+<p>In the beginning of the book, after you have bootstrapped your application with <em>create-react-app</em>, you already had several <code>import</code> and <code>export</code> statements across your initial files. Now it is the appropriate time to explain these.</p>
+
+<p className="it">El <code>import</code> y <code>export</code> declaraciones ayudará a compartir código en varios archivos. Antes había ya varias soluciones para esto en el entorno de JavaScript. Fue un desastre, debido a que se queres seguir una forma estandarizada en lugar de tener varios enfoques para la misma cosa. Ahora bien, es un comportamiento nativo en JavaScript ES6.</p>
+
+<p>The <code>import</code> and <code>export</code> statements help you to share code across multiple files. Before there were already several solutions for this in the JavaScript environment. It was a mess, because you would want to follow one standardized way rather than having several approaches for the same thing. Now it is a native behavior in JavaScript ES6.</p>
+
+<p className="it">Además, estas declaraciones abrazan código de división. Distribuir tu código en varios archivos para mantenerla reutilizable y fácil de mantener. El primero es cierto, porque se podes importar el trozo de código en varios archivos. Este último es cierto porque tiene una sola fuente, donde se mantiene la pieza de código.</p>
+
+<p>Additionally these statements embrace code splitting. You distribute your code across multiple files to keep it reusable and maintainable. The former is true because you can import the piece of code in multiple files. The latter is true because you have one single source where you maintain the piece of code.</p>
+
+<p className="it">Por último, pero no menos importante, que ayuda a pensar en la encapsulación de código. No todas las funcionalidades necesita conseguir exportado desde un archivo. Algunas de estas funcionalidades sólo se deberías usar en el archivo en el que se han definido. Las exportaciones de un archivo son, básicamente, la API pública para el archivo. Sólo las funcionalidades exportados están disponibles para ser reutilizado en otro lugar. De ello se desprende la mejor práctica de la encapsulación.</p>
+
+<p>Last but not least, it helps you to think about code encapsulation. Not every functionality needs to get exported from a file. Some of these functionalities should only be used in the file where they have been defined. The exports of a file are basically the public API to the file. Only the exported functionalities are available to be reused somewhere else. It follows the best practice of encapsulation.</p>
+
+<p className="it">Pero vayamos a la práctica. ¿Cómo estos <code>import</code> y <code>export</code> trabajan declaraciones? Los siguientes ejemplos muestran las declaraciones de compartir uno o múltiples variables entre dos archivos. Al final, el enfoque podes escalar a varios archivos y podría compartir algo más que simples variables.</p>
+
+<p>But let’s get practical. How do these <code>import</code> and <code>export</code> statements work? The following examples showcase the statements by sharing one or multiple variables across two files. In the end, the approach can scale to multiple files and could share more than simple variables.</p>
+
+<p className="it">podes exportar una o varias variables. Se llama un llamado a la exportación.</p>
+
+<p>You can export one or multiple variables. It is called a named export.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: file1.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">firstname</code> <code class="o">=</code> <code class="s1">'robin'</code><code class="p">;</code>
+<code class="kr">const</code> <code class="nx">lastname</code> <code class="o">=</code> <code class="s1">'wieruch'</code><code class="p">;</code>
+
+<code class="kr">export</code> <code class="p">&#123;</code> <code class="nx">firstname</code><code class="p">,</code> <code class="nx">lastname</code> <code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">E importarlos en otro archivo con una ruta relativa al primer archivo.</p>
+
+<p>And import them in another file with a relative path to the first file.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: file2.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="p">&#123;</code> <code class="nx">firstname</code><code class="p">,</code> <code class="nx">lastname</code> <code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'./file1.js'</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">firstname</code><code class="p">);</code>
+<code class="c1">// output: robin</code>
+</pre></div>
+
+</figure>
+
+<p className="it">También podes importar todas las variables exportadas desde otro archivo como un objeto.</p>
+
+<p>You can also import all exported variables from another file as one object.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: file2.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="o">*</code> <code class="nx">as</code> <code class="nx">person</code> <code class="nx">from</code> <code class="s1">'./file1.js'</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">person</code><code class="p">.</code><code class="nx">firstname</code><code class="p">);</code>
+<code class="c1">// output: robin</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Las importaciones pueden  tener un alias. podes suceder que importe funcionalidades de múltiples archivos que tienen el mismo nombre de exportación. Es por eso que se podes utilizar un alias.</p>
+
+<p>Imports can have an alias. It can happen that you import functionalities from multiple files that have the same named export. That’s why you can use an alias.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: file2.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="p">&#123;</code> <code class="nx">firstname</code> <code class="nx">as</code> <code class="nx">foo</code> <code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'./file1.js'</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">foo</code><code class="p">);</code>
+<code class="c1">// output: robin</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Por último, pero no menos importante, existe la <code>default</code> declaración. podes ser utilizado por algunos casos de uso:</p>
+
+<p>Last but not least there exists the <code>default</code> statement. It can be used for a few use cases:</p>
+
+<ul>
+  <li>to export and import a single functionality</li>
+  <li>to highlight the main functionality of the exported API of a module</li>
+  <li>to have a fallback import functionality</li>
+</ul>
+
+<figure class="code">
+  <figcaption>Code Playground: file1.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">robin</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">firstname</code><code class="o">:</code> <code class="s1">'robin'</code><code class="p">,</code>
+  <code class="nx">lastname</code><code class="o">:</code> <code class="s1">'wieruch'</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="kr">export</code> <code class="k">default</code> <code class="nx">robin</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<figure class="code">
+  <figcaption>Code Playground: file2.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">developer</code> <code class="nx">from</code> <code class="s1">'./file1.js'</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">developer</code><code class="p">);</code>
+<code class="c1">// output: &#123; firstname: 'robin', lastname: 'wieruch' &#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">El nombre de importación podes ser diferente del nombre por defecto exportado. También se podes utilizar en conjunción con las declaraciones de exportación e importación con nombre.</p>
+
+<p>The import name can differ from the exported default name. You can also use it in conjunction with the named export and import statements.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: file1.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">firstname</code> <code class="o">=</code> <code class="s1">'robin'</code><code class="p">;</code>
+<code class="kr">const</code> <code class="nx">lastname</code> <code class="o">=</code> <code class="s1">'wieruch'</code><code class="p">;</code>
+
+<code class="kr">const</code> <code class="nx">person</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">firstname</code><code class="p">,</code>
+  <code class="nx">lastname</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="kr">export</code> <code class="p">&#123;</code>
+  <code class="nx">firstname</code><code class="p">,</code>
+  <code class="nx">lastname</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="kr">export</code> <code class="k">default</code> <code class="nx">person</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<figure class="code">
+  <figcaption>Code Playground: file2.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">developer</code><code class="p">,</code> <code class="p">&#123;</code> <code class="nx">firstname</code><code class="p">,</code> <code class="nx">lastname</code> <code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'./file1.js'</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">developer</code><code class="p">);</code>
+<code class="c1">// output: &#123; firstname: 'robin', lastname: 'wieruch' &#125;</code>
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">firstname</code><code class="p">,</code> <code class="nx">lastname</code><code class="p">);</code>
+<code class="c1">// output: robin wieruch</code>
+</pre></div>
+
+</figure>
+
+<p className="it">En las exportaciones nombradas podes prescindir de líneas adicionales y exportar las variables directamente.</p>
+
+<p>In named exports you can spare additional lines and export the variables directly.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: file1.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">export</code> <code class="kr">const</code> <code class="nx">firstname</code> <code class="o">=</code> <code class="s1">'robin'</code><code class="p">;</code>
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">lastname</code> <code class="o">=</code> <code class="s1">'wieruch'</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Estas son las principales funcionalidades de los módulos ES6. Ellos te ayudan a organizar el código, para mantener tu código y el diseño de las API de módulos reutilizables. También podes exportar y funcionalidades de importación para ponerlos a prueba. Que va a renderizar  en uno de los siguientes capítulos.</p>
+
+<p>These are the main functionalities for ES6 modules. They help you to organize your code, to maintain your code and to design reusable module APIs. You can also export and import functionalities to test them. You will do that in one of the following chapters.</p>
+
+<h4 id="leanpub-auto-exercises-27">Exercises:</h4>
+
+<ul>
+  <li>read more about <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import">ES6 import</a>
+</li>
+  <li>read more about <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export">ES6 export</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Ref a DOM Element</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-ref-a-dom-element">Ref a DOM Element</h3>
+
+<p className="it">A veces es necesario para interactuar con tus nodos DOM en React. El <code>ref</code> atributo te da acceso a un node en tus elementos. Por lo general, esto es un patrón en contrReact , ya que debes utilizar su forma declarativa de hacer las cosas y su flujo de datos unidireccional. Sin embargo, hay ciertos casos en los que necesita el acceso al node DOM. La documentación oficial menciona tres casos de uso:</p>
+
+<p>Sometimes you need to interact with your DOM nodes in React. The <code>ref</code> attribute gives you access to a node in your elements. Usually that is an anti pattern in React, because you should use its declarative way of doing things and its unidirectional data flow. But there are certain cases where you need access to the DOM node. The official documentation mentions three use cases:</p>
+
+<ul>
+  <li className="it">para utilizar la API DOM (enfoque, la reproducción de los medios de comunicación, etc.)</li>
+  <li>to use the DOM API (focus, media playback etc.)</li>
+  <li className="it">para invocar animaciones node DOM imperativas</li>
+  <li>to invoke imperative DOM node animations</li>
+  <li className="it">para integrarse con la biblioteca de terceros que necesita el node DOM (por ejemplo <a href="https://d3js.org/">D3.js</a> )</li>
+  <li>to integrate with third-party library that needs the DOM node (e.g. <a href="https://d3js.org/">D3.js</a>)</li>
+</ul>
+
+<p className="it">Hagámoslo por ejemplo, con el componente de búsqueda. Cuando la aplicación hace que la primera vez, el campo de entrada debes ser enfocado. Eso es un caso de uso donde se necesita el acceso a la API de DOM. Este capítulo te mostrará cómo funciona, pero ya que no es muy útil para la aplicación en sí, vamos a omitir los cambios después del capítulo. Se podes mantener para su propia aplicación, si quieres.</p>
+
+<p>Let’s do it by example with the Search component. When the application renders the first time, the input field should be focused. That’s one use case where you would need access to the DOM API. This chapter will show you how it works, but since it is not very useful for the application itself, we will omit the changes after the chapter. You can keep it for your own application if you want.</p>
+
+<p className="it">En general, se podes utilizar el <code>ref</code> atributo en ambos componentes sin estado funcionales y componentes de clase ES6. En el ejemplo del caso de uso de enfoque, se necesita un método de ciclo de vida. Es por eso que primero te mostrará el enfoque de utilizar el <code>ref</code> atributo con un componente de clase ES6.</p>
+
+<p>In general, you can use the <code>ref</code> attribute in both functional stateless components and ES6 class components. In the example of the focus use case, you will need a lifecycle method. That’s why I will first show you the approach of using the <code>ref</code> attribute with an ES6 class component.</p>
+
+<p className="it">El paso inicial es refactorizar el componente sin estado funcional a un componente de clase ES6.</p>
+
+<p>The initial step is to refactor the functional stateless component to an ES6 class component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">class Search extends Component &#123;
+</code><code class="uil">
+</code><code class="uil">  render() &#123;
+</code><code class="uil">    const &#123;
+</code><code class="uil">      value,
+</code><code class="uil">      onChange,
+</code><code class="uil">      onSubmit,
+</code><code class="uil">      children
+</code><code class="uil">    &#125; = this.props;
+</code><code class="uil">
+</code><code class="uil">    return (
+</code>      &lt;form onSubmit=&#123;onSubmit&#125;&gt;
+        &lt;input
+          type="text"
+          value=&#123;value&#125;
+          onChange=&#123;onChange&#125;
+        /&gt;
+        &lt;button type="submit"&gt;
+          &#123;children&#125;
+        &lt;/button&gt;
+      &lt;/form&gt;
+<code class="uil">    );
+</code><code class="uil">  &#125;
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">El <code>this</code> objeto de un componente de clase ES6 nos ayuda a hacer referencia al node DOM con el <code>ref</code> atributo.</p>
+
+<p>The <code>this</code> object of an ES6 class component helps us to reference the DOM node with the <code>ref</code> attribute.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Search extends Component &#123;
+
+  render() &#123;
+    const &#123;
+      value,
+      onChange,
+      onSubmit,
+      children
+    &#125; = this.props;
+
+    return (
+      &lt;form onSubmit=&#123;onSubmit&#125;&gt;
+        &lt;input
+          type="text"
+          value=&#123;value&#125;
+          onChange=&#123;onChange&#125;
+<code class="uil">          ref=&#123;(node) =&gt; &#123; this.input = node; &#125;&#125;
+</code>        /&gt;
+        &lt;button type="submit"&gt;
+          &#123;children&#125;
+        &lt;/button&gt;
+      &lt;/form&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se podes enfocar el campo de entrada cuando el componente montado utilizando el <code>this</code> objeto y el método de ciclo de vida apropiado.</p>
+
+<p>Now you can focus the input field when the component mounted by using the <code>this</code> object and the appropriate lifecycle method.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Search extends Component &#123;
+
+<code class="uil">  componentDidMount() &#123;
+</code><code class="uil">    this.input.focus();
+</code><code class="uil">  &#125;
+</code>
+  render() &#123;
+    const &#123;
+      value,
+      onChange,
+      onSubmit,
+      children
+    &#125; = this.props;
+
+    return (
+      &lt;form onSubmit=&#123;onSubmit&#125;&gt;
+        &lt;input
+          type="text"
+          value=&#123;value&#125;
+          onChange=&#123;onChange&#125;
+          ref=&#123;(node) =&gt; &#123; this.input = node; &#125;&#125;
+        /&gt;
+        &lt;button type="submit"&gt;
+          &#123;children&#125;
+        &lt;/button&gt;
+      &lt;/form&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El campo de entrada debes centrarse cuando se hace la solicitud. Eso es todo, básicamente.</p>
+
+<p>The input field should be focused when the application is rendered. That’s it basically.</p>
+
+<p className="it">Pero ¿cómo obtener acceso a la <code>ref</code> de un componente sin estado funcional sin el <code>this</code> objeto? El siguiente componente sin estado funcional demuestra.</p>
+
+<p>But how would you get access to the <code>ref</code> in a functional stateless component without the <code>this</code> object? The following functional stateless component demonstrates it.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Search = (&#123;
+  value,
+  onChange,
+  onSubmit,
+  children
+&#125;) =&gt; &#123;
+<code class="uil">  let input;
+</code>  return (
+    &lt;form onSubmit=&#123;onSubmit&#125;&gt;
+      &lt;input
+        type="text"
+        value=&#123;value&#125;
+        onChange=&#123;onChange&#125;
+<code class="uil">        ref=&#123;(node) =&gt; input = node&#125;
+</code>      /&gt;
+      &lt;button type="submit"&gt;
+        &#123;children&#125;
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En el ejemplo del caso de uso enfoque no te ayudaría, ya que no tienen método de ciclo de vida para activar el enfoque mediante el uso de la API de DOM. Pero en el futuro se puedan encontrar otros casos de uso en los que podes tener sentido utilizar un componente sin estado funcional con el <code>ref</code> atributo.</p>
+
+<p>In the example of the focus use case it wouldn’t help you, because you have no lifecycle method to trigger the focus by using the DOM API. But in the future you might come across other use cases where it can make sense to use a functional stateless component with the <code>ref</code> attribute.</p>
+
+<h4 id="leanpub-auto-exercises-32">Exercises</h4>
+
+<ul>
+<li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/refs-and-the-dom.html">el atributo ref en React</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/refs-and-the-dom.html">the ref attribute in React</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

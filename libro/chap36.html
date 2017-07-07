@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Conditional Rendering</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-conditional-rendering">Conditional Rendering</h3>
+
+<p className="it">La prestación condicional se introdujo muy pronto en React aplicaciones. Sucede cuando se queres tomar la decisión de renderizar  sea uno u otro elemento. A veces se entiende impedir un elemento o nada. Después de todo, una representación condicional uso más simple podes ser expresada por una sentencia if-else en JSX.</p>
+
+<p>The conditional rendering is introduced pretty early in React applications. It happens when you want to make a decision to render either one or another element. Sometimes it means to render an element or nothing. After all, a conditional rendering simplest usage can be expressed by an if-else statement in JSX.</p>
+
+<p className="it">El <code>result</code> objeto en el estado del componente interno es nulo en el principio. Hasta ahora, el componente de aplicación devuelto ningún elemento cuando el <code>result</code> no ha llegado de la API. Eso ya es una representación condicional, debido a que regrese a principios del <code>render()</code> método de ciclo de vida para una determinada condición. El componente de aplicación o bien hace nada, o tus elementos.</p>
+
+<p>The <code>result</code> object in the internal component state is null in the beginning. So far, the App component returned no elements when the <code>result</code> hasn’t arrived from the API. That’s already a conditional rendering, because you return earlier from the <code>render()</code> lifecycle method for a certain condition. The App component either renders nothing or its elements.</p>
+
+<p className="it">Pero vamos a ir un paso más allá. Tiene más sentido para envolver el componente Tabla, que es el único componente que depende de la <code>result</code>, en una representación condicional independiente. Todo lo demás se debes mostrar, a pesar de que no existe <code>result</code> todavía. Podes simplemente utilizar una expresión ternaria en su JSX.</p>
+
+<p>But let’s go one step further. It makes more sense to wrap the Table component, which is the only component that depends on the <code>result</code>, in an independent conditional rendering. Everything else should be displayed, even though there is no <code>result</code> yet. You can simply use a ternary expression in your JSX.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+<code class="uil">    const &#123; searchTerm, result &#125; = this.state;
+</code>    return (
+      &lt;div className="page"&gt;
+        &lt;div className="interactions"&gt;
+          &lt;Search
+            value=&#123;searchTerm&#125;
+            onChange=&#123;this.onSearchChange&#125;
+          &gt;
+            Search
+          &lt;/Search&gt;
+        &lt;/div&gt;
+<code class="uil">        &#123; result
+</code><code class="uil">          ? &lt;Table
+</code><code class="uil">            list=&#123;result.hits&#125;
+</code><code class="uil">            pattern=&#123;searchTerm&#125;
+</code><code class="uil">            onDismiss=&#123;this.onDismiss&#125;
+</code><code class="uil">          /&gt;
+</code><code class="uil">          : null
+</code><code class="uil">        &#125;
+</code>      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Esa es su segunda opción para expresar una representación condicional. Una tercera opción es la lógica <code>&amp;&amp;</code> del operador. En JavaScript una <code>true &amp;&amp; 'Hello World'</code> siempre se evalúa como 'Hola mundo'. Una <code>false &amp;&amp; 'Hello World'</code> siempre se evalúa como falsa.</p>
+
+<p>That’s your second option to express a conditional rendering. A third option is the logical <code>&amp;&amp;</code> operator. In JavaScript a <code>true &amp;&amp; 'Hello World'</code> always evaluates to ‘Hello World’. A <code>false &amp;&amp; 'Hello World'</code> always evaluates to false.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">result</code> <code class="o">=</code> <code class="kc">true</code> <code class="o">&amp;&amp;</code> <code class="s1">'Hello World'</code><code class="p">;</code>
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">result</code><code class="p">);</code>
+<code class="c1">// output: Hello World</code>
+
+<code class="kr">const</code> <code class="nx">result</code> <code class="o">=</code> <code class="kc">false</code> <code class="o">&amp;&amp;</code> <code class="s1">'Hello World'</code><code class="p">;</code>
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">result</code><code class="p">);</code>
+<code class="c1">// output: false</code>
+</pre></div>
+
+</figure>
+
+<p className="it">En React se podes hacer uso de ese comportamiento. Si la condición es verdadera, la expresión después de la lógica <code>&amp;&amp;</code> operador será la salida. Si la condición es falsa, React ignora y se salta la expresión. Es aplicable en el caso Tabla condicional prestación, ya que debes devolver una tabla o nada.</p>
+
+<p>In React you can make use of that behavior. If the condition is true, the expression after the logical <code>&amp;&amp;</code> operator will be the output. If the condition is false, React ignores and skips the expression. It is applicable in the Table conditional rendering case, because it should return a Table or nothing.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="p">&#123;</code> <code class="nx">result</code> <code class="o">&amp;&amp;</code>
+  <code class="o">&lt;</code><code class="nx">Table</code>
+    <code class="nx">list</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">result</code><code class="p">.</code><code class="nx">hits</code><code class="p">&#125;</code>
+    <code class="nx">pattern</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">searchTerm</code><code class="p">&#125;</code>
+    <code class="nx">onDismiss</code><code class="o">=</code><code class="p">&#123;</code><code class="k">this</code><code class="p">.</code><code class="nx">onDismiss</code><code class="p">&#125;</code>
+  <code class="o">/&gt;</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Estos fueron algunos enfoques para utilizar la reproducción condicional en React. Podes leer acerca de <a href="https://www.robinwieruch.de/conditional-rendering-react/">más alternativas en mi sitio web</a> donde guardo una lista exhaustiva de las representaciones condicionales. Por otra parte se llega a conocer tus diferentes casos de uso y cuándo aplicarlas.</p>
+
+<p>These were a few approaches to use conditional rendering in React. You can read about <a href="https://www.robinwieruch.de/conditional-rendering-react/">more alternatives on my website</a> where I keep an exhaustive list of conditional renderings. Moreover you will get to know their different use cases and when to apply them.</p>
+
+<p className="it">Después de todo, Debesría ser capaz de ver los datos captados en tu aplicación. Todo excepto la tabla se muestra cuando el ir a buscar datos están pendientes. Una vez que la solicitud resuelve el resultado, aparece la tabla.</p>
+
+<p>After all, you should be able to see the fetched data in your application. Everything except the Table is displayed when the data fetching is pending. Once the request resolves the result, the Table is displayed.</p>
+
+<h4 id="leanpub-auto-exercises-24">Exercises:</h4>
+
+<ul>
+<li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/conditional-rendering.html">React prestación condicional</a>
+</li>
+
+  <li>read more about <a href="https://facebook.github.io/react/docs/conditional-rendering.html">React conditional rendering</a>
+</li>
+
+<li className="it">Leer más acerca de <a href="https://www.robinwieruch.de/conditional-rendering-react/">maneras diferentes para representaciones condicionales</a>
+</li>
+  <li>read more about <a href="https://www.robinwieruch.de/conditional-rendering-react/">different ways for conditional renderings</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

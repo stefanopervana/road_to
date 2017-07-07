@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Fetching Data</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-fetching-data">Fetching Data</h3>
+
+<p className="it">Ahora ya está preparado para obtener los datos de la API de Hacker News. He mencionado un método de ciclo de vida que podes ser utilizado para obtener los datos: <code>componentDidMount()</code>. Que va a utilizar la API fetch nativa para realizar la solicitud.</p>
+
+<p>Now you are prepared to fetch data from the Hacker News API. I mentioned one lifecycle method that can be used to fetch data: <code>componentDidMount()</code>. You will use the native fetch API to perform the request.</p>
+
+<p className="it">Antes de que podamos usarlo, vamos a configurar las constantes de URL y los parámetros por defecto a la desintegración de la solicitud de API en trozos.</p>
+
+<p>Before we can use it, let’s set up the url constants and default parameters to breakup the API request into chunks.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>import React, &#123; Component &#125; from 'react';
+import './App.css';
+
+<code class="uil">const DEFAULT_QUERY = 'redux';
+</code><code class="uil">
+</code><code class="uil">const PATH_BASE = 'https://hn.algolia.com/api/v1';
+</code><code class="uil">const PATH_SEARCH = '/search';
+</code><code class="uil">const PARAM_SEARCH = 'query=';
+</code>
+...
+</pre></div>
+
+</figure>
+
+<p className="it">En ES6 JavaScript podes usar <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals">cadenas de la plantilla</a> para concatenar cadenas. Lo va a usar para concatenar su URL para el punto final de la API.</p>
+
+<p>In ES6 JavaScript you can use <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals">template strings</a> to concatenate strings. You will use it to concatenate your url for the API endpoint.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// ES6</code>
+<code class="kr">const</code> <code class="nx">url</code> <code class="o">=</code> <code class="sb">`</code><code class="si">$&#123;</code><code class="nx">PATH_BASE</code><code class="si">&#125;$&#123;</code><code class="nx">PATH_SEARCH</code><code class="si">&#125;</code><code class="sb">?</code><code class="si">$&#123;</code><code class="nx">PARAM_SEARCH</code><code class="si">&#125;$&#123;</code><code class="nx">DEFAULT_QUERY</code><code class="si">&#125;</code><code class="sb">`</code><code class="p">;</code>
+
+<code class="c1">// ES5</code>
+<code class="kd">var</code> <code class="nx">url</code> <code class="o">=</code> <code class="nx">PATH_BASE</code> <code class="o">+</code> <code class="nx">PATH_SEARCH</code> <code class="o">+</code> <code class="s1">'?'</code> <code class="o">+</code> <code class="nx">PARAM_SEARCH</code> <code class="o">+</code> <code class="nx">DEFAULT_QUERY</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">url</code><code class="p">);</code>
+<code class="c1">// output: https://hn.algolia.com/api/v1/search?query=redux</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Que mantendrás su composición url flexibles en el futuro.</p>
+
+<p>That will keep your url composition flexible in the future.</p>
+
+<p className="it">Pero vayamos a la solicitud de la API donde usará la URL. Los datos enteros traen proceso será presentado a la vez, pero cada paso conseguirán explicado después.</p>
+
+<p>But let’s get to the API request where you will use the url. The whole data fetch process will be presented at once, but each step will get explained afterward.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>...
+
+class App extends Component &#123;
+
+  constructor(props) &#123;
+    super(props);
+
+    this.state = &#123;
+<code class="uil">      result: null,
+</code><code class="uil">      searchTerm: DEFAULT_QUERY,
+</code>    &#125;;
+
+<code class="uil">    this.setSearchTopstories = this.setSearchTopstories.bind(this);
+</code><code class="uil">    this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
+</code>    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this);
+  &#125;
+
+<code class="uil">  setSearchTopstories(result) &#123;
+</code><code class="uil">    this.setState(&#123; result &#125;);
+</code><code class="uil">  &#125;
+</code><code class="uil">
+</code><code class="uil">  fetchSearchTopstories(searchTerm) &#123;
+</code><code class="uil">    fetch(`$&#123;PATH_BASE&#125;$&#123;PATH_SEARCH&#125;?$&#123;PARAM_SEARCH&#125;$&#123;searchTerm&#125;`)
+</code><code class="uil">      .then(response =&gt; response.json())
+</code><code class="uil">      .then(result =&gt; this.setSearchTopstories(result));
+</code><code class="uil">  &#125;
+</code><code class="uil">
+</code><code class="uil">  componentDidMount() &#123;
+</code><code class="uil">    const &#123; searchTerm &#125; = this.state;
+</code><code class="uil">    this.fetchSearchTopstories(searchTerm);
+</code><code class="uil">  &#125;
+</code>
+  ...
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Una gran cantidad de cosas suceden en el código. Pensé que se rompa en pedazos más pequeños. Por otra parte, sería difícil de entender las relaciones de cada pieza entre sí. Voy a explicar cada paso en detalle.</p>
+
+<p>A lot of things happen in the code. I thought about it to break it into smaller pieces. Then again it would be difficult to grasp the relations of each piece to each other. Let me explain each step in detail.</p>
+
+<p className="it">En primer lugar, se podes eliminar la lista de elementos artificiales, debido a que regrese a consecuencia de la API de Hacker News. El estado inicial de su componente tiene un resultado predeterminado y el término de búsqueda vacía. El mismo término de búsqueda por defecto se utiliza en el campo de búsqueda y en su primera solicitud.</p>
+
+<p>First, you can remove the artificial list of items, because you return a result from the Hacker News API. The initial state of your component has an empty result and default search term. The same default search term is used in the search field and in your first request.</p>
+
+<p className="it">En segundo lugar, se utiliza el <code>componentDidMount()</code> método de ciclo de vida para recuperar los datos después de que el componente se montó. En el primer buscar el término de búsqueda por defecto del estado del componente se utiliza. Se buscará “redux” historias relacionadas, ya que es el parámetro predeterminado.</p>
+
+<p>Second, you use the <code>componentDidMount()</code> lifecycle method to fetch the data after the component did mount. In the very first fetch the default search term from the component state is used. It will fetch “redux” related stories, because that is the default parameter.</p>
+
+<p className="it">En tercer lugar, el nativo fetch es utilizado. Las cadenas de la plantilla JavaScript ES6 permiten que componen la URL con el <code>searchTerm</code>. La url es el argumento de la función API fetch nativa. La respuesta tiene que quedar transformado a JSON, eso es un paso obligatorio en un nativo traiga, y, finalmente, se podes configurar en el estado de los componentes internos.</p>
+
+<p>Third, the native fetch is used. The JavaScript ES6 template strings allow it to compose the url with the <code>searchTerm</code>. The url is the argument for the native fetch API function. The response needs to get transformed to json, that’s a mandatory step in a native fetch, and can finally be set in the internal component state.</p>
+
+<p className="it">Por último, pero no menos importante, no se olvide de unirse a tus nuevos métodos de componentes.</p>
+
+<p>Last but not least, don’t forget to bind your new component methods.</p>
+
+<p className="it">Ahora podes utilizar los datos captados en lugar de la lista de elementos artificiales. Sin embargo, tenes que tener cuidado de nuevo. El resultado no es sólo una lista de los datos. <a href="https://hn.algolia.com/api">Es un objeto complejo con meta-información y una lista de hits (historias). </a>podes emitir el estado interno con <code>console.log(this.state);</code> en su <code>render()</code> método para visualizarlo.</p>
+
+<p>Now you can use the fetched data instead of the artificial list of items. However, you have to be careful again. The result is not only a list of data. <a href="https://hn.algolia.com/api">It’s a complex object with meta information and a list of hits (stories).</a> You can output the internal state with <code>console.log(this.state);</code> in your <code>render()</code> method to visualize it.</p>
+
+<p className="it">Vamos a utilizar el resultado para hacerlo. Pero vamos a evitar para hacer cualquier cosa - devolver null - cuando no hay ningún resultado. Una vez que la solicitud a la API tuvo éxito, el resultado se guarda en el estado y el componente de aplicación será volver a hacer con el estado actualizado.</p>
+
+<p>Let’s use the result to render it. But we will prevent to render anything - return null - when there is no result. Once the request to the API succeeded, the result is saved to the state and the App component will re-render with the updated state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+<code class="uil">    const &#123; searchTerm, result &#125; = this.state;
+</code><code class="uil">
+</code><code class="uil">    if (!result) &#123; return null; &#125;
+</code><code class="uil">
+</code>    return (
+      &lt;div className="page"&gt;
+        ...
+        &lt;Table
+<code class="uil">          list=&#123;result.hits&#125;
+</code>          pattern=&#123;searchTerm&#125;
+          onDismiss=&#123;this.onDismiss&#125;
+        /&gt;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Recapitulemos lo que sucede durante el ciclo de vida de los componentes. Su componente se ha inicializado por el constructor. Después de que se hace por primera vez. Pero a prevenir a mostrarlo, porque el resultado está vacía. A continuación, el <code>componentDidMount()</code> método de ciclo de vida se ejecuta. En ese método de hacer salir los datos de la Hacker News API de forma asíncrona. Una vez que los datos llegan, cambia su estado componente interno. Después de que la actualización del ciclo de vida entra en juego. El componente se ejecuta el <code>render()</code> método de nuevo, pero esta vez con los datos de población en el estado de los componentes internos. El componente y por lo tanto el componente Tabla con su contenido consigue volver a prestar.</p>
+
+<p>Let’s recap what happens during the component lifecycle. Your component gets initialized by the constructor. After that it renders for the first time. But you prevent to display it, because the result is empty. Then the <code>componentDidMount()</code> lifecycle method runs. In that method you fetch the data from the Hacker News API asynchronously. Once the data arrives, it changes your internal component state. After that the update lifecycle comes into play. The component runs the <code>render()</code> method again, but this time with populated data in your internal component state. The component and thus the Table component with its content gets re-rendered.</p>
+
+<p className="it">Ha utilizado la API nativa de ir a buscar que es apoyada por la mayoría de los navegadores para realizar una solicitud asincrónica a una API. La <em>create-react-app</em> de configuración se asegura de que es compatible con todos los navegadores. Hay paquetes de nodos de terceras partes que se pueden  utilizar para sustituir la API fetch orígenes: <a href="https://github.com/visionmedia/superagent">superagente</a> y <a href="https://github.com/mzabriskie/axios">axios</a>.</p>
+
+<p>You used the native fetch API that is supported by most browsers to perform an asynchronous request to an API. The <em>create-react-app</em> configuration makes sure that it is supported in every browser. There are third party node packages that you can use to substitute the native fetch API: <a href="https://github.com/visionmedia/superagent">superagent</a> and <a href="https://github.com/mzabriskie/axios">axios</a>.</p>
+
+<p className="it">Volver a la aplicación: La lista de accesos debes ser visible ahora. Pero en el botón “Descartar” se ha roto. Vamos a arreglar eso en el siguiente capítulo.</p>
+
+<p>Back to your application: The list of hits should be visible now. But the “Dismiss” button is broken. We will fix that in the next chapter.</p>
+
+<h4 id="leanpub-auto-exercises-22">Exercises:</h4>
+
+<ul>
+  <li className="it">leer más sobre <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals">cadenas de la plantilla ES6</a>
+</li>
+
+<li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals">ES6 template strings</a>
+</li>
+
+<li className="it">leer más acerca de <a href="https://developer.mozilla.org/en/docs/Web/API/Fetch_API">la API fetch nativa</a></li>
+
+
+<li>read more about <a href="https://developer.mozilla.org/en/docs/Web/API/Fetch_API">the native fetch API</a>
+</li>
+
+<li className="it">experimento con el <a href="https://hn.algolia.com/api">Hacker News API</a></li>
+
+<li>experiment with the <a href="https://hn.algolia.com/api">Hacker News API</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

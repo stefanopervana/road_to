@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Hot Module Reloading</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-hot-module-reloading">Hot Module Reloading</h3>
+
+<p className="it">Hay una cosa que se podes hacer en el <em>index.js src /</em> archivo para mejorar su experiencia como desarrollador.</p>
+
+<p>There is one thing that you can do in the <em>src/index.js</em> file to improve your experience as a developer.</p>
+
+<p className="it">En <em>crear una aplicación React</em> ya es una ventaja que el navegador se actualiza automáticamente la página cuando cambie tu código fuente. Probarlo cambiando la <code>helloWorld</code> variable en su <em>/ app.js src</em> archivo. El navegador debes actualizar la página. Pero se podes hacer mejor.</p>
+
+<p>In <em>create-react-app</em> it is already an advantage that the browser automatically refreshes the page when you change your source code. Try it by changing the <code>helloWorld</code> variable in your <em>src/App.js</em> file. The browser should refresh the page. But you can do better.</p>
+
+<p className="it">Módulo caliente Recarga (HMR) es una herramienta para recargar tu aplicaciónen el navegador. El navegador no realiza una actualización de la página. Se podes activar fácilmente en <em>crear una aplicación React</em>. En tus <em>src / index.js</em> - su punto de entrada parReact  - hay que añadir una pequeña configuración.</p>
+
+<p>Hot Module Reloading (HMR) is a tool to reload your application in the browser. The browser doesn’t perform a page refresh. You can easily activate it in <em>create-react-app</em>. In your <em>src/index.js</em> - your entry point to React - you have to add one little configuration.</p>
+
+<figure class="code">
+  <figcaption>src/index.js</figcaption>
+
+<div class="highlight"><pre>import React from 'react';<br></br>
+import ReactDOM from 'react-dom';<br></br>
+import App from './App';<br></br>
+import './index.css';<br></br>
+<br></br>
+ReactDOM.render(<br></br>
+  &lt;App /&gt;,<br></br>
+  document.getElementById('root')<br></br>
+);<br></br>
+<br></br>
+<code class="uil">if (module.hot) &#123;<br></br>
+</code><code class="uil">  module.hot.accept()<br></br>
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Eso es. Inténtelo de nuevo para cambiar la <code>hellowWorld</code> variable en su <em>/ app.js src</em> archivo. El navegador no debes llevar a cabo una actualización de la página, pero vuelve a cargar la aplicación y muestra la salida correcta.</p>
+
+<p>That’s it. Try again to change the <code>hellowWorld</code> variable in your <em>src/App.js</em> file. The browser shouldn’t perform a page refresh, but the application reloads and shows the correct output.</p>
+
+<p className="it">HMR viene con múltiples ventajas.</p>
+
+<p>HMR comes with multiple advantages.</p>
+
+<p className="it">Imagínese que estás depurando el código con <code>console.log()</code> declaraciones. Estas declaraciones se quedarán en su consola de desarrollador, a pesar de que cambie tu código, ya que el navegador no se actualiza la página más. Eso podes ser conveniente para los propósitos de depuración.</p>
+
+<p>Imagine you are debugging your code with <code>console.log()</code> statements. These statements will stay in your developer console, even though you change your code, because the browser doesn’t refresh the page anymore. That can be convenient for debugging purposes.</p>
+
+<p className="it">En una aplicación cada vez mayor de una actualización de la página retrasa su productividad. Vos tiene que esperar a que se cargue la página. Una recarga de la página podes tardar varios segundos en una aplicación de gran tamaño. HMR quita esta desventaja.</p>
+
+<p>In a growing application a page refresh delays your productivity. You have to wait until the page loads. A page reload can take several seconds in a large application. HMR takes away this disadvantage.</p>
+
+<p className="it">El mayor beneficio es que se podes mantener el estado de la aplicación con HMR. Imagine que tiene un cuadro de diálogo en tu aplicacióncon múltiples pasos y estás en el paso 3. Básicamente se trata de un asistente. Sin HMR que iba a cambiar el código fuente de su navegador y actualiza la página. Tendrías que abrir el cuadro de diálogo de nuevo y sin tener que navegar desde el paso 1 al paso 3. Con HMR tus estancias de diálogo abiertos en el paso 3. Se mantiene el estado de la aplicación a pesar de que los cambios en el código fuente. La aplicación en sí vuelve a cargar, pero no la página.</p>
+
+<p>The biggest benefit is that you can keep the application state with HMR. Imagine you have a dialog in your application with multiple steps and you are at step 3. Basically it is a wizard. Without HMR you would change the source code and your browser refreshes the page. You would have to open the dialog again and would have to navigate from step 1 to step 3. With HMR your dialog stays open at step 3. It keeps the application state even though the source code changes. The application itself reloads, but not the page.</p>
+
+<h4 id="leanpub-auto-exercises-7">Exercises:</h4>
+
+<ul>
+  <li className="it">abrir la carpeta <em>public/index.html</em> para ver donde el React aplicaciones engancha en su HTML</li>
+  
+
+  <li>change your <em>src/App.js</em> source code a few times to see HMR in action</li>
+  <li className="it">leer más acerca de <a href="https://facebook.github.io/react/docs/rendering-elements.html">la prestación de los elementos en React</a>
+</li>
+<li>watch the first 10 minutes of <a href="https://www.youtube.com/watch?v=xsSnOQynTHs">Live React: Hot Reloading with Time Travel</a> by Dan Abramov</li>
+</ul>
+
+
+</div>
+</body>
+</html>

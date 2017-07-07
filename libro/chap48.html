@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Loading …</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-loading-">Loading …</h3>
+
+<p className="it">Ahora vamos a volver a la aplicación. Es posible que desee mostrar un indicador de carga cuando se envía una solicitud de búsqueda al Hacker News API. La solicitud es asíncrona y debes mostrar su usuario alguna información de que algo está a punto de suceder. Vamos a definir un componente Cargando reutilizable en su <em>/ app.js src</em> archivo.</p>
+
+<p>Now let’s get back to the application. You might want to show a loading indicator when you submit a search request to the Hacker News API. The request is asynchronous and you should show your user some feedback that something is about to happen. Let’s define a reusable Loading component in your <em>src/App.js</em> file.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">Loading</code> <code class="o">=</code> <code class="p">()</code> <code class="o">=&gt;</code>
+  <code class="o">&lt;</code><code class="nx">div</code><code class="o">&gt;</code><code class="nx">Loading</code> <code class="p">...</code><code class="o">&lt;</code><code class="err">/div&gt;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora tendrás una propiedad para almacenar el estado de carga. Con base en el estado de carga se podes elegir si desea mostrar el componente Cargando más adelante.</p>
+
+<p>Now you will need a property to store the loading state. Based on the loading state you can decide to show the Loading component later on.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  constructor(props) &#123;
+    super(props);
+
+    this.state = &#123;
+      results: null,
+      searchKey: '',
+      searchTerm: DEFAULT_QUERY,
+<code class="uil">      isLoading: false,
+</code>    &#125;;
+
+    ...
+  &#125;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El valor inicial de que la propiedad es falsa. No se carga nada antes de que el componente de aplicación está montado.</p>
+
+<p>The initial value of that property is false. You don’t load anything before the App component is mounted.</p>
+
+<p className="it">Cuando realiza la solicitud, se establece un estado de carga de verdad. Eventualmente, la solicitud tendrás éxito y se podes establecer el estado de carga en false.</p>
+
+<p>When you make the request, you set a loading state to true. Eventually the request will succeed and you can set the loading state to false.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  setSearchTopstories(result) &#123;
+    const &#123; hits, page &#125; = result;
+    const &#123; searchKey, results &#125; = this.state;
+
+    const oldHits = results &amp;&amp; results[searchKey]
+      ? results[searchKey].hits
+      : [];
+
+    const updatedHits = [
+      ...oldHits,
+      ...hits
+    ];
+
+    this.setState(&#123;
+      results: &#123;
+        ...results,
+        [searchKey]: &#123; hits: updatedHits, page &#125;
+      &#125;,
+<code class="uil">      isLoading: false
+</code>    &#125;);
+  &#125;
+
+  fetchSearchTopstories(searchTerm, page) &#123;
+<code class="uil">    this.setState(&#123; isLoading: true &#125;);
+</code>
+    fetch(`$&#123;PATH_BASE&#125;$&#123;PATH_SEARCH&#125;?$&#123;PARAM_SEARCH&#125;$&#123;searchTerm&#125;&amp;$&#123;PARAM_PAGE&#125;\
+$&#123;page&#125;&amp;$&#123;PARAM_HPP&#125;$&#123;DEFAULT_HPP&#125;`)
+      .then(response =&gt; response.json())
+      .then(result =&gt; this.setSearchTopstories(result));
+  &#125;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En el último paso que va a utilizar el componente de carga en tu aplicación. Una representación condicional basada en el estado de carga decidirá si usted muestra un componente de carga o componente Button. El último es el botón en busca de más datos.</p>
+
+<p>In the last step you will use the Loading component in your App. A conditional rendering based on the loading state will decide whether you show a Loading component or Button component. The latter one is your button to fetch more data.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+<code class="uil">    const &#123;
+</code><code class="uil">      searchTerm,
+</code><code class="uil">      results,
+</code><code class="uil">      searchKey,
+</code><code class="uil">      isLoading
+</code><code class="uil">    &#125; = this.state;
+</code>
+    const page = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].page
+    ) || 0;
+
+    const list = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].hits
+    ) || [];
+
+    return (
+      &lt;div className="page"&gt;
+        ...
+        &lt;div className="interactions"&gt;
+<code class="uil">          &#123; isLoading
+</code><code class="uil">            ? &lt;Loading /&gt;
+</code><code class="uil">            : &lt;Button
+</code><code class="uil">              onClick=&#123;() =&gt; this.fetchSearchTopstories(searchKey, page + 1)&#125;&gt;
+</code><code class="uil">              More
+</code><code class="uil">            &lt;/Button&gt;
+</code><code class="uil">          &#125;
+</code>        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Inicialmente el componente de carga se mostrará cuando se inicia la aplicación, porque haces una consulta a <code>componentDidMount()</code>. No hay ningún componente Tabla, porque la lista está vacía. Cuando la respuesta vuelve de la API de Hacker News, se muestra el resultado, el estado de carga se establece en false y el componente de carga desaparece. Aparece el botón “Más” en busca de más datos. Una vez que usted lo trae más datos, el botón desaparecerá. En cambio, el componente de carga se mostrará.</p>
+
+<p>Initially the Loading component will show up when you start your application, because you make a request on <code>componentDidMount()</code>. There is no Table component, because the list is empty. When the response returns from the Hacker News API, the result is shown, the loading state is set to false and the Loading component disappears. The “More” button to fetch more data appears. Once you fetch more data, the button will disappear. Instead the Loading component will show up.</p>
+
+<h4 id="leanpub-auto-exercises-33">Exercises:</h4>
+
+<ul>
+<li className="it">utilizar una biblioteca como <a href="http://fontawesome.io/">fuente impresionante</a> para mostrar un icono de carga en lugar de la “Cargando ...” Texto</li>
+  <li>use a library like <a href="http://fontawesome.io/">Font Awesome</a> to show a loading icon instead of the “Loading …” text</li>
+</ul>
+
+
+</div>
+</body>
+</html>

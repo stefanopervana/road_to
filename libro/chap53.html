@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Revisited: setState()</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-revisited-setstate">Revisited: setState()</h3>
+
+<p className="it">Hasta ahora, usted ha usado React <code>setState()</code> para gestionar su estado componente interno. podes pasar un objeto a la función donde se podes actualizar parcialmente el estado interno.</p>
+
+
+<p>So far, you have used React <code>setState()</code> to manage your internal component state. You can pass an object to the function where you can update partially the internal state.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="k">this</code><code class="p">.</code><code class="nx">setState</code><code class="p">(&#123;</code> <code class="nx">foo</code><code class="o">:</code> <code class="nx">bar</code> <code class="p">&#125;);</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Pero <code>setState()</code> no tomar sólo un objeto. En su segunda versión, se podes pasar una función para actualizar el estado.</p>
+
+
+<p>But <code>setState()</code> doesn’t take only an object. In its second version, you can pass a function to update the state.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="k">this</code><code class="p">.</code><code class="nx">setState</code><code class="p">((</code><code class="nx">prevState</code><code class="p">,</code> <code class="nx">props</code><code class="p">)</code> <code class="o">=&gt;</code> <code class="p">&#123;</code>
+  <code class="p">...</code>
+<code class="p">&#125;);</code>
+</pre></div>
+
+</figure>
+
+<p className="it">¿Por qué deberías querer hacer eso? Hay un caso de uso cruciales donde tiene sentido utilizar una función sobre un objeto. Es cuando se actualiza el estado en función del estado o puntales anterior. Si no se utiliza una función, la gestión del estado interno podes provocar errores.</p>
+
+
+<p>Why should you want to do that? There is one crucial use case where it makes sense to use a function over an object. It is when you update the state depending on the previous state or props. If you don’t use a function, the internal state management can cause bugs.</p>
+
+<p className="it">Pero ¿por qué causar errores al usar un objeto más de una función cuando la actualización depende del estado o puntales anterior? El React <code>setState()</code> método es asíncrono. React lotes <code>setState()</code> llamadas y los ejecuta con el tiempo. podes suceder que el estado o puntales anterior cambiaron entre cuando usted confiar en ella.</p>
+
+
+<p>But why does it cause bugs to use an object over a function when the update depends on the previous state or props? The React <code>setState()</code> method is asynchronous. React batches <code>setState()</code> calls and executes them eventually. It can happen that the previous state or props changed in between when you would rely on it.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">fooCount</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">state</code><code class="p">;</code>
+<code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">barCount</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">props</code><code class="p">;</code>
+<code class="k">this</code><code class="p">.</code><code class="nx">setState</code><code class="p">(&#123;</code> <code class="nx">count</code><code class="o">:</code> <code class="nx">fooCount</code> <code class="o">+</code> <code class="nx">barCount</code> <code class="p">&#125;);</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Imaginar que <code>fooCount</code> y <code>barCount</code>, por tanto, el estado o los apoyos, pueden  cambiar a otro lugar en tus componentes. En una aplicación cada vez mayor que tiene más a menudo 'setstate ()' llamadas a través de tu aplicación. Desde <code>setState()</code> ejecuta de forma asíncrona, que se basaría en el ejemplo de los valores probables rancios.</p>
+
+
+<p>Imagine that <code>fooCount</code> and <code>barCount</code>, thus the state or the props, can change somewhere else in your components. In a growing application you have more often ‘setState()’ calls across your application. Since <code>setState()</code> executes asynchronously, you would rely in the example on likely stale values.</p>
+
+<p className="it">Con el enfoque de la función, la función de <code>setState()</code> una devolución de llamada que opera sobre el estado y los apoyos en el momento de ejecutar la función de devolución de llamada. A pesar de que <code>setState()</code> es asíncrona, con una función que toma el estado y los accesorios en el momento en que se ejecuta.</p>
+
+
+<p>With the function approach, the function in <code>setState()</code> is a callback that operates on the state and props at the time of executing the callback function. Even though <code>setState()</code> is asynchronous, with a function it takes the state and props at the time when it is executed.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="k">this</code><code class="p">.</code><code class="nx">setState</code><code class="p">((</code><code class="nx">prevState</code><code class="p">,</code> <code class="nx">props</code><code class="p">)</code> <code class="o">=&gt;</code> <code class="p">&#123;</code>
+  <code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">fooCount</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="nx">prevState</code><code class="p">;</code>
+  <code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">barCount</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="nx">props</code><code class="p">;</code>
+  <code class="k">return</code> <code class="p">&#123;</code> <code class="nx">count</code><code class="o">:</code> <code class="nx">fooCount</code> <code class="o">+</code> <code class="nx">barCount</code> <code class="p">&#125;;</code>
+<code class="p">&#125;);</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora, volvamos a tu código de solucionar este comportamiento. Juntos vamos a solucionarlo por un lugar en el que <code>setState()</code> se utiliza y se basa en el estado o puntales. Después que son capaces de fijarlo en lugares donde la actualización del estado se basa en el estado o puntales anterior.</p>
+
+
+<p>Now, lets get back to your code to fix this behavior. Together we will fix it for one place where <code>setState()</code> is used and relies on the state or props. Afterward you are able to fix it at places where the state update relies on the previous state or props.</p>
+
+<p className="it">El <code>setSearchTopstories()</code> método se basa en el estado anterior y por lo tanto es un ejemplo perfecto de utilizar una función sobre un objeto en <code>setState()</code>. En este momento parece que el siguiente fragmento de código. Extraer los valores del estado, pero la actualización del estado en función del estado anterior de forma asíncrona.</p>
+
+
+<p>The <code>setSearchTopstories()</code> method relies on the previous state and thus is a perfect example to use a function over an object in <code>setState()</code>. Right now it looks like the following code snippet. You extract values from the state, but update the state depending on the previous state asynchronously.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nx">setSearchTopstories</code><code class="p">(</code><code class="nx">result</code><code class="p">)</code> <code class="p">&#123;</code>
+  <code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">hits</code><code class="p">,</code> <code class="nx">page</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="nx">result</code><code class="p">;</code>
+  <code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">searchKey</code><code class="p">,</code> <code class="nx">results</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">state</code><code class="p">;</code>
+
+  <code class="kr">const</code> <code class="nx">oldHits</code> <code class="o">=</code> <code class="nx">results</code> <code class="o">&amp;&amp;</code> <code class="nx">results</code><code class="p">[</code><code class="nx">searchKey</code><code class="p">]</code>
+    <code class="o">?</code> <code class="nx">results</code><code class="p">[</code><code class="nx">searchKey</code><code class="p">].</code><code class="nx">hits</code>
+    <code class="o">:</code> <code class="p">[];</code>
+
+  <code class="kr">const</code> <code class="nx">updatedHits</code> <code class="o">=</code> <code class="p">[</code>
+    <code class="p">...</code><code class="nx">oldHits</code><code class="p">,</code>
+    <code class="p">...</code><code class="nx">hits</code>
+  <code class="p">];</code>
+
+  <code class="k">this</code><code class="p">.</code><code class="nx">setState</code><code class="p">(&#123;</code>
+    <code class="nx">results</code><code class="o">:</code> <code class="p">&#123;</code>
+      <code class="p">...</code><code class="nx">results</code><code class="p">,</code>
+      <code class="p">[</code><code class="nx">searchKey</code><code class="p">]</code><code class="o">:</code> <code class="p">&#123;</code> <code class="nx">hits</code><code class="o">:</code> <code class="nx">updatedHits</code><code class="p">,</code> <code class="nx">page</code> <code class="p">&#125;</code>
+    <code class="p">&#125;,</code>
+    <code class="nx">isLoading</code><code class="o">:</code> <code class="kc">false</code>
+  <code class="p">&#125;);</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se podes utilizar la función para evitar errores debido a un estado rancio.</p>
+
+
+<p>Now you can use the function to prevent bugs because of a stale state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>setSearchTopstories(result) &#123;
+  const &#123; hits, page &#125; = result;
+
+<code class="uil">  this.setState(prevState =&gt; &#123;
+</code><code class="uil">    ...
+</code><code class="uil">  &#125;);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">podes mover todo el bloque que ya se han aplicado en la función. Sólo hay que intercambiar que opere en el <code>prevState</code> lugar de <code>this.state</code>.</p>
+
+
+<p>You can move the whole block that you already implemented into the function. You only have to exchange that you operate on the <code>prevState</code> rather than <code>this.state</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>setSearchTopstories(result) &#123;
+  const &#123; hits, page &#125; = result;
+
+  this.setState(prevState =&gt; &#123;
+<code class="uil">    const &#123; searchKey, results &#125; = prevState;
+</code><code class="uil">
+</code><code class="uil">    const oldHits = results &amp;&amp; results[searchKey]
+</code><code class="uil">      ? results[searchKey].hits
+</code><code class="uil">      : [];
+</code><code class="uil">
+</code><code class="uil">    const updatedHits = [
+</code><code class="uil">      ...oldHits,
+</code><code class="uil">      ...hits
+</code><code class="uil">    ];
+</code><code class="uil">
+</code><code class="uil">    return &#123;
+</code><code class="uil">      results: &#123;
+</code><code class="uil">        ...results,
+</code><code class="uil">        [searchKey]: &#123; hits: updatedHits, page &#125;
+</code><code class="uil">      &#125;,
+</code><code class="uil">      isLoading: false
+</code><code class="uil">    &#125;;
+</code>  &#125;);
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Eso va a solucionar el problema con un estado rancio. Dado que es una función, se podes extraer la función de mejorar su lectura. Eso es una ventaja más de utilizar una función sobre un objeto. La función podes vivir fuera del componente. Pero tenes que utilizar una función de orden superior para pasar el resultado. Después de todo lo que desea actualizar el estado en base al resultado obtienen de la API.</p>
+
+
+<p>That will fix the issue with a stale state. Since it is a function, you can extract the function for an improved readability. That’s one more advantage to use a function over an object. The function can live outside of the component. But you have to use a higher order function to pass the result. After all you want to update the state based on the fetched result from the API.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nx">setSearchTopstories</code><code class="p">(</code><code class="nx">result</code><code class="p">)</code> <code class="p">&#123;</code>
+  <code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">hits</code><code class="p">,</code> <code class="nx">page</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="nx">result</code><code class="p">;</code>
+  <code class="k">this</code><code class="p">.</code><code class="nx">setState</code><code class="p">(</code><code class="nx">updateSearchTopstoriesState</code><code class="p">(</code><code class="nx">hits</code><code class="p">,</code> <code class="nx">page</code><code class="p">));</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">La <code>updateSearchTopstoriesState()</code> función tiene que devolver una función. Es una función de orden superior. podes definir esta función de orden superior fuera de su componente de aplicación. Nótese cómo la firma de la función cambia ligeramente ahora.</p>
+
+
+<p>The <code>updateSearchTopstoriesState()</code> function has to return a function. It is a higher order function. You can define this higher order function outside of your App component. Note how the function signature changes slightly now.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const updateSearchTopstoriesState = (hits, page) =&gt; (prevState) =&gt; &#123;
+</code><code class="uil">  const &#123; searchKey, results &#125; = prevState;
+</code><code class="uil">
+</code><code class="uil">  const oldHits = results &amp;&amp; results[searchKey]
+</code><code class="uil">    ? results[searchKey].hits
+</code><code class="uil">    : [];
+</code><code class="uil">
+</code><code class="uil">  const updatedHits = [
+</code><code class="uil">    ...oldHits,
+</code><code class="uil">    ...hits
+</code><code class="uil">  ];
+</code><code class="uil">
+</code><code class="uil">  return &#123;
+</code><code class="uil">    results: &#123;
+</code><code class="uil">      ...results,
+</code><code class="uil">      [searchKey]: &#123; hits: updatedHits, page &#125;
+</code><code class="uil">    &#125;,
+</code><code class="uil">    isLoading: false
+</code><code class="uil">  &#125;;
+</code><code class="uil">&#125;;
+</code>
+class App extends Component &#123;
+  ...
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Eso es. La función sobre un enfoque objeto en <code>setState()</code> correcciones de errores potenciales sin embargo, aumenta la legibilidad y mantenibilidad del código.</p>
+
+
+<p>That’s it. The function over an object approach in <code>setState()</code> fixes potential bugs yet increases readability and maintainability of your code.</p>
+
+<h4 id="leanpub-auto-exercise">Exercise:</h4>
+
+<ul><li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/state-and-lifecycle.html#using-state-correctly">React con el estado correctamente</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/state-and-lifecycle.html#using-state-correctly">React using state correctly</a>
+</li><li className="it">refactorizar todos los métodos setstate utilizar una función
+    </li>
+  <li>refactor all setState methods to use a function
+    <ul><li className="it">pero sólo cuando tiene sentido, porque se basa en los apoyos o estado</li>
+      <li>but only when it makes sense, because it relies on props or state</li>
+    </ul>
+  </li>
+</ul>
+
+
+</div>
+</body>
+</html>

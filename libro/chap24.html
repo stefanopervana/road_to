@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Interactions with Forms and Events</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-interactions-with-forms-and-events">Interactions with Forms and Events</h3>
+
+<p className="it">Vamos a añadir otra interacción de experimentar formas y eventos en React. La interacción es una funcionalidad de búsqueda. La entrada del campo de búsqueda se debes utilizar para filtrar la lista basada en la propiedad del título de un artículo.</p>
+
+<p>Let’s add another interaction to experience forms and events in React. The interaction is a search functionality. The input of the search field should be used to filter your list based on the title property of an item.</p>
+
+<p className="it">En primer lugar se define el campo de entrada en su JSX.</p>
+
+<p>First you define your input field in your JSX.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    return (
+      &lt;div className="App"&gt;
+<code class="uil">        &lt;form&gt;
+</code><code class="uil">          &lt;input type="text" /&gt;
+</code><code class="uil">        &lt;/form&gt;
+</code>        &#123; this.state.list.map(item =&gt;
+          ...
+        )&#125;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En el siguiente escenario que se escriba en el campo y filtrar la lista temporal por el término de búsqueda. Para ser capaz de filtrar la lista, necesita el valor del campo de entrada para actualizar el estado. Pero, ¿cómo se accede al valor? podes utilizar <strong>eventos sintéticos</strong> en React para acceder a la carga de evento.</p>
+
+<p>In the following scenario you will type into the field and filter the list temporary by the search term. To be able to filter the list, you need the value of the input field to update the state. But how do you access the value? You can use <strong>synthetic events</strong> in React to access the event payload.</p>
+
+<p className="it">Vamos a definir una <code>onChange()</code> llamada de retorno para el campo de entrada.</p>
+
+<p>Let’s define an <code>onChange()</code> callback function for the input field.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    return (
+      &lt;div className="App"&gt;
+<code class="uil">        &lt;form&gt;
+</code><code class="uil">          &lt;input
+</code><code class="uil">            type="text"
+</code><code class="uil">            onChange=&#123;this.onSearchChange&#125;
+</code><code class="uil">          /&gt;
+</code><code class="uil">        &lt;/form&gt;
+</code>        ...
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">La función está ligada a la componente y por lo tanto un método de clase de nuevo. Vos tiene que unirse y definir el método.</p>
+
+<p>The function is bound to the component and thus a class method again. You have to bind and define the method.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  constructor(props) &#123;
+    super(props);
+
+    this.state = &#123;
+      list,
+    &#125;;
+
+<code class="uil">    this.onSearchChange = this.onSearchChange.bind(this);
+</code>    this.onDismiss = this.onDismiss.bind(this);
+  &#125;
+
+<code class="uil">  onSearchChange() &#123;
+</code><code class="uil">    ...
+</code><code class="uil">  &#125;
+</code>
+  ...
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El argumento método te da acceso a la sintéticReact  evento. El evento tiene el valor del campo de entrada en su objeto de destino. Ahora se podes manipular el estado para el término de búsqueda:</p>
+
+<p>The method argument gives you access to the synthetic React event. The event has the value of the input field in its target object. Now you can manipulate the state for the search term:</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+<code class="uil">  onSearchChange(event) &#123;
+</code><code class="uil">    this.setState(&#123; searchTerm: event.target.value &#125;);
+</code><code class="uil">  &#125;
+</code>
+  ...
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Además tiene que definir el estado inicial para el <code>searchTerm</code> en el constructor.</p>
+
+<p>Additionally you have to define the initial state for the <code>searchTerm</code> in the constructor.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  constructor(props) &#123;
+    super(props);
+
+    this.state = &#123;
+      list,
+<code class="uil">      searchTerm: '',
+</code>    &#125;;
+
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this);
+  &#125;
+
+  ...
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se almacena el valor de entrada a su estado componente interno cada vez que el valor de los cambios en el campo de entrada. Sin embargo, la lista no se actualiza todavía. Vos tiene que filtrar la lista temporal basada en el <code>searchTerm</code>. Eso es bastante simple. Antes de asignar la lista se podes aplicar un filtro en él. Ya ha utilizado la funcionalidad del filtro incorporado en JavaScript.</p>
+
+<p>Now you store the input value to your internal component state every time the value in the input field changes. However, the list doesn’t update yet. You have to filter the list temporary based on the <code>searchTerm</code>. That’s fairly simple. Before you map the list you can apply a filter on it. You have already used the built-in JavaScript filter functionality.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    return (
+      &lt;div className="App"&gt;
+        &lt;form&gt;
+          &lt;input
+            type="text"
+            onChange=&#123;this.onSearchChange&#125;
+          /&gt;
+        &lt;/form&gt;
+<code class="uil">        &#123; this.state.list.filter(...).map(item =&gt;
+</code>          ...
+        )&#125;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Vamos a acercarse a la función de filtro de una manera diferente esta vez. Queremos definir el argumento de filtro - la función - fuera de nuestro componente de clase ES6. Hay que no tienen acceso al estado del componente - por lo tanto no tenemos acceso a la <code>searchTerm</code> propiedad para evaluar la condición del filtro. Tenemos que pasar a la <code>searchTerm</code> de la función de filtro y tiene que devolver una nueva función para evaluar la condición. Eso se llama una función de orden superior.</p>
+
+<p>Let’s approach the filter function in a different way this time. We want to define the filter argument - the function - outside of our ES6 class component. There we don’t have access to the state of the component - thus we have no access to the <code>searchTerm</code> property to evaluate the filter condition. We have to pass the <code>searchTerm</code> to the filter function and have to return a new function to evaluate the condition. That’s called a higher order function.</p>
+
+<p className="it">Normalmente no me mencionar funciones de orden superior, pero en un libro React se hace totalmente sentido. Tiene sentido para saber acerca de las funciones de orden superior, porque React trata de un concepto llamado componentes de orden superior. Se llega a conocer el concepto más adelante en el libro. Ahora, de nuevo, vamos a centrarnos en la funcionalidad del filtro.</p>
+
+<p>Normally I wouldn’t mention higher order functions, but in React  book it makes totally sense. It makes sense to know about higher order functions, because React deals with a concept called higher order components. You will get to know the concept later in the book. Now again, let’s focus on the filter functionality.</p>
+
+<p className="it">En primer lugar hay que definir la función de orden superior fuera de su clase.</p>
+
+<p>First you have to define the higher order function outside of your class.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">function isSearched(searchTerm) &#123;
+</code><code class="uil">  return function(item) &#123;
+</code><code class="uil">    // some condition which returns true or false
+</code><code class="uil">  &#125;
+</code><code class="uil">&#125;
+</code>
+class App extends Component &#123;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">La función toma el <code>searchTerm</code> y devuelve otra función que toma un elemento. La función devuelto se utiliza para filtrar la lista basándose en la condición definida en la función.</p>
+
+<p>The function takes the <code>searchTerm</code> and returns another function which takes an item. The returned function will be used to filter the list based on the condition defined in the function.</p>
+
+<p className="it">Vamos a definir la condición.</p>
+
+<p>Let’s define the condition.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>function isSearched(searchTerm) &#123;
+  return function(item) &#123;
+<code class="uil">    return !searchTerm ||
+</code><code class="uil">      item.title.toLowerCase().includes(searchTerm.toLowerCase());
+</code>  &#125;
+&#125;
+
+class App extends Component &#123;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">La condición dice varias cosas. Filtrar la lista sólo cuando una <code>searchTerm</code> se establece. Cuando una <code>searchTerm</code> se establece, que coinciden con la entrada <code>searchTerm</code> patrón con el título del artículo. Podes hacer eso con el incorporado en <code>includes</code> la funcionalidad de JavaScript. Sólo cuando el patrón coincide, se vuelve verdadera y el elemento queda en la lista. Pero tenga cuidado con la coincidencia de patrones: No hay que olvidar a minúsculas ambas cadenas. De lo contrario habrá desajustes entre un término de búsqueda 'redux' y un título del artículo 'Redux'.</p>
+
+<p>The condition says multiple things. You filter the list only when a <code>searchTerm</code> is set. When a <code>searchTerm</code> is set, you match the incoming <code>searchTerm</code> pattern with the title of the item. You can do that with the built-in <code>includes</code> JavaScript functionality. Only when the pattern matches, you return true and the item stays in the list. But be careful with pattern matching: You shouldn’t forget to lower case both strings. Otherwise there will be mismatches between a search term ‘redux’ and an item title ‘Redux’.</p>
+
+<p className="it">Una cosa que se deja de mencionar: Hicimos trampa un poco utilizando el built-in incluye la funcionalidad de JavaScript. Ya es una característica ES6. ¿Cómo se vería eso en JavaScript ES5? Se podría utilizar la <code>indexOf()</code> función para obtener el índice del elemento de la lista. Cuando el artículo esté en la lista, <code>indexOf()</code> devolverá un índice positivo.</p>
+
+<p>One thing is left to mention: We cheated a bit by using the built-in includes JavaScript functionality. It is already an ES6 feature. How would that look like in JavaScript ES5? You would use the <code>indexOf()</code> function to get the index of the item in the list. When the item is in the list, <code>indexOf()</code> will return a positive index.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// ES5</code>
+<code class="nx">string</code><code class="p">.</code><code class="nx">indexOf</code><code class="p">(</code><code class="nx">pattern</code><code class="p">)</code> <code class="o">!==</code> <code class="o">-</code><code class="mi">1</code>
+
+<code class="c1">// ES6</code>
+<code class="nx">string</code><code class="p">.</code><code class="nx">includes</code><code class="p">(</code><code class="nx">pattern</code><code class="p">)</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Otra refactorización ordenada se podes hacer con una función de flecha ES6 nuevo. Esto hace que la función más concisa:</p>
+
+<p>Another neat refactoring can be done with an ES6 arrow function again. It makes the function more concise:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// ES5</code>
+<code class="kd">function</code> <code class="nx">isSearched</code><code class="p">(</code><code class="nx">searchTerm</code><code class="p">)</code> <code class="p">&#123;</code>
+  <code class="k">return</code> <code class="kd">function</code><code class="p">(</code><code class="nx">item</code><code class="p">)</code> <code class="p">&#123;</code>
+    <code class="k">return</code> <code class="o">!</code><code class="nx">searchTerm</code> <code class="o">||</code> <code class="nx">item</code><code class="p">.</code><code class="nx">title</code><code class="p">.</code><code class="nx">toLowerCase</code><code class="p">().</code><code class="nx">includes</code><code class="p">(</code><code class="nx">searchTerm</code><code class="p">.</code><code class="nx">toLowerCa</code><code class="o">\</code>
+<code class="nx">se</code><code class="p">());</code>
+  <code class="p">&#125;</code>
+<code class="p">&#125;</code>
+
+<code class="c1">// ES6</code>
+<code class="kr">const</code> <code class="nx">isSearched</code> <code class="o">=</code> <code class="p">(</code><code class="nx">searchTerm</code><code class="p">)</code> <code class="o">=&gt;</code> <code class="p">(</code><code class="nx">item</code><code class="p">)</code> <code class="o">=&gt;</code>
+  <code class="o">!</code><code class="nx">searchTerm</code> <code class="o">||</code> <code class="nx">item</code><code class="p">.</code><code class="nx">title</code><code class="p">.</code><code class="nx">toLowerCase</code><code class="p">().</code><code class="nx">includes</code><code class="p">(</code><code class="nx">searchTerm</code><code class="p">.</code><code class="nx">toLowerCase</code><code class="p">());</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Se podría argumentar que funcionan es más fácil de leer. Personalmente me quedo con la segunda. El ecosistemReact  utiliza una gran cantidad de conceptos de programación funcional. Sucede con frecuencia que va a utilizar una función que devuelve una función (funciones de orden superior). En ES6 podes expresar estos más concisa con funciones de dirección.</p>
+
+<p>One could argue which function is more readable. Personally I prefer the second one. The React ecosystem uses a lot of functional programming concepts. It happens often that you will use a function which returns a function (higher order functions). In ES6 you can express these more concise with arrow functions.</p>
+
+<p className="it">Por último, pero no menos importante, tenes que utilizar la define <code>isSearched()</code> la función para filtrar la lista.</p>
+
+<p>Last but not least, you have to use the defined <code>isSearched()</code> function to filter your list.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    return (
+      &lt;div className="App"&gt;
+        &lt;form&gt;
+          &lt;input
+            type="text"
+            onChange=&#123;this.onSearchChange&#125;
+          /&gt;
+        &lt;/form&gt;
+<code class="uil">        &#123; this.state.list.filter(isSearched(this.state.searchTerm)).map(item =&gt;
+</code>          ...
+        )&#125;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">La funcionalidad de búsqueda deberías funcionar ahora. Intentalo.</p>
+
+<p>The search functionality should work now. Try it.</p>
+
+<h4 id="leanpub-auto-exercises-14">Exercises:</h4>
+
+<ul><li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/handling-events.html">React eventos</a>
+</li>
+ 
+  <li>read more about <a href="https://facebook.github.io/react/docs/handling-events.html">React events</a>
+</li>
+
+<li className="it">leer más acerca de <a href="https://en.wikipedia.org/wiki/Higher-order_function">las funciones de orden superior</a>
+</li>
+  <li>read more about <a href="https://en.wikipedia.org/wiki/Higher-order_function">higher order functions</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

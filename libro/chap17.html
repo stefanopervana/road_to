@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Complex JavaScript in JSX</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-complex-javascript-in-jsx">Complex JavaScript in JSX</h3>
+
+<p className="it">Volvamos a su componente de aplicación. Hasta el momento que renderizó algunas variables primitivas en su JSX. Ahora usted comenzará a hacer una lista de elementos. La lista estará datos artificiales en el comienzo, pero más tarde se obtendrás los datos de una API externa. Eso será mucho más excitante.</p>
+
+
+<p>Let’s get back to your App component. So far you rendered some primitive variables in your JSX. Now you will start to render a list of items. The list will be artificial data in the beginning, but later you will fetch the data from an external API. That will be far more exciting.</p>
+
+<p className="it">En primer lugar tiene que definir la lista de elementos.</p>
+
+
+<p>First you have to define the list of items.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>import React, &#123; Component &#125; from 'react';<br></br>
+import './App.css';<br></br>
+<br></br>
+<code class="uil">const list = [<br></br>
+</code><code class="uil">  &#123;<br></br>
+</code><code class="uil">    title: 'React',<br></br>
+</code><code class="uil">    url: 'https://facebook.github.io/react/',<br></br>
+</code><code class="uil">    author: 'Jordan Walke',<br></br>
+</code><code class="uil">    num_comments: 3,<br></br>
+</code><code class="uil">    points: 4,<br></br>
+</code><code class="uil">    objectID: 0,<br></br>
+</code><code class="uil">  &#125;,<br></br>
+</code><code class="uil">  &#123;<br></br>
+</code><code class="uil">    title: 'Redux',<br></br>
+</code><code class="uil">    url: 'https://github.com/reactjs/redux',<br></br>
+</code><code class="uil">    author: 'Dan Abramov, Andrew Clark',<br></br>
+</code><code class="uil">    num_comments: 2,<br></br>
+</code><code class="uil">    points: 5,<br></br>
+</code><code class="uil">    objectID: 1,<br></br>
+</code><code class="uil">  &#125;,<br></br>
+</code><code class="uil">];<br></br>
+</code><br></br>
+class App extends Component &#123;<br></br>
+  ...<br></br>
+&#125;<br></br>
+</pre></div>
+
+</figure>
+
+<p className="it">Los datos artificiales reflejarán los datos que buscará más tarde de la API. Un elemento de la lista tiene un título, una URL y un autor. Además viene con un identificador, puntos (que indican qué tan popular es un artículo) y un recuento de los comentarios.</p>
+
+
+<p>The artifical data will reflect the data we will fetch later on from the API. An item in the list has a title, an url and a author. Additionally it comes with an identifier, points (which indicate how popular an article is) and a count of comments.</p>
+
+<p className="it">Ahora podes utilizar el código JavaScript integrado en <code>map</code> la funcionalidad en su JSX. Le permite iterar sobre la lista de elementos para mostrarlos. Como se ha mencionado, que va a utilizar llaves para encapsular la expresión JavaScript en su JSX.</p>
+
+
+<p>Now you can use the built-in JavaScript <code>map</code> functionality in your JSX. It enables you to iterate over your list of items to display them. As mentioned, you will use curly braces to encapsulate the JavaScript expression in your JSX.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;<br></br>
+<br></br>
+  render() &#123;<br></br>
+    return (<br></br>
+      &lt;div className="App"&gt;<br></br>
+<code class="uil">        &#123; list.map(function(item) &#123;<br></br>
+</code><code class="uil">          return &lt;div&gt;&#123;item.title&#125;&lt;/div&gt;;<br></br>
+</code><code class="uil">        &#125;)&#125;<br></br>
+</code>      &lt;/div&gt;<br></br>
+    );<br></br>
+  &#125;<br></br>
+&#125;<br></br>
+<br></br>
+export default App;
+</pre></div>
+
+</figure>
+
+<p className="it">Eso es bastante potente en JSX. Por lo general, es posible que haya utilizado <code>map</code> para convertir una lista de elementos a otra lista de elementos. Esta vez se utiliza <code>map</code> para convertir una lista de elementos a los elementos HTML.</p>
+
+
+<p>That’s pretty powerful in JSX. Usually you might have used <code>map</code> to convert one list of items to another list of items. This time you use <code>map</code> to convert a list of items to HTML elements.</p>
+
+<p className="it">Hasta ahora, sólo la <code>title</code> va a abrir para cada elemento. Pero vamos a mostrar un poco más de las propiedades de los elementos.</p>
+
+
+<p>So far, only the <code>title</code> will be displayed for each item. But let’s display some more of the item properties.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  render() &#123;
+    return (
+      &lt;div className="App"&gt;
+<code class="uil">        &#123; list.map(function(item) &#123;
+</code><code class="uil">          return (
+</code><code class="uil">            &lt;div&gt;<br></br>
+</code><code class="uil">              &lt;span&gt;<br></br>
+</code><code class="uil">                &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;<br></br>
+</code><code class="uil">              &lt;/span&gt;<br></br>
+</code><code class="uil">              &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;<br></br>
+</code><code class="uil">              &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;<br></br>
+</code><code class="uil">              &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;<br></br>
+</code><code class="uil">            &lt;/div&gt;<br></br>
+</code><code class="uil">          );<br></br>
+</code><code class="uil">        &#125;)&#125;<br></br>
+</code>      &lt;/div&gt;<br></br>
+    );<br></br>
+  &#125;<br></br>
+&#125;<br></br>
+<br></br>
+export default App;
+</pre></div>
+
+</figure>
+
+<p className="it">Se podes ver cómo la función de mapa es simplemente inlined en su JSX. Cada propiedad del elemento aparece en una <code>&lt;span&gt;</code> etiqueta. Por otra parte la propiedad url del elemento se utiliza en el <code>href</code> atributo de la etiqueta de anclaje.</p>
+
+
+<p>You can see how the map function is simply inlined in your JSX. Each item property is displayed in a <code>&lt;span&gt;</code> tag. Moreover the url property of the item is used in the <code>href</code> attribute of the anchor tag.</p>
+
+<p className="it">React hará todo el trabajo por usted y mostrar cada elemento. Sin embargo, se debes añadir un ayudante parReact  a abrazar todo su potencial y mejorar su rendimiento. Tiene que asignar un atributo clave para cada elemento de la lista. Sólo de esa manerReact  es capaz de identificar añadido, cambiado y artículos cuando la lista de cambios eliminado. Los elementos de la lista artificiales vienen con un identificador ya.</p>
+
+
+<p>React will do all the work for you and display each item. But you should add one helper for React to embrace its full potential and improve its performance. You have to assign a key attribute to each list element. Only that way React is able to identify added, changed and removed items when the list changes. The artificial list items come with an identifier already.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>&#123; list.map(function(item) &#123;<br></br>
+  return (<br></br>
+<code class="uil">    &lt;div key=&#123;item.objectID&#125;&gt;<br></br>
+</code>      &lt;span&gt;<br></br>
+        &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;<br></br>
+      &lt;/span&gt;<br></br>
+      &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;<br></br>
+      &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;<br></br>
+      &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;<br></br>
+    &lt;/div&gt;<br></br>
+  );<br></br>
+&#125;)&#125;<br></br>
+</pre></div>
+
+</figure>
+
+<p className="it">Debes asegurarse de que el atributo clave es un identificador estable. No cometa el error de utilizar el índice de elemento de la array. El índice de array no es estable en absoluto. Por ejemplo, cuando la lista cambia su orden, React tendrás un tiempo difícil la identificación de los elementos correctamente.</p>
+
+
+<p>You should make sure that the key attribute is a stable identifier. Don’t make the mistake of using the item index in the array. The array index isn’t stable at all. For instance, when the list changes its order, React will have a hard time identifying the items properly.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// don't do this</code><br></br>
+<code class="p">&#123;</code> <code class="nx">list</code><code class="p">.</code><code class="nx">map</code><code class="p">(</code><code class="kd">function</code><code class="p">(</code><code class="nx">item</code><code class="p">,</code> <code class="nx">key</code><code class="p">)</code> <code class="p">&#123;</code><br></br>
+  <code class="k">return</code> <code class="p">(</code><br></br>
+    <code class="o">&lt;</code><code class="nx">div</code> <code class="nx">key</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">key</code><code class="p">&#125;</code><code class="o">&gt;</code><br></br>
+      <code class="p">...</code><br></br>
+    <code class="o">&lt;</code><code class="err">/div&gt;</code><br></br>
+  <code class="p">);</code><br></br>
+<code class="p">&#125;)&#125;</code><br></br>
+</pre></div>
+
+</figure>
+
+<p className="it">Se está mostrando ambos elementos de la lista ahora. Podes comenzar tu aplicación, abra el navegador y ver tanto los elementos de la lista mostrada.</p>
+
+
+<p>You are displaying both list items now. You can start your app, open your browser and see both items of the list displayed.</p>
+
+<h4 id="leanpub-auto-exercises-8">Exercises:</h4>
+
+<ul>
+  <li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/lists-and-keys.html">React listas y claves</a>
+</li>
+
+
+<li>read more about <a href="https://facebook.github.io/react/docs/lists-and-keys.html">React lists and keys</a>
+</li>
+
+<li className="it">recapitular el <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map">estándar incorporado funcionalidades de array en JavaScript</a>
+</li>
+
+
+<li>recap the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map">standard built-in Array functionalities in JavaScript</a>
+</li>
+
+<li className="it">utilizar expresiones de JavaScript más por su cuenta en JSX</li>
+
+<li>use more JavaScript expressions on your own in JSX</li>
+</ul>
+
+
+</div>
+</body>
+</html>
+
+
+
+

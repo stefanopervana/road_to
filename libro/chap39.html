@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Client Cache</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-client-cache">Client Cache</h3>
+
+<p className="it">Cada búsqueda enviar hace una petición a la API de Hacker News. Es posible buscar “redux”, seguido de “React” y finalmente “redux” de nuevo. En total se hace 3 peticiones. Pero que ha buscado “redux” dos veces y las dos veces tomó una ida y vuelta asíncrono conjunto para recuperar los datos. En una memoria caché del cliente-echado a un lado en que almacena cada resultado. Cuando se hace una solicitud a la API, se comprueba si el resultado ya está ahí. Si está allí, se utiliza la memoria caché. De lo contrario una solicitud de API se hace para recuperar los datos.</p>
+
+<p>Each search submit makes a request to the Hacker News API. You might search for “redux”, followed by “react” and eventually “redux” again. In total it makes 3 requests. But you searched for “redux” twice and both times it took a whole asynchronous roundtrip to fetch the data. In a client-sided cache you would store each result. When a request to the API is made, it checks if a result is already there. If it is there, the cache is used. Otherwise an API request is made to fetch the data.</p>
+
+<p className="it">Con el fin de tener una memoria caché del cliente para cada resultado, tenes que almacenar múltiples <code>results</code> en lugar de uno <code>result</code> en su estado componente interno. El objeto resultado será un mapa con el término de búsqueda como clave y el resultado como valor. Cada resultado de la API será salvado por término de búsqueda (clave).</p>
+
+<p>In order to have a client cache for each result, you have to store multiple <code>results</code> rather than one <code>result</code> in your internal component state. The results object will be a map with the search term as key and the result as value. Each result from the API will be saved by search term (key).</p>
+
+<p className="it">En el momento de su resultado en el estado del componente tiene una apariencia similar a la siguiente:</p>
+
+<p>At the moment your result in the component state looks similar to the following:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nx">result</code><code class="o">:</code> <code class="p">&#123;</code>
+  <code class="nx">hits</code><code class="o">:</code> <code class="p">[</code> <code class="p">...</code> <code class="p">],</code>
+  <code class="nx">page</code><code class="o">:</code> <code class="mi">2</code><code class="p">,</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Vos ha efectuado dos solicitudes de API. Uno para el término de búsqueda “redux” y otra para “React”. El mapa de resultados debes ser similar a la siguiente:</p>
+
+<p>Imagine you have made two API requests. One for the search term “redux” and another one for “react”. The results map should look like the following:</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nx">results</code><code class="o">:</code> <code class="p">&#123;</code>
+  <code class="nx">redux</code><code class="o">:</code> <code class="p">&#123;</code>
+    <code class="nx">hits</code><code class="o">:</code> <code class="p">[</code> <code class="p">...</code> <code class="p">],</code>
+    <code class="nx">page</code><code class="o">:</code> <code class="mi">2</code><code class="p">,</code>
+  <code class="p">&#125;,</code>
+  <code class="nx">react</code><code class="o">:</code> <code class="p">&#123;</code>
+    <code class="nx">hits</code><code class="o">:</code> <code class="p">[</code> <code class="p">...</code> <code class="p">],</code>
+    <code class="nx">page</code><code class="o">:</code> <code class="mi">1</code><code class="p">,</code>
+  <code class="p">&#125;,</code>
+  <code class="p">...</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Vamos a implementar una memoria caché del lado del cliente con React <code>setState()</code>. En primer lugar, cambiar el nombre del <code>result</code> objeto a <code>results</code> en el estado componente inicial. En segundo lugar, definir un temporal <code>searchKey</code> que se utiliza para almacenar cada uno <code>result</code>.</p>
+
+<p>Let’s implement a client-side cache with React <code>setState()</code>. First, rename the <code>result</code> object to <code>results</code> in the initial component state. Second, define a temporary <code>searchKey</code> which is used to store each <code>result</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  constructor(props) &#123;
+    super(props);
+
+    this.state = &#123;
+<code class="uil">      results: null,
+</code><code class="uil">      searchKey: '',
+</code>      searchTerm: DEFAULT_QUERY,
+    &#125;;
+
+    ...
+
+  &#125;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El <code>searchKey</code> tiene que ser establecido antes de realizar cada solicitud. Refleja la <code>searchTerm</code>. Vos podría preguntarse: ¿Por qué no usamos el <code>searchTerm</code> en el primer lugar? El <code>searchTerm</code> es una variable fluctuante, ya que se cambia cada vez que se teclea en el campo Buscar. Sin embargo, al final se necesita una variable no fluctuante. Se determina el reciente término de búsqueda presentado a la API y se podes utilizar para recuperar el resultado correcto del mapa de resultados. Es un puntero a su resultado actual en la memoria caché.</p>
+
+<p>The <code>searchKey</code> has to be set before each request is made. It reflects the <code>searchTerm</code>. You might wonder: Why don’t we use the <code>searchTerm</code> in the first place? The <code>searchTerm</code> is a fluctuant variable, because it gets changed every time you type into the Search input field. However, in the end you will need a non fluctuant variable. It determines the recent submitted search term to the API and can be used to retrieve the correct result from the map of results. It is a pointer to your current result in the cache.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>componentDidMount() &#123;
+  const &#123; searchTerm &#125; = this.state;
+<code class="uil">  this.setState(&#123; searchKey: searchTerm &#125;);
+</code>  this.fetchSearchTopstories(searchTerm, DEFAULT_PAGE);
+&#125;
+
+onSearchSubmit(event) &#123;
+  const &#123; searchTerm &#125; = this.state;
+<code class="uil">  this.setState(&#123; searchKey: searchTerm &#125;);
+</code>  this.fetchSearchTopstories(searchTerm, DEFAULT_PAGE);
+  event.preventDefault();
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora tenes que ajustar la funcionalidad donde el resultado se almacena en el estado de los componentes internos. Se debes almacenar cada resultado por <code>searchKey</code>.</p>
+
+<p>Now you have to adjust the functionality where the result is stored to the internal component state. It should store each result by <code>searchKey</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  setSearchTopstories(result) &#123;
+    const &#123; hits, page &#125; = result;
+<code class="uil">    const &#123; searchKey, results &#125; = this.state;
+</code><code class="uil">
+</code><code class="uil">    const oldHits = results &amp;&amp; results[searchKey]
+</code><code class="uil">      ? results[searchKey].hits
+</code><code class="uil">      : [];
+</code>
+    const updatedHits = [
+      ...oldHits,
+      ...hits
+    ];
+
+    this.setState(&#123;
+<code class="uil">      results: &#123;
+</code><code class="uil">        ...results,
+</code><code class="uil">        [searchKey]: &#123; hits: updatedHits, page &#125;
+</code><code class="uil">      &#125;
+</code>    &#125;);
+  &#125;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El <code>searchKey</code> será usado como tecla para guardar los éxitos actualizados y página en un <code>results</code> mapa.</p>
+
+<p>The <code>searchKey</code> will be used as key to save the updated hits and page in a <code>results</code> map.</p>
+
+<p className="it">En primer lugar, tenes que recuperar el <code>searchKey</code> del estado de los componentes. Hay que recordar que el <code>searchKey</code> consigue el sistema en <code>componentDidMount()</code> y <code>onSearchSubmit()</code>.</p>
+
+<p>First, you have to retrieve the <code>searchKey</code> from the component state. Remember that the <code>searchKey</code> gets set on <code>componentDidMount()</code> and <code>onSearchSubmit()</code>.</p>
+
+<p className="it">En segundo lugar, los viejos éxitos tienen que quedar fusionado con los nuevos éxitos como antes. Pero esta vez los viejos éxitos consiguen recuperar del <code>results</code> mapa con el <code>searchKey</code> que la clave.</p>
+
+<p>Second, the old hits have to get merged with the new hits as before. But this time the old hits get retrieved from the <code>results</code> map with the <code>searchKey</code> as key.</p>
+
+<p className="it">En tercer lugar, un nuevo resultado se podes fijar en el <code>results</code> mapa en el estado. Vamos a examinar el <code>results</code> objeto en <code>setState()</code>.</p>
+
+<p>Third, a new result can be set in the <code>results</code> map in the state. Let’s examine the <code>results</code> object in <code>setState()</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nx">results</code><code class="o">:</code> <code class="p">&#123;</code>
+  <code class="p">...</code><code class="nx">results</code><code class="p">,</code>
+  <code class="p">[</code><code class="nx">searchKey</code><code class="p">]</code><code class="o">:</code> <code class="p">&#123;</code> <code class="nx">hits</code><code class="o">:</code> <code class="nx">updatedHits</code><code class="p">,</code> <code class="nx">page</code> <code class="p">&#125;</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">La parte inferior se asegura para almacenar el resultado actualizado por <code>searchKey</code> el mapa de resultados. El valor es un objeto con un hits y propiedad de página. El <code>searchKey</code> es el término de búsqueda. Ya has aprendido la <code>[searchKey]</code> sintaxis. Es un nombre de propiedad ES6 computarizada. Le ayuda a asignar valores de forma dinámica en un objeto.</p>
+
+<p>The bottom part makes sure to store the updated result by <code>searchKey</code> in the results map. The value is an object with a hits and page property. The <code>searchKey</code> is the search term. You already learned the <code>[searchKey]</code> syntax. It is an ES6 computed property name. It helps you to allocate values dynamically in an object.</p>
+
+<p className="it">La parte superior tiene que extenderse a objetos de todos los demás resultados <code>searchKey</code> en el estado. De lo contrario se perdería todos los resultados ha guardado antes.</p>
+
+<p>The upper part needs to object spread all other results by <code>searchKey</code> in the state. Otherwise you would lose all results you stored before.</p>
+
+<p className="it">Ahora se almacenan todos los resultados de su término de búsqueda. Ese es el primer paso para que su caché. En el siguiente paso se podes recuperar el resultado en función del término de búsqueda desde el mapa de resultados.</p>
+
+<p>Now you store all results by search term. That’s the first step to enable your cache. In the next step you can retrieve the result depending on the search term from your map of results.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+<code class="uil">    const &#123;
+</code><code class="uil">      searchTerm,
+</code><code class="uil">      results,
+</code><code class="uil">      searchKey
+</code><code class="uil">    &#125; = this.state;
+</code><code class="uil">
+</code><code class="uil">    const page = (
+</code><code class="uil">      results &amp;&amp;
+</code><code class="uil">      results[searchKey] &amp;&amp;
+</code><code class="uil">      results[searchKey].page
+</code><code class="uil">    ) || 0;
+</code><code class="uil">
+</code><code class="uil">    const list = (
+</code><code class="uil">      results &amp;&amp;
+</code><code class="uil">      results[searchKey] &amp;&amp;
+</code><code class="uil">      results[searchKey].hits
+</code><code class="uil">    ) || [];
+</code><code class="uil">
+</code>    return (
+      &lt;div className="page"&gt;
+        &lt;div className="interactions"&gt;
+          &lt;Search
+            value=&#123;searchTerm&#125;
+            onChange=&#123;this.onSearchChange&#125;
+            onSubmit=&#123;this.onSearchSubmit&#125;
+          &gt;
+            Search
+          &lt;/Search&gt;
+        &lt;/div&gt;
+<code class="uil">        &lt;Table
+</code><code class="uil">          list=&#123;list&#125;
+</code><code class="uil">          onDismiss=&#123;this.onDismiss&#125;
+</code><code class="uil">        /&gt;
+</code>        &lt;div className="interactions"&gt;
+<code class="uil">          &lt;Button onClick=&#123;() =&gt; this.fetchSearchTopstories(searchKey, page + 1)\
+</code><code class="uil">&#125;&gt;
+</code>            More
+          &lt;/Button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Dado que por defecto a una lista vacía cuando no hay ningún resultado por <code>searchKey</code>, se podes prescindir de la prestación condicional para el componente Tabla ahora. Además tendrás que pasar el <code>searchKey</code> lugar de la <code>searchTerm</code> que el botón “Más”. De lo contrario su paginado se ha podido recuperar depende del <code>searchTerm</code> valor que es fluctuante. Además, asegúrese de mantener la fluctuante <code>searchTerm</code> viviendas en el campo de entrada en el componente de “Buscar”.</p>
+
+<p>Since you default to an empty list when there is no result by <code>searchKey</code>, you can spare the conditional rendering for the Table component now. Additionally you will need to pass the <code>searchKey</code> rather than the <code>searchTerm</code> to the “More” button. Otherwise your paginated fetch depends on the <code>searchTerm</code> value which is fluctuant. Moreover make sure to keep the fluctuant <code>searchTerm</code> property for the input field in the “Search” component.</p>
+
+<p className="it">La funcionalidad de búsqueda deberías funcionar de nuevo. Almacena todos los resultados de la API de Hacker News.</p>
+
+<p>The search functionality should work again. It stores all results from the Hacker News API.</p>
+
+<p className="it">Además, el <code>onDismiss()</code> método necesita para ser mejorado. Todavía se ocupa del <code>result</code> objeto. Ahora tiene que hacer frente a múltiples <code>results</code>.</p>
+
+<p>Additionally the <code>onDismiss()</code> method needs to get improved. It still deals with the <code>result</code> object. Now it has to deal with multiple <code>results</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>  onDismiss(id) &#123;
+<code class="uil">    const &#123; searchKey, results &#125; = this.state;
+</code><code class="uil">    const &#123; hits, page &#125; = results[searchKey];
+</code>
+    const isNotId = item =&gt; item.objectID !== id;
+<code class="uil">    const updatedHits = hits.filter(isNotId);
+</code><code class="uil">
+</code><code class="uil">    this.setState(&#123;
+</code><code class="uil">      results: &#123;
+</code><code class="uil">        ...results,
+</code><code class="uil">        [searchKey]: &#123; hits: updatedHits, page &#125;
+</code><code class="uil">      &#125;
+</code><code class="uil">    &#125;);
+</code>  &#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El botón “Descartar” deberías funcionar de nuevo.</p>
+
+<p>The “Dismiss” button should work again.</p>
+
+<p className="it">Sin embargo, nada impide que la aplicación envíe una solicitud de API en cada búsqueda enviar. A pesar de que podes haber ya consecuencia de ello, no hay verificación que impide la solicitud. La funcionalidad de caché todavía no está completo. El último paso sería la de evitar que la solicitud cuando el resultado está disponible en la caché.</p>
+
+<p>However, nothing stops the application from sending an API request on each search submit. Even though there might be already a result, there is no check that prevents the request. The cache functionality is not complete yet. The last step would be to prevent the request when a result is available in the cache.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  constructor(props) &#123;
+
+    ...
+
+<code class="uil">    this.needsToSearchTopstories = this.needsToSearchTopstories.bind(this);
+</code>    this.setSearchTopstories = this.setSearchTopstories.bind(this);
+    this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.onDismiss = this.onDismiss.bind(this);
+  &#125;
+
+<code class="uil">  needsToSearchTopstories(searchTerm) &#123;
+</code><code class="uil">    return !this.state.results[searchTerm];
+</code><code class="uil">  &#125;
+</code>
+  ...
+
+  onSearchSubmit(event) &#123;
+    const &#123; searchTerm &#125; = this.state;
+    this.setState(&#123; searchKey: searchTerm &#125;);
+<code class="uil">
+</code><code class="uil">    if (this.needsToSearchTopstories(searchTerm)) &#123;
+</code><code class="uil">      this.fetchSearchTopstories(searchTerm, DEFAULT_PAGE);
+</code><code class="uil">    &#125;
+</code><code class="uil">
+</code>    event.preventDefault();
+  &#125;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora su cliente realiza una solicitud a la API de una sola vez a pesar de que la búsqueda de un término de búsqueda dos veces. Incluso los datos paginados con varias páginas en caché consigue de esa manera, porque siempre se guarda la última página de cada resultado en el <code>results</code> mapa.</p>
+
+<p>Now your client makes a request to the API only once although you search for a search term twice. Even paginated data with several pages gets cached that way, because you always save the last page for each result in the <code>results</code> map.</p>
+
+<div class="page-break"></div>
+<p className="it">Que han aprendido a interactuar con una API en React! Recapitulemos los últimos capítulos:</p>
+
+<p>You have learned to interact with an API in React! Let’s recap the last chapters:</p>
+
+<ul>
+  <li>React
+    <ul>
+      <li>ES6 class component lifecycle methods for different use cases</li>
+      <li>componentDidMount() for API interactions</li>
+      <li>conditional renderings</li>
+      <li>synthetic events on forms</li>
+    </ul>
+  </li>
+  <li>ES6
+    <ul>
+      <li>template strings to compose strings</li>
+      <li>spread operator for immutable data structures</li>
+      <li>computed property names</li>
+    </ul>
+  </li>
+  <li>General
+    <ul>
+      <li>Hacker News API interaction</li>
+      <li>native fetch browser API</li>
+      <li>client- and server-side search</li>
+      <li>pagination of data</li>
+      <li>client-side caching</li>
+    </ul>
+  </li>
+</ul>
+
+<p className="it">Una vez más, tiene sentido tomar un descanso. Internalizar los aprendizajes y aplicarlos en su propio. Podes experimentar con el código fuente que ha escrito hasta ahora.</p>
+
+<p>Again it makes sense to take a break. Internalize the learnings and apply them on your own. You can experiment with the source code you have written so far.</p>
+
+<p className="it">podes encontrar el código fuente en el <a href="https://github.com/rwieruch/hackernews-client/tree/e60436a9d6c449e76a362aef44dd5667357b7994">repositorio oficial</a>.</p>
+
+<p>You can find the source code in the <a href="https://github.com/rwieruch/hackernews-client/tree/e60436a9d6c449e76a362aef44dd5667357b7994">official repository</a>.</p>
+
+
+
+</div>
+</body>
+</html>

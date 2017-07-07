@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Snapshot Tests with Jest</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-snapshot-tests-with-jest">Snapshot Tests with Jest</h3>
+
+<p className="it"><a href="https://facebook.github.io/jest/">La broma</a> es un framework de pruebas de JavaScript. En Facebook se utiliza para validar el código JavaScript. En la comunidad React que se utiliza para la cobertura de las pruebas componentes React. Afortunadamente <em>crear una aplicación React</em> ya viene con la broma.</p>
+
+<p><a href="https://facebook.github.io/jest/">Jest</a> is a JavaScript testing framework. At Facebook it is used to validate the JavaScript code. In the React community it is used for React components test coverage. Fortunately <em>create-react-app</em> already comes with Jest.</p>
+
+<p className="it">Vamos a empezar a probar tus primeros componentes. Antes de que pueda hacer eso, tiene que exportar los componentes de su <em>/ app.js src</em> archivo para ponerlos a prueba en un archivo diferente.</p>
+
+<p>Let’s start to test your first components. Before you can do that, you have to export the components from your <em>src/App.js</em> file to test them in a different file.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>...
+
+class App extends Component &#123;
+  ...
+&#125;
+
+...
+
+export default App;
+
+<code class="uil">export &#123;
+</code><code class="uil">  Button,
+</code><code class="uil">  Search,
+</code><code class="uil">  Table,
+</code><code class="uil">&#125;;
+</code></pre></div>
+
+</figure>
+
+<p className="it">En tus <em>App.test.js</em> archivo encontrará una primera prueba. Se verifica que el componente de aplicación hace sin ningún error.</p>
+
+<p>In your <em>App.test.js</em> file you will find a first test. It verifies that the App component renders without any errors.</p>
+
+<figure class="code">
+  <figcaption>src/App.test.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">React</code> <code class="nx">from</code> <code class="s1">'react'</code><code class="p">;</code>
+<code class="kr">import</code> <code class="nx">ReactDOM</code> <code class="nx">from</code> <code class="s1">'react-dom'</code><code class="p">;</code>
+<code class="kr">import</code> <code class="nx">App</code> <code class="nx">from</code> <code class="s1">'./App'</code><code class="p">;</code>
+
+<code class="nx">it</code><code class="p">(</code><code class="s1">'renders without crashing'</code><code class="p">,</code> <code class="p">()</code> <code class="o">=&gt;</code> <code class="p">&#123;</code>
+  <code class="kr">const</code> <code class="nx">div</code> <code class="o">=</code> <code class="nb">document</code><code class="p">.</code><code class="nx">createElement</code><code class="p">(</code><code class="s1">'div'</code><code class="p">);</code>
+  <code class="nx">ReactDOM</code><code class="p">.</code><code class="nx">render</code><code class="p">(</code><code class="o">&lt;</code><code class="nx">App</code> <code class="o">/&gt;</code><code class="p">,</code> <code class="nx">div</code><code class="p">);</code>
+<code class="p">&#125;);</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Se podes ejecutar mediante el uso de los interactivos <em>crear una reacción-app</em> secuencias de comandos en la línea de comandos.</p>
+
+<p>You can run it by using the interactive <em>create-react-app</em> scripts on the command line.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm run test
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora broma te permite escribir pruebas instantáneas. Estas pruebas hacen una instantánea de su componente prestados y ejecutar esta instantánea contra futuras instantáneas. Cuando cambia un futuro instantánea que recibirás durante la prueba. podes aceptar el cambio instantánea, porque ha cambiado la implementación del componente a propósito, o negar el cambio e investigar para un error.</p>
+
+<p>Now Jest enables you to write Snapshot tests. These tests make a snapshot of your rendered component and run this snapshot against future snapshots. When a future snapshot changes you will get notified during the test. You can either accept the snapshot change, because you changed the component implementation on purpose, or deny the change and investigate for an error.</p>
+
+<p className="it">Broma almacena las instantáneas en una carpeta. Sólo de esa manera se podes mostrar el diff a futuras instantáneas. Además las instantáneas se pueden  compartir entre los equipos.</p>
+
+<p>Jest stores the snapshots in a folder. Only that way it can show the diff to future snapshots. Additionally the snapshots can be shared across teams.</p>
+
+<p className="it">Vos tiene que instalar una biblioteca de utilidades antes de poder escribir su primera prueba instantánea.</p>
+
+<p>You have to install an utility library before you can write your first Snapshot test.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save-dev react-test-renderer
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se podes extender la prueba de componentes de aplicaciones con su primera prueba instantánea.</p>
+
+<p>Now you can extend the App component test with your first Snapshot test.</p>
+
+<figure class="code">
+  <figcaption>src/App.test.js</figcaption>
+
+<div class="highlight"><pre>import React from 'react';
+import ReactDOM from 'react-dom';
+<code class="uil">import renderer from 'react-test-renderer';
+</code> import App from './App';
+
+<code class="uil">describe('App', () =&gt; &#123;
+</code>
+  it('renders', () =&gt; &#123;
+    const div = document.createElement('div');
+    ReactDOM.render(&lt;App /&gt;, div);
+  &#125;);
+
+<code class="uil">  test('snapshots', () =&gt; &#123;
+</code><code class="uil">    const component = renderer.create(
+</code><code class="uil">      &lt;App /&gt;
+</code><code class="uil">    );
+</code><code class="uil">    let tree = component.toJSON();
+</code><code class="uil">    expect(tree).toMatchSnapshot();
+</code><code class="uil">  &#125;);
+</code>
+<code class="uil">&#125;);
+</code></pre></div>
+
+</figure>
+
+<p className="it">Ejecutar las pruebas de nuevo y ver cómo las pruebas ya sea éxito o fracasan. Deben tener éxito. Una vez que cambie la salida del bloque rendir en su componente de aplicación, la prueba falla instantánea. A continuación, podes decidir actualizar la instantánea o investigar en su componente de aplicación.</p>
+
+<p>Run your tests again and see how the tests either succeed or fail. They should succeed. Once you change the output of the render block in your App component, the Snapshot test should fail. Then you can decide to update the snapshot or investigate in your App component.</p>
+
+<p className="it">Vamos a añadir más pruebas para nuestros componentes independientes. En primer lugar, el componente de búsqueda:</p>
+
+<p>Let’s add more tests for our independent components. First, the Search component:</p>
+
+<figure class="code">
+  <figcaption>src/App.test.js</figcaption>
+
+<div class="highlight"><pre>import React from 'react';
+import ReactDOM from 'react-dom';
+import renderer from 'react-test-renderer';
+<code class="uil">import App, &#123; Search &#125; from './App';
+</code>
+...
+
+<code class="uil">describe('Search', () =&gt; &#123;
+</code><code class="uil">
+</code><code class="uil">  it('renders', () =&gt; &#123;
+</code><code class="uil">    const div = document.createElement('div');
+</code><code class="uil">    ReactDOM.render(&lt;Search&gt;Search&lt;/Search&gt;, div);
+</code><code class="uil">  &#125;);
+</code><code class="uil">
+</code><code class="uil">  test('snapshots', () =&gt; &#123;
+</code><code class="uil">    const component = renderer.create(
+</code><code class="uil">      &lt;Search&gt;Search&lt;/Search&gt;
+</code><code class="uil">    );
+</code><code class="uil">    let tree = component.toJSON();
+</code><code class="uil">    expect(tree).toMatchSnapshot();
+</code><code class="uil">  &#125;);
+</code><code class="uil">
+</code><code class="uil">&#125;);
+</code></pre></div>
+
+</figure>
+
+<p className="it">En segundo lugar, el componente Button:</p>
+
+<p>Second, the Button component:</p>
+
+<figure class="code">
+  <figcaption>src/App.test.js</figcaption>
+
+<div class="highlight"><pre>...
+<code class="uil">import App, &#123; Search, Button &#125; from './App';
+</code>
+...
+
+<code class="uil">describe('Button', () =&gt; &#123;
+</code><code class="uil">
+</code><code class="uil">  it('renders', () =&gt; &#123;
+</code><code class="uil">    const div = document.createElement('div');
+</code><code class="uil">    ReactDOM.render(&lt;Button&gt;Give Me More&lt;/Button&gt;, div);
+</code><code class="uil">  &#125;);
+</code><code class="uil">
+</code><code class="uil">  test('snapshots', () =&gt; &#123;
+</code><code class="uil">    const component = renderer.create(
+</code><code class="uil">      &lt;Button&gt;Give Me More&lt;/Button&gt;
+</code><code class="uil">    );
+</code><code class="uil">    let tree = component.toJSON();
+</code><code class="uil">    expect(tree).toMatchSnapshot();
+</code><code class="uil">  &#125;);
+</code><code class="uil">
+</code><code class="uil">&#125;);
+</code></pre></div>
+
+</figure>
+
+<p className="it">Por último, pero no menos importante, el componente de tabla:</p>
+
+<p>Last but not least, the Table component:</p>
+
+<figure class="code">
+  <figcaption>src/App.test.js</figcaption>
+
+<div class="highlight"><pre>...
+<code class="uil">import App, &#123; Search, Button, Table &#125; from './App';
+</code>
+...
+
+<code class="uil">describe('Table', () =&gt; &#123;
+</code><code class="uil">
+</code><code class="uil">  const props = &#123;
+</code><code class="uil">    list: [
+</code><code class="uil">      &#123; title: '1', author: '1', num_comments: 1, points: 2, objectID: 'y' &#125;,
+</code><code class="uil">      &#123; title: '2', author: '2', num_comments: 1, points: 2, objectID: 'z' &#125;,
+</code><code class="uil">    ],
+</code><code class="uil">  &#125;;
+</code><code class="uil">
+</code><code class="uil">  it('renders', () =&gt; &#123;
+</code><code class="uil">    const div = document.createElement('div');
+</code><code class="uil">    ReactDOM.render(&lt;Table &#123; ...props &#125; /&gt;, div);
+</code><code class="uil">  &#125;);
+</code><code class="uil">
+</code><code class="uil">  test('snapshots', () =&gt; &#123;
+</code><code class="uil">    const component = renderer.create(
+</code><code class="uil">      &lt;Table &#123; ...props &#125; /&gt;
+</code><code class="uil">    );
+</code><code class="uil">    let tree = component.toJSON();
+</code><code class="uil">    expect(tree).toMatchSnapshot();
+</code><code class="uil">  &#125;);
+</code><code class="uil">
+</code><code class="uil">&#125;);
+</code></pre></div>
+
+</figure>
+
+<p className="it">pruebas instantáneas suelen permanecer bastante básico. Sólo se desea cubrir que el componente no cambia su salida. Una vez que tus cambios de la salida, tenes que decidir si acepta los cambios. De lo contrario, tenes que fijar el componente cuando la salida no es la salida deseada.</p>
+
+<p>Snapshot tests usually stay pretty basic. You only want to cover that the component doesn’t change its output. Once its changes the output, you have to decide if you accept the changes. Otherwise you have to fix the component when the output is not the desired output.</p>
+
+<h4 id="leanpub-auto-exercises-30">Exercises:</h4>
+
+<ul><li className="it">ver cómo las pruebas instantáneas fallan una vez que cambian su implementación del componente
+    </li>
+   
+  <li>see how the Snapshot tests fail once you change your component implementation
+    <ul> <li className="it">aceptar o negar el cambio instantánea</li>
+      <li>either accept or deny the snapshot change</li>
+    </ul>
+  </li>
+  <li className="it">mantener tus pruebas instantáneas al día cuando los cambios de implementación en próximos capítulos</li>
+  <li>keep your snapshots tests up to date when the implementation changes in next chapters</li>
+  <li className="it">leer más acerca de <a href="https://facebook.github.io/jest/docs/tutorial-react.html">Jest en React</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/jest/docs/tutorial-react.html">Jest in React</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>
+
+
+
+      
+    </ul>
+  </li>
+  
+  

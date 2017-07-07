@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Composeable Components</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-composeable-components">Composeable Components</h3>
+
+<p className="it">Hay una más pequeña propiedad que se podes acceder en los puntales del objeto: la <code>children</code> hélice. Se podes utilizar para pasar a tus elementos componentes desde arriba - que son desconocidos para el propio componente - pero que sea posible componer los componentes entre sí. Vamos a ver cómo esto se ve como cuando pasa únicamente un texto (cadena) como un niño al componente de búsqueda.</p>
+
+<p>There is one more little property which is accessible in the props object: the <code>children</code> prop. You can use it to pass elements to your components from above - which are unknown to the component itself - but make it possible to compose components into each other. Let’s see how this looks like when you only pass a text (string) as a child to the Search component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123; searchTerm, list &#125; = this.state;
+    return (
+      &lt;div className="App"&gt;
+<code class="uil">        &lt;Search
+</code><code class="uil">          value=&#123;searchTerm&#125;
+</code><code class="uil">          onChange=&#123;this.onSearchChange&#125;
+</code><code class="uil">        &gt;
+</code><code class="uil">          Search
+</code><code class="uil">        &lt;/Search&gt;
+</code>        &lt;Table
+          list=&#123;list&#125;
+          pattern=&#123;searchTerm&#125;
+          onDismiss=&#123;this.onDismiss&#125;
+        /&gt;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora el componente de búsqueda podes desestructurar la propiedad a los niños de los apoyos. Entonces se podes especificar dónde se deben mostrar a los niños.</p>
+
+<p>Now the Search component can destructure the children property from props. Then it can specify where the children should be displayed.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Search extends Component &#123;
+  render() &#123;
+<code class="uil">    const &#123; value, onChange, children &#125; = this.props;
+</code>    return (
+      &lt;form&gt;
+<code class="uil">        &#123;children&#125; &lt;input
+</code>          type="text"
+          value=&#123;value&#125;
+          onChange=&#123;onChange&#125;
+        /&gt;
+      &lt;/form&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El “Buscar” texto debes ser visible al lado de su campo de entrada ahora. Cuando se utiliza el componente de búsqueda en otro lugar, se podes elegir un texto diferente si lo desea. Después de todo no es único texto que podes pasar cuando eran niños. Se podes pasar un elemento y árboles de elementos (que podes ser encapsulado por los componentes de nuevo) cuando eran niños. La propiedad niños hace que sea posible tejer componentes entre sí.</p>
+
+<p>The “Search” text should be visible next to your input field now. When you use the Search component somewhere else, you can choose a different text if you like. After all it is not only text that you can pass as children. You can pass an element and element trees (which can be encapsulated by components again) as children. The children property makes it possible to weave components into each other.</p>
+
+<h4 id="leanpub-auto-exercises-18">Exercises:</h4>
+
+<ul>
+<li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/composition-vs-inheritance.html">el modelo de composición de React</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/composition-vs-inheritance.html">the composition model of React</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

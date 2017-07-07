@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">node and npm</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-node-and-npm">node and npm</h3>
+
+<p className="it">En este capítulo se te da un poco de curso rápido de node y la npm. No es exhaustiva, pero usted recibirá todas las herramientas necesarias. Si está familiarizado con los dos, podes saltarse este capítulo.</p>
+
+<p>This chapter gives you a little crash course in node and npm. It is not exhaustive, but you will get all the necessary tools. If you are familiar with both of them, you can skip the chapter.</p>
+
+<p className="it">El <strong>gestor de paquetes nodo</strong> (NPM) te permite instalar externos <strong>paquetes de nodos</strong> desde la línea de comandos. Estos paquetes pueden  ser un conjunto de funciones de utilidad, bibliotecas o frameworks enteros. Son las dependencias de tu aplicación. podes instalar estos paquetes a su carpeta de paquete global de node o en la carpeta de proyecto local.</p>
+
+<p>The <strong>node package manager</strong> (npm) allows you to install external <strong>node packages</strong> from the command line. These packages can be a set of utility functions, libraries or whole frameworks. They are the dependencies of your application. You can either install these packages to your global node package folder or to your local project folder.</p>
+
+<p className="it">paquetes de nodos globales son accesibles desde todas partes en el terminal y hay que instalarlos sólo una vez. podes instalar un paquete global escribiendo en su terminal:</p>
+
+<p>Global node packages are accessible from everywhere in the terminal and you have to install them only once. You can install a global package by typing in your terminal:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install -g &lt;package&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">La <code>-g</code> bandera dice NPM para instalar el paquete global. Paquetes locales se utilizan en la aplicación. Por ejemplo, React como una biblioteca será un paquete local que podes ser requerida en su solicitud de uso. Se podes instalar a través del terminal escribiendo:</p>
+
+<p>The <code>-g</code> flag tells npm to install the package globally. Local packages are used in your application. For instance, React as a library will be a local package which can be required in your application for usage. You can install it via the terminal by typing:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install &lt;package&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">En el caso de React sería:</p>
+
+<p>In the case of React it would be:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install react
+</pre></div>
+
+</figure>
+
+<p className="it">El paquete instalado aparecerá automáticamente en una carpeta llamada <em>node_modules /</em>. Pero ten cuidado. Siempre que instale un paquete local, no se debes olvidar la ordenada <code>--save</code> de la bandera:</p>
+
+<p>The installed package will automatically appear in a folder called <em>node_modules/</em>. But be careful. Whenever you install a local package you shouldn’t forget the neat <code>--save</code> flag:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save &lt;package&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">La <code>--save</code> bandera dice NPM para almacenar el requisito de paquete en un archivo llamado <em>package.json</em>. El archivo se podes encontrar en la carpeta del proyecto.</p>
+
+<p>The <code>--save</code> flag tells npm to store the package requirement in a file called <em>package.json</em>. The file can be found in your project folder.</p>
+
+<p className="it">No cada carpeta del proyecto viene con un <em>package.json</em> archivo embargo. Hay un comando NPM para inicializar un proyecto NPM y por lo tanto un <em>package.json</em> archivo. Sólo cuando se tiene ese archivo, podes instalar nuevos paquetes locales a través de la npm.</p>
+
+<p>Not every project folder comes with a <em>package.json</em> file though. There is a npm command to initialize a npm project and thus a <em>package.json</em> file. Only when you have that file, you can install new local packages via npm.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm init -y
+</pre></div>
+
+</figure>
+
+<p className="it">La <code>-y</code> bandera es un acceso directo para inicializar todos los valores predeterminados en su <em>package.json</em>. Si no lo utiliza, tenes que decidir cómo configurar el archivo.</p>
+
+<p>The <code>-y</code> flag is a shortcut to initialize all the defaults in your <em>package.json</em>. If you don’t use it, you have to decide how to configure the file.</p>
+
+<p className="it">Una palabra más sobre el <em>package.json</em>. El archivo te permite compartir tu proyecto con otros desarrolladores sin compartir todos los paquetes de nodo. El archivo tiene todas las referencias de los paquetes de nodos utilizados en tu proyecto. Estos paquetes son llamados dependencias. Todo el mundo podes copiar el proyecto sin las dependencias. Las dependencias son referencias en el <em>package.json</em>. Alguien que copia tu proyecto pueden  instalar todos los paquetes mediante el uso <code>npm install</code> de la línea de comandos.</p>
+
+<p>One more word about the <em>package.json</em>. The file enables you to share your project with other developers without sharing all the node packages. The file has all the references of node packages used in your project. These packages are called dependencies. Everyone can copy your project without the dependencies. The dependencies are references in the <em>package.json</em>. Someone who copies your project can install all packages by using <code>npm install</code> on the command line.</p>
+
+<p className="it">Quiero cubrir una más comandos NPM para evitar confusiones:</p>
+
+<p>I want to cover one more npm command to prevent confusion:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save-dev &lt;package&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">La <code>--save-dev</code> bandera indica que el paquete node sólo se utiliza en el entorno de desarrollo. No va a ser utilizado en la producción cuando se implementa la aplicación en un servidor. ¿Qué tipo de paquete de node podes ser? Imagine que desea probar la aplicación con la ayuda de un paquete de nodo. Es necesario instalar ese paquete a través de la npm, pero queres excluirlo de su entorno de producción. Allí no desea probar la aplicación más. Debe ser probado ya y funciona fuera de la caja para los usuarios. Eso es sólo un caso de uso en el que se desea utilizar la <code>--save-dev</code> bandera.</p>
+
+<p>The <code>--save-dev</code> flag indicates that the node package is only used in the development environment. It will not be used in production when you deploy your application on a server. What kind of node package could that be? Imagine you want to test your application with the help of a node package. You need to install that package via npm, but want to exclude it from your production environment. There you don’t want to test your application anymore. It should be tested already and work out of the box for users. That’s only one use case where you would want to use the <code>--save-dev</code> flag.</p>
+
+<p className="it">Te encontraráscon más comandos de npm en su camino. Pero estos serán suficientes por ahora.</p>
+
+<p>You will encounter more npm commands on your way. But these will be sufficient for now.</p>
+
+<h4 id="leanpub-auto-exercises-1">Exercises:</h4>
+
+<ul>
+  <li className="it">configurar un tiro de proyecto npm 
+
+  <li>setup a throw away npm project
+    <ul>
+      <li className="it">crear una nueva carpeta con <code>mkdir &lt;folder_name&gt;</code> </li> 
+
+      <li>create a new folder with <code>mkdir &lt;folder_name&gt;</code>
+</li>
+      <li className="it">navegue a la carpeta con <code>cd &lt;folder_name&gt;</code> </li>
+
+      <li>navigate into the folder with <code>cd &lt;folder_name&gt;</code>
+</li>
+      <li className="it">ejecutar <code>npm init -y</code> </li>
+
+      <li>execute <code>npm init -y</code>
+</li>
+      <li className="it">instalar un paquete local, como React con <code>npm install --save react</code> </li>
+
+      <li>install a local package like React with <code>npm install --save react</code>
+</li>
+      <li className="it">echar un vistazo a la <em>package.json</em> archivo y el <em>node_modules /</em> carpeta</li>
+
+      <li>have a look into the <em>package.json</em> file and the <em>node_modules/</em> folder</li>
+      <li className="it">averiguar cómo desinstalar el <em>React</em> paquete de nodo</li>
+
+      <li>find out how to uninstall the <em>react</em> node package</li>
+    </ul>
+  </li>
+  <li className="it">leer más acerca de <a href="https://docs.npmjs.com/">npm</a> </li>
+
+  <li>read more about <a href="https://docs.npmjs.com/">npm</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

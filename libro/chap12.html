@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Zero-Configuration Setup</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-zero-configuration-setup">Zero-Configuration Setup</h3>
+
+<p className="it">En el camino de aprender React que va a utilizar <a href="https://github.com/facebookincubator/create-react-app">crear una aplicación React</a> para arrancar la aplicación. Se trata de un kit de inicio obstinado aún sin configuración parReact  introducido por Facebook en 2016. Las personas que <a href="https://twitter.com/dan_abramov/status/806985854099062785">recomendaría a los principiantes en un 96%</a>. En <em>crear una aplicación React</em> del utillaje y la configuración evolucionan en el fondo mientras la atención se centra en la implementación de la aplicación.</p>
+
+<p>In the Road to learn React you will use <a href="https://github.com/facebookincubator/create-react-app">create-react-app</a> to bootstrap your application. It’s an opinionated yet zero-configuration starter kit for React introduced by Facebook in 2016. People would <a href="https://twitter.com/dan_abramov/status/806985854099062785">recommend it to beginners by 96%</a>. In <em>create-react-app</em> the tooling and configuration evolve in the background while the focus is on the application implementation.</p>
+
+<p className="it">Para empezar, tendrás que instalar el paquete a los paquetes de nodos globales. Después de que siempre tenga a su disposición en la línea de comandos para arrancar nuevas aplicaciones React.</p>
+
+<p>To get started, you will have to install the package to your global node packages. After that you always have it available on the command line to bootstrap new React applications.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install -g create-react-app
+</pre></div>
+
+</figure>
+
+<p className="it">podes comprobar la versión de <em>crear una aplicación React</em> para verificar la instalación correcta en la línea de comandos:</p>
+
+<p>You can check the version of <em>create-react-app</em> to verify a successful installation on your command line:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> create-react-app --version
+</pre></div>
+
+</figure>
+
+<p className="it">Se te debes dar una salida sobre la versión.</p>
+
+<p>It should give you an output about the version.</p>
+
+<p className="it">Ahora podes arrancar su primera aplicación React. Lo llamamos <em>HackerNews</em> , pero se podes elegir un nombre diferente. Después simplemente navegue a la carpeta:</p>
+
+<p>Now you can bootstrap your first React application. We call it <em>hackernews</em>, but you can choose a different name. Afterward simply navigate into the folder:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> create-react-app hackernews<br></br>
+cd hackernews
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se podes abrir la aplicación en tu editor. La siguiente estructura de carpetas debes ser presentada a usted:</p>
+
+<p>Now you can open the application in your editor. The following folder structure should be presented to you:</p>
+
+<figure class="code">
+  <figcaption>Folder Structure</figcaption>
+
+<div class="highlight"><pre><code></code> hackernews/<br></br>
+  README.md<br></br>
+  node_modules/<br></br>
+  package.json<br></br>
+  .gitignore<br></br>
+  public/<br></br>
+    favicon.ico<br></br>
+    index.html<br></br>
+  src/<br></br>
+    App.css<br></br>
+    App.js<br></br>
+    App.test.js<br></br>
+    index.css<br></br>
+    index.js<br></br>
+    logo.svg
+</pre></div>
+
+</figure>
+
+<p className="it">Al principio todo lo que necesita se encuentra en la carpeta <em>/ src</em>.</p>
+
+<p>In the beginning everything you need is located in the <em>src/</em> folder.</p>
+
+<p className="it">La atención se centra principalmente en la <em>/ app.js src</em> archivo para implementar componentes React. Será utilizado para implementar tu aplicación, pero más tarde es posible que desee dividir tus componentes en varios archivos.</p>
+
+<p>The main focus lies on the <em>src/App.js</em> file to implement React components. It will be used to implement your application, but later you might want to split up your components into multiple files.</p>
+
+<p className="it">Además se encuentra un <em>/ App.test.js src</em> archivo para pruebas y un <em>src / index.js</em> como punto de entrada al mundo React. Se llega a conocer ambos archivos en un capítulo posterior. Además, hay un <em>src / index.css</em> y <em>/ App.css src</em> archivo el estilo de tu aplicacióny componentes. Todas están equipadas con estilo por defecto cuando los abra.</p>
+
+<p>Additionally you will find a <em>src/App.test.js</em> file for tests and a <em>src/index.js</em> as entry point to the React world. You will get to know both files in a later chapter. In addition, there is a <em>src/index.css</em> and a <em>src/App.css</em> file to style your application and components. They all come with default style when you open them.</p>
+
+<p className="it">Al lado de la <em>/ src</em> carpeta se encuentra el <em>package.json</em> archivo y <em>node_modules /</em> carpeta para administrar tus paquetes de nodo. La <em>create-react-app</em> aplicación es un proyecto de la npm. podes utilizar la npm para instalar y desinstalar paquetes de nodos a tu proyecto.</p>
+
+<p>Next to to the <em>src/</em> folder you will find the <em>package.json</em> file and <em>node_modules/</em> folder to manage your node packages. The <em>create-react-app</em> application is a npm project. You can use npm to install and uninstall node packages to your project.</p>
+
+<p className="it">La <em>create-react-app</em> del proyecto viene con las siguientes secuencias de comandos de la npm para su línea de comandos:</p>
+
+<p>The <em>create-react-app</em> project comes with the following npm scripts for your command line:</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code>// Runs the application in http://localhost:3000<br></br>
+npm start<br></br>
+<br></br>
+// Runs the tests<br></br>
+npm test<br></br>
+<br></br>
+// Builds the application for production<br></br>
+npm run build
+</pre></div>
+
+</figure>
+
+<p className="it">Las secuencias de comandos se definen en su <em>package.json</em> también. Su aplicación es repetitivo React bootstrap ahora.</p>
+
+<p>The scripts are defined in your <em>package.json</em> too. Your boilerplate React application is bootstrapped now.</p>
+
+<h4 id="leanpub-auto-exercises-3">Exercises:</h4>
+
+<ul>
+  <li className="it"> <code>npm start</code> tu aplicacióny visitar la página en el navegador</li>
+
+  <li>
+<code>npm start</code> your application and visit the page in your browser</li>
+  <li className="it">ejecutar el interactivo <code>npm test</code> guión</li>
+
+  <li>run the interactive <code>npm test</code> script</li>
+  <li className="it">familiarizarse con la estructura de carpetas</li>
+
+  <li>make yourself familiar with the folder structure</li>
+  <li className="it">familiarizarse con el contenido de los archivos</li>
+
+  <li>make yourself familiar with the content of the files</li>
+  <li className="it">leer más acerca de <a href="https://github.com/facebookincubator/create-react-app">las secuencias de comandos y crear una aplicación React</a> </li>
+
+  <li>read more about <a href="https://github.com/facebookincubator/create-react-app">the scripts and create-react-app</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>
+

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Controlled Components</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-controlled-components">Controlled Components</h3>
+
+<p className="it">Ya has aprendido sobre el flujo de datos unidireccional en React. La misma ley se aplica para el campo de entrada, que actualiza el estado que a su vez filtra la lista. El estado fue cambiado, el <code>render()</code> método se ejecuta de nuevo y utiliza el reciente <code>searchTerm</code> estado para solicitar la condición de filtro.</p>
+
+<p>You already learned about the unidirectional data flow in React. The same law applies for the input field, which updates the state that in turn filters the list. The state was changed, the <code>render()</code> method runs again and uses the recent <code>searchTerm</code> state to apply the filter condition.</p>
+
+<p className="it">Pero no olvidemos algo en el elemento de entrada? Una etiqueta HTML de entrada viene con un <code>value</code> atributo. El atributo de valor por lo general tiene el valor que se muestra en el campo de entrada - en nuestro caso la <code>searchTerm</code> propiedad. Sin embargo, parece que no es necesario que en React.</p>
+
+<p>But didn’t we forget something in the input element? A HTML input tag comes with a <code>value</code> attribute. The value attribute usually has the value that is shown in the input field - in our case the <code>searchTerm</code> property. However, it seems like we don’t need that in React.</p>
+
+<p className="it">Eso está mal. Los elementos de formulario, como <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> y <code>&lt;select&gt;</code> mantienen su propio estado. Modifican el valor internamente una vez que alguien cambia desde el exterior. En React eso se llama un <strong>componente no controlada</strong> , ya que maneja su propio estado. En React debes asegurarse de que los elementos <strong>componentes controlados</strong> .</p>
+
+<p>That’s wrong. Form elements such as <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> and <code>&lt;select&gt;</code> hold their own state. They modify the value internally once someone changes it from the outside. In React that’s called an <strong>uncontrolled component</strong>, because it handles its own state. In React you should make sure to make those elements <strong>controlled components</strong>.</p>
+
+<p className="it">¿Cómo se debes hacer eso? Es suficiente con establecer el atributo de valor del campo de entrada. El valor ya está registrado en la <code>searchTerm</code> propiedad del Estado.</p>
+
+<p>How should you do that? You only have to set the value attribute of the input field. The value is already saved in the <code>searchTerm</code> state property.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123; searchTerm, list &#125; = this.state;
+    return (
+      &lt;div className="App"&gt;
+        &lt;form&gt;
+          &lt;input
+            type="text"
+<code class="uil">            value=&#123;searchTerm&#125;
+</code>            onChange=&#123;this.onSearchChange&#125;
+          /&gt;
+        &lt;/form&gt;
+        ...
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Eso es. El ciclo de flujo de datos unidireccional para el campo de entrada es autónomo ahora. El estado del componente interno es la única fuente de la verdad para el campo de entrada.</p>
+
+<p>That’s it. The unidirectional data flow cycle for the input field is self-contained now. The internal component state is the single source of truth for the input field.</p>
+
+<p className="it">Toda la gestión de estado interno y el flujo unidireccional de datos podrían ser nuevas para usted. Pero una vez que están acostumbrados a ello, será su flujo natural para poner en práctica las cosas en React. En general, React traído un nuevo patrón con el flujo de datos unidireccional al mundo de las aplicaciones de una sola página. Se adoptó por varios frameworks y bibliotecas.</p>
+
+<p>The whole internal state management and unidirectional data flow might be new to you. But once you are used to it, it will be your natural flow to implement things in React. In general, React brought a novel pattern with the unidirectional data flow to the world of single page applications. It is adopted by several frameworks and libraries.</p>
+
+<h4 id="leanpub-auto-exercises-16">Exercises:</h4>
+
+<ul><li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/forms.html">React formas</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/forms.html">React forms</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Paginated Fetch</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-paginated-fetch">Paginated Fetch</h3>
+
+<p className="it">¿Tuvo un vistazo más de cerca a la estructura de datos devuelto todavía? El <a href="https://hn.algolia.com/api">Hacker News API</a> devuelve más de una lista de éxitos. La propiedad página, que es 0 en la primera respuesta, se podes utilizar para obtener los datos más paginados. Sólo tiene que pasar a la página siguiente con el mismo término de búsqueda a la API.</p>
+
+<p>Did you have a closer look at the returned data structure yet? The <a href="https://hn.algolia.com/api">Hacker News API</a> returns more than a list of hits. The page property, which is 0 in the first response, can be used to fetch more paginated data. You only need to pass the next page with the same search term to the API.</p>
+
+<p className="it">Vamos a extender las constantes de la API composeable que pueda hacer frente a los datos paginados.</p>
+
+<p>Let’s extend the composeable API constants that it can deal with paginated data.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const DEFAULT_QUERY = 'redux';
+<code class="uil">const DEFAULT_PAGE = 0;
+</code>
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+<code class="uil">const PARAM_PAGE = 'page=';
+</code></pre></div>
+
+</figure>
+
+<p className="it">Ahora Podes utilizar estas constantes para agregar el parámetro de página a la solicitud del API.</p>
+
+<p>Now you can use these constants to add the page parameter to your API request.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">url</code> <code class="o">=</code> <code class="sb">`</code><code class="si">$&#123;</code><code class="nx">PATH_BASE</code><code class="si">&#125;$&#123;</code><code class="nx">PATH_SEARCH</code><code class="si">&#125;</code><code class="sb">?</code><code class="si">$&#123;</code><code class="nx">PARAM_SEARCH</code><code class="si">&#125;$&#123;</code><code class="nx">searchTerm</code><code class="si">&#125;</code><code class="sb">&amp;</code><code class="si">$&#123;</code><code class="nx">PARAM_PAG</code><code class="o">\</code>
+<code class="nx">E</code><code class="si">&#125;</code><code class="sb">`</code><code class="p">;</code>
+
+<code class="nx">console</code><code class="p">.</code><code class="nx">log</code><code class="p">(</code><code class="nx">url</code><code class="p">);</code>
+<code class="c1">// output: https://hn.algolia.com/api/v1/search?query=redux&amp;page=</code>
+</pre></div>
+
+</figure>
+
+<p className="it">El <code>fetchSearchTopstories()</code> método se llevará a la página como segundo argumento. El <code>componentDidMount()</code> y <code>onSearchSubmit()</code> métodos toman el <code>DEFAULT_PAGE</code> de las llamadas iniciales API. Deben buscar la primera página en la primera solicitud. Cada adicional traiga debes buscar a la página siguiente.</p>
+
+<p>The <code>fetchSearchTopstories()</code> method will take the page as second argument. The <code>componentDidMount()</code> and <code>onSearchSubmit()</code> methods take the <code>DEFAULT_PAGE</code> for the initial API calls. They should fetch the first page on the first request. Every additional fetch should fetch the next page.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  componentDidMount() &#123;
+    const &#123; searchTerm &#125; = this.state;
+<code class="uil">    this.fetchSearchTopstories(searchTerm, DEFAULT_PAGE);
+</code>  &#125;
+
+<code class="uil">  fetchSearchTopstories(searchTerm, page) &#123;
+</code><code class="uil">    fetch(`$&#123;PATH_BASE&#125;$&#123;PATH_SEARCH&#125;?$&#123;PARAM_SEARCH&#125;$&#123;searchTerm&#125;&amp;$&#123;PARAM_PAGE&#125;\
+</code><code class="uil">$&#123;page&#125;`)
+</code>      .then(response =&gt; response.json())
+      .then(result =&gt; this.setSearchTopstories(result));
+  &#125;
+
+  onSearchSubmit(event) &#123;
+    const &#123; searchTerm &#125; = this.state;
+<code class="uil">    this.fetchSearchTopstories(searchTerm, DEFAULT_PAGE);
+</code>    event.preventDefault();
+  &#125;
+
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora podes utilizar la página actual de la respuesta del API en <code>fetchSearchTopstories()</code>. podes utilizar este método en un botón para ir a buscar más historias en un clic de botón. Vamos a utilizar el botón para obtener los datos más paginados del Hacker News API. Sólo es necesario definir la <code>onClick()</code> función que toma el término de búsqueda actual y la siguiente página (página actual + 1).</p>
+
+<p>Now you can use the current page from the API response in <code>fetchSearchTopstories()</code>. You can use this method in a button to fetch more stories on a button click. Let’s use the Button to fetch more paginated data from the Hacker News API. You only need to define the <code>onClick()</code> function which takes the current search term and the next page (current page + 1).</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123; searchTerm, result &#125; = this.state;
+<code class="uil">    const page = (result &amp;&amp; result.page) || 0;
+</code>    return (
+      &lt;div className="page"&gt;
+        &lt;div className="interactions"&gt;
+        ...
+        &#123; result &amp;&amp;
+          &lt;Table
+            list=&#123;result.hits&#125;
+            onDismiss=&#123;this.onDismiss&#125;
+          /&gt;
+        &#125;
+<code class="uil">        &lt;div className="interactions"&gt;
+</code><code class="uil">          &lt;Button onClick=&#123;() =&gt; this.fetchSearchTopstories(searchTerm, page + 1\
+</code><code class="uil">)&#125;&gt;
+</code><code class="uil">            More
+</code><code class="uil">          &lt;/Button&gt;
+</code><code class="uil">        &lt;/div&gt;
+</code>      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Debes asegurarse de que la página por defecto a 0 cuando no hay ningún resultado.</p>
+
+<p>You should make sure to default to page 0 when there is no result.</p>
+
+<p className="it">Hay un paso que falta. Hacer salir la página siguiente de datos, pero va a sobrescribir la página anterior de datos. Desea concatenar los datos antiguos y nuevos. Vamos a ajustar la funcionalidad para añadir los nuevos datos en lugar de sobrescribirlo.</p>
+
+<p>There is one step missing. You fetch the next page of data, but it will overwrite your previous page of data. You want to concatenate the old and new data. Let’s adjust the functionality to add the new data rather than to overwrite it.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>setSearchTopstories(result) &#123;
+<code class="uil">  const &#123; hits, page &#125; = result;
+</code><code class="uil">
+</code><code class="uil">  const oldHits = page !== 0
+</code><code class="uil">    ? this.state.result.hits
+</code><code class="uil">    : [];
+</code><code class="uil">
+</code><code class="uil">  const updatedHits = [
+</code><code class="uil">    ...oldHits,
+</code><code class="uil">    ...hits
+</code><code class="uil">  ];
+</code><code class="uil">
+</code><code class="uil">  this.setState(&#123;
+</code><code class="uil">    result: &#123; hits: updatedHits, page &#125;
+</code><code class="uil">  &#125;);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En primer lugar, se obtiene los golpes y la página del resultado.</p>
+
+<p>First, you get the hits and page from the result.</p>
+
+<p className="it">En segundo lugar, tenes que comprobar si ya hay viejos éxitos. Cuando la página es 0, se trata de una nueva solicitud de búsqueda de <code>componentDidMount()</code> o <code>onSearchSubmit()</code>. Los accesos están vacíos. Pero cuando se hace clic en el botón “Más” para obtener los datos paginados de la página no es 0. Es la página siguiente. Los viejos éxitos ya están almacenados en su estado y por lo tanto pueden  ser utilizados.</p>
+
+<p>Second, you have to check if there are already old hits. When the page is 0, it is a new search request from <code>componentDidMount()</code> or <code>onSearchSubmit()</code>. The hits are empty. But when you click the “More” button to fetch paginated data the page isn’t 0. It is the next page. The old hits are already stored in your state and thus can be used.</p>
+
+<p className="it">En tercer lugar, no desea sobrescribir los viejos éxitos. podes combinar viejos y nuevos éxitos de la solicitud de API reciente. La unión de ambas listas se podes hacer con el operador gama propagación JavaScript ES6.</p>
+
+<p>Third, you don’t want to overwrite the old hits. You can merge old and new hits from the recent API request. The merge of both lists can be done with the JavaScript ES6 array spread operator.</p>
+
+<p className="it">En cuarto lugar, se establecen los éxitos fusionadas y la página en el estado de los componentes internos.</p>
+
+<p>Fourth, you set the merged hits and page in the internal component state.</p>
+
+<p className="it">podes hacer un último ajuste. Al intentar el botón “Más” sólo obtiene un par de elementos de la lista. La URL de la API se podes extender a buscar más elementos de la lista con cada solicitud. Una vez más se podes añadir más constantes de trayectoria composeable.</p>
+
+<p>You can make one last adjustment. When you try the “More” button it only fetches a few list items. The API url can be extended to fetch more list items with each request. Again you can add more composeable path constants.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const DEFAULT_QUERY = 'redux';
+const DEFAULT_PAGE = 0;
+<code class="uil">const DEFAULT_HPP = '100';
+</code>
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+const PARAM_PAGE = 'page=';
+<code class="uil">const PARAM_HPP = 'hitsPerPage=';
+</code></pre></div>
+
+</figure>
+
+<p className="it">Ahora podes utilizar las constantes de extender la URL de la API.</p>
+
+<p>Now you can use the constants to extend the API url.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>fetchSearchTopstories(searchTerm, page) &#123;
+<code class="uil">  fetch(`$&#123;PATH_BASE&#125;$&#123;PATH_SEARCH&#125;?$&#123;PARAM_SEARCH&#125;$&#123;searchTerm&#125;&amp;$&#123;PARAM_PAGE&#125;$&#123;\
+</code><code class="uil">page&#125;&amp;$&#123;PARAM_HPP&#125;$&#123;DEFAULT_HPP&#125;`)
+</code>    .then(response =&gt; response.json())
+    .then(result =&gt; this.setSearchTopstories(result));
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Después de la solicitud a la API de Hacker News obtiene más elementos de lista en una solicitud que antes.</p>
+
+<p>Afterward the request to the Hacker News API fetches more list items in one request than before.</p>
+
+<h4 id="leanpub-auto-exercises-26">Exercises:</h4>
+
+<ul>
+<li className="it">experimentar con las <a href="https://hn.algolia.com/api">Noticias de parámetros API Hacker</a>
+</li>
+  <li>experiment with the <a href="https://hn.algolia.com/api">Hacker News API parameters</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

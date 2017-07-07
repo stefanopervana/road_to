@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Split Up Components</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-split-up-components">Split Up Components</h3>
+
+<p className="it">Tiene un gran componente App ahora. Sigue creciendo y se podes confundir con el tiempo. podes comenzar a dividirlo en trozos - componentes más pequeños.</p>
+
+
+<p>You have one large App component now. It keeps growing and can be confusing eventually. You can start to split it up into chunks - smaller components.</p>
+
+<p className="it">Vamos a empezar a utilizar un componente para la entrada de búsqueda y un componente de la lista de elementos.</p>
+
+
+<p>Let’s start to use a component for the search input and a component for the list of items.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123; searchTerm, list &#125; = this.state;
+    return (
+      &lt;div className="App"&gt;
+<code class="uil">        &lt;Search /&gt;
+</code><code class="uil">        &lt;Table /&gt;
+</code>      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">podes pasar esas propiedades componentes que pueden  utilizar ellos mismos.</p>
+
+
+<p>You can pass those components properties which they can use themselves.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123; searchTerm, list &#125; = this.state;
+    return (
+      &lt;div className="App"&gt;
+<code class="uil">        &lt;Search
+</code><code class="uil">          value=&#123;searchTerm&#125;
+</code><code class="uil">          onChange=&#123;this.onSearchChange&#125;
+</code><code class="uil">        /&gt;
+</code><code class="uil">        &lt;Table
+</code><code class="uil">          list=&#123;list&#125;
+</code><code class="uil">          pattern=&#123;searchTerm&#125;
+</code><code class="uil">          onDismiss=&#123;this.onDismiss&#125;
+</code><code class="uil">        /&gt;
+</code>      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se pueden  definir los componentes del lado de su componente de aplicación. Estos componentes serán componentes de clase ES6 también. Ellos hacen que los mismos elementos como antes.</p>
+
+
+<p>Now you can define the components next to your App component. Those components will be ES6 class components as well. They render the same elements like before.</p>
+
+<p className="it">El primero es el componente de búsqueda.</p>
+
+
+<p>The first one is the Search component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+  ...
+&#125;
+
+<code class="uil">class Search extends Component &#123;
+</code><code class="uil">  render() &#123;
+</code><code class="uil">    const &#123; value, onChange &#125; = this.props;
+</code><code class="uil">    return (
+</code><code class="uil">      &lt;form&gt;
+</code><code class="uil">        &lt;input
+</code><code class="uil">          type="text"
+</code><code class="uil">          value=&#123;value&#125;
+</code><code class="uil">          onChange=&#123;onChange&#125;
+</code><code class="uil">        /&gt;
+</code><code class="uil">      &lt;/form&gt;
+</code><code class="uil">    );
+</code><code class="uil">  &#125;
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">El segundo es el componente de la tabla.</p>
+
+
+<p>The second one is the Table component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>...
+
+<code class="uil">class Table extends Component &#123;
+</code><code class="uil">  render() &#123;
+</code><code class="uil">    const &#123; list, pattern, onDismiss &#125; = this.props;
+</code><code class="uil">    return (
+</code><code class="uil">      &lt;div&gt;
+</code><code class="uil">        &#123; list.filter(isSearched(pattern)).map(item =&gt;
+</code><code class="uil">          &lt;div key=&#123;item.objectID&#125;&gt;
+</code><code class="uil">            &lt;span&gt;
+</code><code class="uil">              &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;
+</code><code class="uil">            &lt;/span&gt;
+</code><code class="uil">            &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;
+</code><code class="uil">            &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;
+</code><code class="uil">            &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;
+</code><code class="uil">            &lt;span&gt;
+</code><code class="uil">              &lt;button
+</code><code class="uil">                onClick=&#123;() =&gt; onDismiss(item.objectID)&#125;
+</code><code class="uil">                type="button"
+</code><code class="uil">              &gt;
+</code><code class="uil">                Dismiss
+</code><code class="uil">              &lt;/button&gt;
+</code><code class="uil">            &lt;/span&gt;
+</code><code class="uil">          &lt;/div&gt;
+</code><code class="uil">        )&#125;
+</code><code class="uil">      &lt;/div&gt;
+</code><code class="uil">    );
+</code><code class="uil">  &#125;
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Ahora tiene tres componentes ES6 clase. Tal vez usted ha notado la <code>this.props</code> objeto. Los puntales - forma corta de propiedades - tienen todos los valores que ha pasado a los componentes cuando se los utiliza en su componente de aplicación. Se podría reutilizar estos componentes en otro lugar, pero ellos pasar valores diferentes. Son reutilizables.</p>
+
+
+<p>Now you have three ES6 class components. Perhaps you have noticed the <code>this.props</code> object. The props - short form for properties - have all the values you have passed to the components when you used them in your App component. You could reuse these components somewhere else but pass them different values. They are reusable.</p>
+
+<h4 id="leanpub-auto-exercises-17">Exercises:</h4>
+
+<ul> <li className="it">averiguar qué componentes se podía dividir
+    </li>
+  <li>figure out which components you could split up
+    <ul>
+     <li className="it">pero no hacerlo ahora, de lo contrario se ejecutará en los conflictos en los próximos capítulos</li>
+      <li>but don’t do it now, otherwise you will run into conflicts in the next chapters</li>
+    </ul>
+  </li>
+</ul>
+
+
+</div>
+</body>
+</html>
+
+
+     

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Reusable Components</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-reusable-components">Reusable Components</h3>
+
+<p className="it">Los componentes reutilizables y composeable te ayuden a llegar a las jerarquías de componentes capaces. Son la base de la capa de vista. Los últimos capítulos mencionan a menudo el término reutilización. podes volver a utilizar la tabla y de Búsqueda componentes ya. No hay que olvidar el componente de aplicación.</p>
+
+
+
+<p>Reusable and composeable components empower you to come up with capable component hierarchies. They are the foundation of your view layer. The last chapters mentioned often the term reusability. You can reuse the Table and Search components already. Not to forget the App component.</p>
+
+<p className="it">Vamos a definir un componente más reutilizable - un componente Button - que consigue volver a utilizar con más frecuencia con el tiempo.</p>
+
+
+
+<p>Let’s define one more reusable component - a Button component - which gets reused more often eventually.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">class</code> <code class="nx">Button</code> <code class="kr">extends</code> <code class="nx">Component</code> <code class="p">&#123;</code>
+  <code class="nx">render</code><code class="p">()</code> <code class="p">&#123;</code>
+    <code class="kr">const</code> <code class="p">&#123;</code>
+      <code class="nx">onClick</code><code class="p">,</code>
+      <code class="nx">className</code><code class="p">,</code>
+      <code class="nx">children</code><code class="p">,</code>
+    <code class="p">&#125;</code> <code class="o">=</code> <code class="k">this</code><code class="p">.</code><code class="nx">props</code><code class="p">;</code>
+
+    <code class="k">return</code> <code class="p">(</code>
+      <code class="o">&lt;</code><code class="nx">button</code>
+        <code class="nx">onClick</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">onClick</code><code class="p">&#125;</code>
+        <code class="nx">className</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">className</code><code class="p">&#125;</code>
+        <code class="nx">type</code><code class="o">=</code><code class="s2">"button"</code>
+      <code class="o">&gt;</code>
+        <code class="p">&#123;</code><code class="nx">children</code><code class="p">&#125;</code>
+      <code class="o">&lt;</code><code class="err">/button&gt;</code>
+    <code class="p">);</code>
+  <code class="p">&#125;</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Podría parecer redundante para declarar un componente de este tipo. Que va a utilizar un <code>Button</code> lugar de una <code>button</code>. Sólo se ahorra al <code>type="button"</code>. Excepto por el tipo de atributo tiene que definir todo lo demás cuando se desea utilizar el componente Button. Pero hay que pensar en la inversión a largo plazo aquí. Imagine que tiene varios botones en tu aplicación, pero queres cambiar un atributo, el estilo o el comportamiento para el botón. Sin el componente que tendría que refactorizar cada botón. En cambio, el componente Button asegura tener sólo una única fuente de verdad. Un botón de refactorizar todos los botones a la vez.</p>
+
+
+
+<p>It might seem redundant to declare such a component. You will use a <code>Button</code> instead of a <code>button</code>. It only spares the <code>type="button"</code>. Except for the type attribute you have to define everything else when you want to use the Button component. But you have to think about the long term investment here. Imagine you have several buttons in your application, but want to change an attribute, style or behavior for the button. Without the component you would have to refactor every button. Instead the Button component ensures to have only one single source of truth. One Button to refactor all buttons at once.</p>
+
+<p className="it">Puesto que usted ya tiene un elemento de botón, podes utilizar el componente Button en lugar. Se omite el atributo type.</p>
+
+
+
+<p>Since you already have a button element, you can use the Button component instead. It omits the type attribute.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Table extends Component &#123;
+  render() &#123;
+    const &#123; list, pattern, onDismiss &#125; = this.props;
+    return (
+      &lt;div&gt;
+        &#123; list.filter(isSearched(pattern)).map(item =&gt;
+          &lt;div key=&#123;item.objectID&#125;&gt;
+            &lt;span&gt;
+              &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;
+            &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;
+            &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;
+            &lt;span&gt;
+<code class="uil">              &lt;Button onClick=&#123;() =&gt; onDismiss(item.objectID)&#125;&gt;
+</code><code class="uil">                Dismiss
+</code><code class="uil">              &lt;/Button&gt;
+</code>            &lt;/span&gt;
+          &lt;/div&gt;
+        )&#125;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El componente Button espera una <code>className</code> propiedad en los apoyos. Pero no pasó ninguna <code>className</code> cuando se utilizó el botón. Debería ser más explícito en el componente Button que el <code>className</code> es opcional.</p>
+
+
+
+<p>The Button component expects a <code>className</code> property in the props. But we didn’t pass any <code>className</code> when the Button was used. It should be more explicit in the Button component that the <code>className</code> is optional.</p>
+
+<p className="it">podes utilizar una función JavaScript ES6: el parámetro por defecto.</p>
+
+
+
+<p>You can use a JavaScript ES6 feature: the default parameter.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class Button extends Component &#123;
+  render() &#123;
+    const &#123;
+      onClick,
+<code class="uil">      className = '',
+</code>      children,
+    &#125; = this.props;
+
+    ...
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora, cada vez que no hay <code>className</code> propiedad, cuyo valor será una cadena vacía.</p>
+
+
+
+<p>Now, whenever there is no <code>className</code> property, the value will be an empty string.</p>
+
+<h4 id="leanpub-auto-exercises-19">Exercises:</h4>
+
+<ul>
+<li className="it">leer más acerca de <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Default_parameters">los parámetros por defecto ES6</a>
+</li>
+  <li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Default_parameters">ES6 default parameters</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

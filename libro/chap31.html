@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Styling Components</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-styling-components">Styling Components</h3>
+
+<p className="it">Vamos a añadir algo de estilo básico para tu aplicacióny componentes. podes volver a utilizar el <em>src / App.css</em> y <em>index.css src /</em> archivos. Preparé un poco de CSS para copiar y pegar, pero no dude en utilizar su propio estilo.</p>
+
+<p>Let’s add some basic styling to your application and components. You can reuse the <em>src/App.css</em> and <em>src/index.css</em> files. I prepared some CSS to copy and paste, but feel free to use your own style.</p>
+
+<figure class="code">
+  <figcaption>src/index.css</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nt">body</code> <code class="p">&#123;</code>
+  <code class="nb">color</code><code class="o">:</code> <code class="m">#222</code><code class="p">;</code>
+  <code class="nb">background</code><code class="o">:</code> <code class="m">#f4f4f4</code><code class="p">;</code>
+  <code class="nb">font</code><code class="o">:</code> <code class="m">400</code> <code class="m">14px</code> <code class="n">CoreSans</code><code class="o">,</code> <code class="n">Arial</code><code class="o">,</code><code class="nb">sans-serif</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nt">a</code> <code class="p">&#123;</code>
+  <code class="nb">color</code><code class="o">:</code> <code class="m">#222</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nt">a</code><code class="nd">:hover</code> <code class="p">&#123;</code>
+  <code class="nb">text-decoration</code><code class="o">:</code> <code class="nb">underline</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nt">ul</code><code class="o">,</code> <code class="nt">li</code> <code class="p">&#123;</code>
+  <code class="nb">list-style</code><code class="o">:</code> <code class="nb">none</code><code class="p">;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">0</code><code class="p">;</code>
+  <code class="nb">margin</code><code class="o">:</code> <code class="m">0</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nt">input</code> <code class="p">&#123;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">10px</code><code class="p">;</code>
+  <code class="nb">border</code><code class="o">-</code><code class="n">radius</code><code class="o">:</code> <code class="m">5px</code><code class="p">;</code>
+  <code class="nb">outline</code><code class="o">:</code> <code class="nb">none</code><code class="p">;</code>
+  <code class="nb">margin-right</code><code class="o">:</code> <code class="m">10px</code><code class="p">;</code>
+  <code class="nb">border</code><code class="o">:</code> <code class="m">1px</code> <code class="nb">solid</code> <code class="m">#dddddd</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nt">button</code> <code class="p">&#123;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">10px</code><code class="p">;</code>
+  <code class="nb">border</code><code class="o">-</code><code class="n">radius</code><code class="o">:</code> <code class="m">5px</code><code class="p">;</code>
+  <code class="nb">border</code><code class="o">:</code> <code class="m">1px</code> <code class="nb">solid</code> <code class="m">#dddddd</code><code class="p">;</code>
+  <code class="nb">background</code><code class="o">:</code> <code class="nb">transparent</code><code class="p">;</code>
+  <code class="nb">color</code><code class="o">:</code> <code class="m">#808080</code><code class="p">;</code>
+  <code class="nb">cursor</code><code class="o">:</code> <code class="nb">pointer</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nt">button</code><code class="nd">:hover</code> <code class="p">&#123;</code>
+  <code class="nb">color</code><code class="o">:</code> <code class="m">#222</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="o">*</code><code class="nd">:focus</code> <code class="p">&#123;</code>
+  <code class="nb">outline</code><code class="o">:</code> <code class="nb">none</code><code class="p">;</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<figure class="code">
+  <figcaption>src/App.css</figcaption>
+
+<div class="highlight"><pre><code></code><code class="nc">.page</code> <code class="p">&#123;</code>
+  <code class="nb">margin</code><code class="o">:</code> <code class="m">20px</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.interactions</code> <code class="p">&#123;</code>
+  <code class="nb">text-align</code><code class="o">:</code> <code class="nb">center</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.table</code> <code class="p">&#123;</code>
+  <code class="nb">margin</code><code class="o">:</code> <code class="m">20px</code> <code class="m">0</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.table-header</code> <code class="p">&#123;</code>
+  <code class="nb">display</code><code class="o">:</code> <code class="n">flex</code><code class="p">;</code>
+  <code class="nb">line-height</code><code class="o">:</code> <code class="m">24px</code><code class="p">;</code>
+  <code class="nb">font-size</code><code class="o">:</code> <code class="m">16px</code><code class="p">;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">0</code> <code class="m">10px</code><code class="p">;</code>
+  <code class="nb">justify</code><code class="o">-</code><code class="nb">content</code><code class="o">:</code> <code class="n">space</code><code class="o">-</code><code class="n">between</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.table-empty</code> <code class="p">&#123;</code>
+  <code class="nb">margin</code><code class="o">:</code> <code class="m">200px</code><code class="p">;</code>
+  <code class="nb">text-align</code><code class="o">:</code> <code class="nb">center</code><code class="p">;</code>
+  <code class="nb">font-size</code><code class="o">:</code> <code class="m">16px</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.table-row</code> <code class="p">&#123;</code>
+  <code class="nb">display</code><code class="o">:</code> <code class="n">flex</code><code class="p">;</code>
+  <code class="nb">line-height</code><code class="o">:</code> <code class="m">24px</code><code class="p">;</code>
+  <code class="nb">white-space</code><code class="o">:</code> <code class="nb">nowrap</code><code class="p">;</code>
+  <code class="nb">margin</code><code class="o">:</code> <code class="m">10px</code> <code class="m">0</code><code class="p">;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">10px</code><code class="p">;</code>
+  <code class="nb">background</code><code class="o">:</code> <code class="m">#ffffff</code><code class="p">;</code>
+  <code class="nb">border</code><code class="o">:</code> <code class="m">1px</code> <code class="nb">solid</code> <code class="m">#e3e3e3</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.table-header</code> <code class="o">&gt;</code> <code class="nt">span</code> <code class="p">&#123;</code>
+  <code class="nb">overflow</code><code class="o">:</code> <code class="nb">hidden</code><code class="p">;</code>
+  <code class="nb">text</code><code class="o">-</code><code class="nb">overflow</code><code class="o">:</code> <code class="n">ellipsis</code><code class="p">;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">0</code> <code class="m">5px</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.table-row</code> <code class="o">&gt;</code> <code class="nt">span</code> <code class="p">&#123;</code>
+  <code class="nb">overflow</code><code class="o">:</code> <code class="nb">hidden</code><code class="p">;</code>
+  <code class="nb">text</code><code class="o">-</code><code class="nb">overflow</code><code class="o">:</code> <code class="n">ellipsis</code><code class="p">;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">0</code> <code class="m">5px</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.button-inline</code> <code class="p">&#123;</code>
+  <code class="nb">border-width</code><code class="o">:</code> <code class="m">0</code><code class="p">;</code>
+  <code class="nb">background</code><code class="o">:</code> <code class="nb">transparent</code><code class="p">;</code>
+  <code class="nb">color</code><code class="o">:</code> <code class="nb">inherit</code><code class="p">;</code>
+  <code class="nb">text-align</code><code class="o">:</code> <code class="nb">inherit</code><code class="p">;</code>
+  <code class="o">-</code><code class="n">webkit</code><code class="o">-</code><code class="nb">font</code><code class="o">-</code><code class="n">smoothing</code><code class="o">:</code> <code class="nb">inherit</code><code class="p">;</code>
+  <code class="nb">padding</code><code class="o">:</code> <code class="m">0</code><code class="p">;</code>
+  <code class="nb">font-size</code><code class="o">:</code> <code class="nb">inherit</code><code class="p">;</code>
+  <code class="nb">cursor</code><code class="o">:</code> <code class="nb">pointer</code><code class="p">;</code>
+<code class="p">&#125;</code>
+
+<code class="nc">.button-active</code> <code class="p">&#123;</code>
+  <code class="nb">border</code><code class="o">-</code><code class="n">radius</code><code class="o">:</code> <code class="m">0</code><code class="p">;</code>
+  <code class="nb">border-bottom</code><code class="o">:</code> <code class="m">1px</code> <code class="nb">solid</code> <code class="m">#38BB6C</code><code class="p">;</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se podes utilizar el estilo de algunos de tus componentes. No se olvide de utilizar React <code>className</code> en lugar de <code>class</code> como atributo HTML.</p>
+
+<p>Now you can use the style in some of your components. Don’t forget to use React <code>className</code> instead of <code>class</code> as HTML attribute.</p>
+
+<p className="it">En primer lugar, aplicarlo en su componente de clase App ES6.</p>
+
+<p>First, apply it in your App ES6 class component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123; searchTerm, list &#125; = this.state;
+    return (
+<code class="uil">      &lt;div className="page"&gt;
+</code><code class="uil">        &lt;div className="interactions"&gt;
+</code>          &lt;Search
+            value=&#123;searchTerm&#125;
+            onChange=&#123;this.onSearchChange&#125;
+          &gt;
+            Search
+          &lt;/Search&gt;
+<code class="uil">        &lt;/div&gt;
+</code>        &lt;Table
+          list=&#123;list&#125;
+          pattern=&#123;searchTerm&#125;
+          onDismiss=&#123;this.onDismiss&#125;
+        /&gt;
+<code class="uil">      &lt;/div&gt;
+</code>    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En segundo lugar, que se aplican en su tabla de componentes sin estado funcional.</p>
+
+<p>Second, apply it in your Table functional stateless component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Table = (&#123; list, pattern, onDismiss &#125;) =&gt;
+<code class="uil">  &lt;div className="table"&gt;
+</code>    &#123; list.filter(isSearched(pattern)).map(item =&gt;
+<code class="uil">      &lt;div key=&#123;item.objectID&#125; className="table-row"&gt;
+</code>        &lt;span&gt;
+          &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;
+        &lt;/span&gt;
+        &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;
+        &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;
+        &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;
+        &lt;span&gt;
+          &lt;Button
+            onClick=&#123;() =&gt; onDismiss(item.objectID)&#125;
+<code class="uil">            className="button-inline"
+</code>          &gt;
+            Dismiss
+          &lt;/Button&gt;
+        &lt;/span&gt;
+<code class="uil">      &lt;/div&gt;
+</code>    )&#125;
+<code class="uil">  &lt;/div&gt;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Ahora que ha labrado tu aplicacióny componentes con CSS básico. Debe tener un aspecto decente. Como ya saben, JSX se mezcla HTML y JavaScript. Se podría argumentar que añadir CSS en la mezcla también. Eso se llama estilo en línea. Se pueden  definir objetos JavaScript y pasarlos al atributo de estilo de un elemento.</p>
+
+<p>Now you have styled your application and components with basic CSS. It should look decent. As you know, JSX mixes up HTML and JavaScript. One could argue to add CSS in the mix as well. That’s called inline style. You can define JavaScript objects and pass them to the style attribute of an element.</p>
+
+<p className="it">Vamos a mantener el ancho de columna Tabla flexibles mediante el uso de estilo en línea.</p>
+
+<p>Let’s keep the Table column width flexible by using inline style.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Table = (&#123; list, pattern, onDismiss &#125;) =&gt;
+  &lt;div className="table"&gt;
+    &#123; list.filter(isSearched(pattern)).map(item =&gt;
+      &lt;div key=&#123;item.objectID&#125; className="table-row"&gt;
+<code class="uil">        &lt;span style=&#123;&#123; width: '40%' &#125;&#125;&gt;
+</code><code class="uil">          &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;
+</code><code class="uil">        &lt;/span&gt;
+</code><code class="uil">        &lt;span style=&#123;&#123; width: '30%' &#125;&#125;&gt;
+</code><code class="uil">          &#123;item.author&#125;
+</code><code class="uil">        &lt;/span&gt;
+</code><code class="uil">        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+</code><code class="uil">          &#123;item.num_comments&#125;
+</code><code class="uil">        &lt;/span&gt;
+</code><code class="uil">        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+</code><code class="uil">          &#123;item.points&#125;
+</code><code class="uil">        &lt;/span&gt;
+</code><code class="uil">        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+</code><code class="uil">          &lt;Button
+</code><code class="uil">            onClick=&#123;() =&gt; onDismiss(item.objectID)&#125;
+</code><code class="uil">            className="button-inline"
+</code><code class="uil">          &gt;
+</code><code class="uil">            Dismiss
+</code><code class="uil">          &lt;/Button&gt;
+</code><code class="uil">        &lt;/span&gt;
+</code>      &lt;/div&gt;
+    )&#125;
+  &lt;/div&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">Realmente se colocarán en línea ahora. Se podría definir los objetos de estilo fuera de tus elementos para hacerlo más limpio.</p>
+
+<p>It is really inlined now. You could define the style objects outside of your elements to make it cleaner.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">largeColumn</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">width</code><code class="o">:</code> <code class="s1">'40%'</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="kr">const</code> <code class="nx">midColumn</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">width</code><code class="o">:</code> <code class="s1">'30%'</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+
+<code class="kr">const</code> <code class="nx">smallColumn</code> <code class="o">=</code> <code class="p">&#123;</code>
+  <code class="nx">width</code><code class="o">:</code> <code class="s1">'10%'</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Después de que se podes utilizar en tus columnas: <code>&lt;span style=&#123;smallColumn&#125;&gt;</code>.</p>
+
+<p>After that you could use it in your columns: <code>&lt;span style=&#123;smallColumn&#125;&gt;</code>.</p>
+
+<p className="it">En general, usted encontrará las diferentes opiniones y soluciones para el estilo en React. Que utilizó CSS ​​puro y estilo en línea ahora. Es suficiente para empezar.</p>
+
+<p>In general, you will find different opinions and solutions for style in React. You used pure CSS and inline style now. It is sufficient to get started.</p>
+
+<p className="it">No quiero ser dogmático aquí, pero quiero dejar algunas opciones más. Podes leer acerca de ellos y aplicarlos en su propio. Pero si usted es nuevo React , lo recomendaría a pegarse a CSS puro y estilo en línea por ahora.</p>
+
+<p>I don’t want to be opinionated here, but I want to leave you some more options. You can read about them and apply them on your own. But if you are new to React, I would recommend to stick to pure CSS and inline style for now.</p>
+
+<ul>
+  <li><a href="https://github.com/FormidableLabs/radium">radium</a></li>
+  <li><a href="https://github.com/khan/aphrodite">aphrodite</a></li>
+  <li><a href="https://github.com/styled-components/styled-components">styled-components</a></li>
+  <li><a href="https://github.com/css-modules/css-modules">CSS Modules</a></li>
+</ul>
+
+<div class="page-break"></div>
+<p className="it">Has aprendido los conceptos básicos para escribir su propia aplicación React! Recapitulemos los últimos capítulos:</p>
+
+<p>You have learned the basics to write your own React application! Let’s recap the last chapters:</p>
+
+<ul>
+  <li>React
+    <ul>
+      <li className="it">utilizar this.state y setstate para gestionar su estado componente interno</li>
+
+      <li>use this.state and setState to manage your internal component state</li>
+      <li className="it">utilizar formas y eventos en React añadir interacciones</li>
+
+      <li>use forms and events in React to add interactions</li>
+      <li className="it">flujo de datos unidireccional es un concepto importante en React</li>
+
+      <li>unidirectional data flow is an important concept in React</li>
+      <li className="it">componer los componentes con los niños y los componentes reutilizables</li>
+
+      <li>compose components with children and reusable components</li>
+      <li className="it">el uso y la implementación de los componentes de clase ES6 y componentes funcionales sin Estado</li>
+
+      <li>usage and implementation of ES6 class components and functional stateless components</li>
+      <li className="it">se acerca al estilo de tus componentes</li>
+
+      <li>approaches to style your components</li>
+    </ul>
+  </li>
+  <li>ES6
+    <ul>
+      <li className="it">flecha funciones con cuerpos de bloque y concisas para acortar tus declaraciones de funciones</li>
+
+      <li>arrow functions with block and concise bodies to shorten your function declarations</li>
+      <li className="it">funciones que están enlazados a una clase son métodos de clase</li>
+
+      <li>functions that are bound to a class are class methods</li>
+      <li className="it">desestructuración de los objetos y arrays</li>
+
+      <li>destructuring of objects and arrays</li>
+      <li className="it">parámetros por defecto</li>
+
+      <li>default parameters</li>
+    </ul>
+  </li>
+  <li>General
+    <ul>
+      <li>higher order functions</li>
+    </ul>
+  </li>
+</ul>
+
+<p className="it">Una vez más, tiene sentido tomar un descanso. Internalizar los aprendizajes y aplicarlos en su propio. Podes experimentar con el código fuente que ha escrito hasta ahora. Además, podes leer más en el oficial de <a href="https://facebook.github.io/react/docs/installation.html">la documentación</a>.</p>
+
+<p>Again it makes sense to take a break. Internalize the learnings and apply them on your own. You can experiment with the source code you have written so far. Additionally you can read more in the official <a href="https://facebook.github.io/react/docs/installation.html">documentation</a>.</p>
+
+<p className="it">podes encontrar el código fuente en el <a href="https://github.com/rwieruch/hackernews-client/tree/2705dcd1a2027c4a6ecb8132428b399785afdfa5">repositorio oficial</a>.</p>
+
+<p>You can find the source code in the <a href="https://github.com/rwieruch/hackernews-client/tree/2705dcd1a2027c4a6ecb8132428b399785afdfa5">official repository</a>.</p>
+
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Advanced Sorting</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-advanced-sorting">Advanced Sorting</h3>
+
+<p className="it">Vos ya ha implementado una interacción cliente-búsqueda y del lado del servidor. Puesto que tenes un componente de la tabla, lo que tendría sentido para mejorar la Tabla con las interacciones avanzadas. ¿Qué hay de que permite la clasificación por las columnas de la tabla?</p>
+
+<p>You have already implemented a client- and server-side search interaction. Since you have a Table component, it would make sense to enhance the Table with advanced interactions. What about enabling sorting by the Table columns?</p>
+
+<p className="it">Sería posible escribir su propia función de clasificación, pero personalmente prefiero utilizar una biblioteca de utilidades para estos casos. <a href="https://lodash.com/">Lodash</a> es una de estas librerías de utilidades. Vamos a instalarlo y usarlo para la funcionalidad de ordenación.</p>
+
+<p>It would be possible to write your own sort function, but personally I prefer to use a utility library for such cases. <a href="https://lodash.com/">Lodash</a> is one of these utility libraries. Let’s install and use it for the sort functionality.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save lodash
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora podes importar el tipo de funcionalidad en su lodash <em>/ app.js src</em> archivo.</p>
+
+<p>Now you can import the sort functionality of lodash in your <em>src/App.js</em> file.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>import React, &#123; Component &#125; from 'react';
+<code class="uil">import &#123; sortBy &#125; from 'lodash';
+</code> import './App.css';
+</pre></div>
+
+</figure>
+
+<p className="it">Tiene varias columnas en su tabla. Hay título, autor, comentarios y columnas puntos. Se pueden  definir funciones de clasificación, donde cada función toma una lista y devuelve una lista de elementos ordenados por la propiedad. Además, necesitarás una función de clasificación por defecto que no especie pero sólo devuelve la lista sin ordenar.</p>
+
+<p>You have several columns in your Table. There are title, author, comments and points columns. You can define sort functions where each function takes a list and returns a list of items sorted by property. Additionally you will need one default sort function which doesn’t sort but only returns the unsorted list.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>...
+
+<code class="uil">const SORTS = &#123;
+</code><code class="uil">  NONE: list =&gt; list,
+</code><code class="uil">  TITLE: list =&gt; sortBy(list, 'title'),
+</code><code class="uil">  AUTHOR: list =&gt; sortBy(list, 'author'),
+</code><code class="uil">  COMMENTS: list =&gt; sortBy(list, 'num_comments').reverse(),
+</code><code class="uil">  POINTS: list =&gt; sortBy(list, 'points').reverse(),
+</code><code class="uil">&#125;;
+</code>
+class App extends Component &#123;
+  ...
+&#125;
+...
+</pre></div>
+
+</figure>
+
+<p className="it">Se podes ver que dos de las funciones de clasificación devolver una lista inversa. Esto se debes a que desea ver los elementos con los más altos comentarios y puntos en lugar de ver los elementos con los más bajos.</p>
+
+<p>You can see that two of the sort functions return a reversed list. That’s because you want to see the items with the highest comments and points rather than to see the items with the lowest.</p>
+
+<p className="it">El <code>SORTS</code> objeto permite hacer referencia a cualquier función de clasificación ahora.</p>
+
+<p>The <code>SORTS</code> object allows you to reference any sort function now.</p>
+
+<p className="it">Una vez más el componente de aplicación se encarga de almacenar el estado de la especie. El estado inicial será la función por defecto inicial, que no ordena a todos y devuelve la lista de entrada como de salida.</p>
+
+<p>Again your App component is responsible for storing the state of the sort. The initial state will be the initial default sort function, which doesn’t sort at all and returns the input list as output.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>this.state = &#123;
+  results: null,
+  searchKey: '',
+  searchTerm: DEFAULT_QUERY,
+  isLoading: false,
+<code class="uil">  sortKey: 'NONE',
+</code>&#125;;
+</pre></div>
+
+</figure>
+
+<p className="it">Una vez que elija una diferente <code>sortKey</code>, digamos que la <code>AUTHOR</code> clave, se te ordenar la lista con la función de clasificación apropiado.</p>
+
+<p>Once you choose a different <code>sortKey</code>, let’s say the <code>AUTHOR</code> key, you will sort the list with the appropriate sort function.</p>
+
+<p className="it">Ahora se podes definir un nuevo método para ordenar en su componente de aplicación que simplemente establece una <code>sortKey</code> a su estado componente interno.</p>
+
+<p>Now you can define a new sort method in your App component that simply sets a <code>sortKey</code> to your internal component state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  constructor(props) &#123;
+
+    ...
+
+    this.needsToSearchTopstories = this.needsToSearchTopstories.bind(this);
+    this.setSearchTopstories = this.setSearchTopstories.bind(this);
+    this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this);
+<code class="uil">    this.onSort = this.onSort.bind(this);
+</code>  &#125;
+
+<code class="uil">  onSort(sortKey) &#123;
+</code><code class="uil">    this.setState(&#123; sortKey &#125;);
+</code><code class="uil">  &#125;
+</code>
+  ...
+
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El siguiente paso es pasar al método y <code>sortKey</code> al componente de la tabla.</p>
+
+<p>The next step is to pass the method and <code>sortKey</code> to your Table component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123;
+      searchTerm,
+      results,
+      searchKey,
+      isLoading,
+<code class="uil">      sortKey
+</code>    &#125; = this.state;
+
+    const page = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].page
+    ) || 0;
+
+    const list = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].hits
+    ) || [];
+
+    return (
+      &lt;div className="page"&gt;
+        &lt;div className="interactions"&gt;
+          &lt;Search
+            value=&#123;searchTerm&#125;
+            onChange=&#123;this.onSearchChange&#125;
+            onSubmit=&#123;this.onSearchSubmit&#125;
+          &gt;
+            Search
+          &lt;/Search&gt;
+        &lt;/div&gt;
+        &lt;Table
+          list=&#123;list&#125;
+<code class="uil">          sortKey=&#123;sortKey&#125;
+</code><code class="uil">          onSort=&#123;this.onSort&#125;
+</code>          onDismiss=&#123;this.onDismiss&#125;
+        /&gt;
+        &lt;div className="interactions"&gt;
+          &lt;ButtonWithLoading
+            isLoading=&#123;isLoading&#125;
+            onClick=&#123;() =&gt; this.fetchSearchTopstories(searchKey, page + 1)&#125;&gt;
+            More
+          &lt;/ButtonWithLoading&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">El componente de la tabla es el responsable de la clasificación de la lista. Se toma una de las <code>SORT</code> funciones por <code>sortKey</code> y pasa a la lista como entrada. Después se mantiene la cartografía sobre la lista ordenada.</p>
+
+<p>The Table component is responsible for sorting the list. It takes one of the <code>SORT</code> functions by <code>sortKey</code> and passes the list as input. Afterward it keeps mapping over the sorted list.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const Table = (&#123;
+</code><code class="uil">  list,
+</code><code class="uil">  sortKey,
+</code><code class="uil">  onSort,
+</code><code class="uil">  onDismiss
+</code><code class="uil">&#125;) =&gt;
+</code>  &lt;div className="table"&gt;
+<code class="uil">    &#123; SORTS[sortKey](list).map(item =&gt;
+</code>      &lt;div key=&#123;item.objectID&#125; className="table-row"&gt;
+        &lt;span style=&#123;&#123; width: '40%' &#125;&#125;&gt;
+          &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;
+        &lt;/span&gt;
+        &lt;span style=&#123;&#123; width: '30%' &#125;&#125;&gt;
+          &#123;item.author&#125;
+        &lt;/span&gt;
+        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+          &#123;item.num_comments&#125;
+        &lt;/span&gt;
+        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+          &#123;item.points&#125;
+        &lt;/span&gt;
+        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+          &lt;Button
+            onClick=&#123;() =&gt; onDismiss(item.objectID)&#125;
+            className="button-inline"
+          &gt;
+            Dismiss
+          &lt;/Button&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
+    )&#125;
+  &lt;/div&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">En teoría la lista conseguiría ordenado por una de las funciones. Pero el tipo predeterminado se establece en <code>NONE</code>. Hasta el momento nadie se ejecuta el <code>onSort()</code> método para cambiar el <code>sortKey</code>. Vamos a extender la tabla con una fila de cabeceras que utilizan componentes de clasificación en columnas para ordenar cada columna.</p>
+
+<p>In theory the list would get sorted by one of the functions. But the default sort is set to <code>NONE</code>. So far no one executes the <code>onSort()</code> method to change the <code>sortKey</code>. Let’s extend the Table with a row of headers that use Sort components in columns to sort each column.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Table = (&#123;
+  list,
+  sortKey,
+  onSort,
+  onDismiss
+&#125;) =&gt;
+  &lt;div className="table"&gt;
+<code class="uil">    &lt;div className="table-header"&gt;
+</code><code class="uil">      &lt;span style=&#123;&#123; width: '40%' &#125;&#125;&gt;
+</code><code class="uil">        &lt;Sort
+</code><code class="uil">          sortKey=&#123;'TITLE'&#125;
+</code><code class="uil">          onSort=&#123;onSort&#125;
+</code><code class="uil">        &gt;
+</code><code class="uil">          Title
+</code><code class="uil">        &lt;/Sort&gt;
+</code><code class="uil">      &lt;/span&gt;
+</code><code class="uil">      &lt;span style=&#123;&#123; width: '30%' &#125;&#125;&gt;
+</code><code class="uil">        &lt;Sort
+</code><code class="uil">          sortKey=&#123;'AUTHOR'&#125;
+</code><code class="uil">          onSort=&#123;onSort&#125;
+</code><code class="uil">        &gt;
+</code><code class="uil">          Author
+</code><code class="uil">        &lt;/Sort&gt;
+</code><code class="uil">      &lt;/span&gt;
+</code><code class="uil">      &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+</code><code class="uil">        &lt;Sort
+</code><code class="uil">          sortKey=&#123;'COMMENTS'&#125;
+</code><code class="uil">          onSort=&#123;onSort&#125;
+</code><code class="uil">        &gt;
+</code><code class="uil">          Comments
+</code><code class="uil">        &lt;/Sort&gt;
+</code><code class="uil">      &lt;/span&gt;
+</code><code class="uil">      &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+</code><code class="uil">        &lt;Sort
+</code><code class="uil">          sortKey=&#123;'POINTS'&#125;
+</code><code class="uil">          onSort=&#123;onSort&#125;
+</code><code class="uil">        &gt;
+</code><code class="uil">          Points
+</code><code class="uil">        &lt;/Sort&gt;
+</code><code class="uil">      &lt;/span&gt;
+</code><code class="uil">      &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+</code><code class="uil">        Archive
+</code><code class="uil">      &lt;/span&gt;
+</code><code class="uil">    &lt;/div&gt;
+</code>    &#123; SORTS[sortKey](list).map(item =&gt;
+      ...
+    )&#125;
+  &lt;/div&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">Cada componente Ordenar consigue un específico <code>sortKey</code> y lo general <code>onSort()</code> la función. Internamente se llama al método con el <code>sortKey</code> que establecer la clave específica.</p>
+
+<p>Each Sort component gets a specific <code>sortKey</code> and the general <code>onSort()</code> function. Internally it calls the method with the <code>sortKey</code> to set the specific key.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">Sort</code> <code class="o">=</code> <code class="p">(&#123;</code> <code class="nx">sortKey</code><code class="p">,</code> <code class="nx">onSort</code><code class="p">,</code> <code class="nx">children</code> <code class="p">&#125;)</code> <code class="o">=&gt;</code>
+  <code class="o">&lt;</code><code class="nx">Button</code> <code class="nx">onClick</code><code class="o">=</code><code class="p">&#123;()</code> <code class="o">=&gt;</code> <code class="nx">onSort</code><code class="p">(</code><code class="nx">sortKey</code><code class="p">)&#125;</code><code class="o">&gt;</code>
+    <code class="p">&#123;</code><code class="nx">children</code><code class="p">&#125;</code>
+  <code class="o">&lt;</code><code class="err">/Button&gt;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Como se podes ver, el componente Ordenar vuelve a utilizar el componente Button común. En un botón haga clic en cada individuo pasado <code>sortKey</code> se consiga el sistema por el <code>onSort()</code> método. Ahora Debesría ser capaz de ordenar la lista cuando se hace clic en los encabezados de columna.</p>
+
+<p>As you can see, the Sort component reuses your common Button component. On a button click each individual passed <code>sortKey</code> will get set by the <code>onSort()</code> method. Now you should be able to sort the list when you click on the column headers.</p>
+
+<p className="it">Pero un botón en un encabezado de la columna se ve un poco tonto. Vamos a dar a la clase un adecuado <code>className</code>.</p>
+
+<p>But a button in a column header looks a bit silly. Let’s give the Sort a proper <code>className</code>.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Sort = (&#123; sortKey, onSort, children &#125;) =&gt;
+<code class="uil">  &lt;Button
+</code><code class="uil">    onClick=&#123;() =&gt; onSort(sortKey)&#125;
+</code><code class="uil">    className="button-inline"
+</code><code class="uil">  &gt;
+</code>    &#123;children&#125;
+  &lt;/Button&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">Debe tener un aspecto agradable ahora. El siguiente objetivo sería implementar inversa especie también. La lista debes conseguir revertir ordenada una vez que se hace clic en un componente clasificar en dos ocasiones. En primer lugar es necesario definir el estado inverso.</p>
+
+<p>It should look nice now. The next goal would be to implement reverse sort as well. The list should get reverse sorted once you click a Sort component twice. First you need to define the reverse state.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>this.state = &#123;
+  results: null,
+  searchKey: '',
+  searchTerm: DEFAULT_QUERY,
+  isLoading: false,
+  sortKey: 'NONE',
+<code class="uil">  isSortReverse: false,
+</code>&#125;;
+</pre></div>
+
+</figure>
+
+<p className="it">En su método para ordenar que pueda evaluar si la lista está ordenada inversa. Es cuando <code>sortKey</code> en el estado es el mismo que el de entrada <code>sortKey</code> y el estado inverso no está ya establecido en true.</p>
+
+<p>Now in your sort method you can evaluate if the list is reverse sorted. It is when <code>sortKey</code> in the state is the same as the incoming <code>sortKey</code> and the reverse state is not already set to true.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>onSort(sortKey) &#123;
+<code class="uil">  const isSortReverse = this.state.sortKey === sortKey &amp;&amp; !this.state.isSortReve\
+</code><code class="uil">rse;
+</code><code class="uil">  this.setState(&#123; sortKey, isSortReverse &#125;);
+</code>&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Una vez más se podes pasar la hélice inversa a su componente Tabla.</p>
+
+<p>Again you can pass the reverse prop to your Table component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    const &#123;
+      searchTerm,
+      results,
+      searchKey,
+      isLoading,
+      sortKey,
+<code class="uil">      isSortReverse
+</code>    &#125; = this.state;
+
+    const page = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].page
+    ) || 0;
+
+    const list = (
+      results &amp;&amp;
+      results[searchKey] &amp;&amp;
+      results[searchKey].hits
+    ) || [];
+
+    return (
+      &lt;div className="page"&gt;
+        ...
+        &lt;Table
+          list=&#123;list&#125;
+          sortKey=&#123;sortKey&#125;
+<code class="uil">          isSortReverse=&#123;isSortReverse&#125;
+</code>          onDismiss=&#123;this.onDismiss&#125;
+          onSort=&#123;this.onSort&#125;
+        /&gt;
+        ...
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">La tabla tiene que tener un cuerpo de bloque de función flecha para calcular los datos ahora.</p>
+
+<p>The Table has to have an arrow function block body to compute the data now.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const Table = (&#123;
+</code><code class="uil">  list,
+</code><code class="uil">  sortKey,
+</code><code class="uil">  isSortReverse,
+</code><code class="uil">  onSort,
+</code><code class="uil">  onDismiss
+</code><code class="uil">&#125;) =&gt; &#123;
+</code><code class="uil">  const sortedList = SORTS[sortKey](list);
+</code><code class="uil">  const reverseSortedList = isSortReverse
+</code><code class="uil">    ? sortedList.reverse()
+</code><code class="uil">    : sortedList;
+</code><code class="uil">
+</code><code class="uil">  return(
+</code>    &lt;div className="table"&gt;
+      &lt;div className="table-header"&gt;
+        ...
+      &lt;/div&gt;
+<code class="uil">      &#123; reverseSortedList.map(item =&gt;
+</code>        ...
+      )&#125;
+    &lt;/div&gt;
+<code class="uil">  );
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">El tipo inverso deberías funcionar ahora.</p>
+
+<p>The reverse sort should work now.</p>
+
+<p className="it">Por último, pero no menos importante tiene que lidiar con una pregunta abierta por el bien de una experiencia de usuario mejorada. ¿podes un usuario distinguir qué columna se ordena de forma activa? Hasta el momento, no es posible. Vamos a darle al usuario una retroalimentación visual.</p>
+
+<p>Last but not least you have to deal with one open question for the sake of an improved user experience. Can a user distinguish which column is actively sorted? So far, it is not possible. Let’s give the user a visual feedback.</p>
+
+<p className="it">Cada componente Ordenar obtiene su específica <code>sortKey</code> ya. Podría ser utilizado para identificar la especie activada. podes pasar el <code>sortKey</code> del estado de los componentes internos como clave de ordenación activa a su componente Ordenar.</p>
+
+<p>Each Sort component gets its specific <code>sortKey</code> already. It could be used to identify the activated sort. You can pass the <code>sortKey</code> from the internal component state as active sort key to your Sort component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Table = (&#123;
+  list,
+  sortKey,
+  isSortReverse,
+  onSort,
+  onDismiss
+&#125;) =&gt; &#123;
+  const sortedList = SORTS[sortKey](list);
+  const reverseSortedList = isSortReverse
+    ? sortedList.reverse()
+    : sortedList;
+
+  return(
+    &lt;div className="table"&gt;
+      &lt;div className="table-header"&gt;
+        &lt;span style=&#123;&#123; width: '40%' &#125;&#125;&gt;
+          &lt;Sort
+            sortKey=&#123;'TITLE'&#125;
+            onSort=&#123;onSort&#125;
+<code class="uil">            activeSortKey=&#123;sortKey&#125;
+</code>          &gt;
+            Title
+          &lt;/Sort&gt;
+        &lt;/span&gt;
+        &lt;span style=&#123;&#123; width: '30%' &#125;&#125;&gt;
+          &lt;Sort
+            sortKey=&#123;'AUTHOR'&#125;
+            onSort=&#123;onSort&#125;
+<code class="uil">            activeSortKey=&#123;sortKey&#125;
+</code>          &gt;
+            Author
+          &lt;/Sort&gt;
+        &lt;/span&gt;
+        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+          &lt;Sort
+            sortKey=&#123;'COMMENTS'&#125;
+            onSort=&#123;onSort&#125;
+<code class="uil">            activeSortKey=&#123;sortKey&#125;
+</code>          &gt;
+            Comments
+          &lt;/Sort&gt;
+        &lt;/span&gt;
+        &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+          &lt;Sort
+            sortKey=&#123;'POINTS'&#125;
+            onSort=&#123;onSort&#125;
+<code class="uil">            activeSortKey=&#123;sortKey&#125;
+</code>          &gt;
+            Points
+          &lt;/Sort&gt;
+          &lt;span style=&#123;&#123; width: '10%' &#125;&#125;&gt;
+            Archive
+          &lt;/span&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &#123; reverseSortedList.map(item =&gt;
+          ...
+      )&#125;
+    &lt;/div&gt;
+  );
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">En su componente de organización que se sabe en base a los <code>sortKey</code> y <code>activeSortKey</code> si el tipo está activo. Dar a su componente Ordenar un extra de <code>class</code> atributo, cuando se ordena, para dar al usuario una retroalimentación visual.</p>
+
+<p>Now in your Sort component you know based on the <code>sortKey</code> and <code>activeSortKey</code> if the sort is active. Give your Sort component an extra <code>class</code> attribute, when it is sorted, to give the user a visual feedback.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const Sort = (&#123;
+</code><code class="uil">  sortKey,
+</code><code class="uil">  activeSortKey,
+</code><code class="uil">  onSort,
+</code><code class="uil">  children
+</code><code class="uil">&#125;) =&gt; &#123;
+</code><code class="uil">  const sortClass = ['button-inline'];
+</code><code class="uil">
+</code><code class="uil">  if (sortKey === activeSortKey) &#123;
+</code><code class="uil">    sortClass.push('button-active');
+</code><code class="uil">  &#125;
+</code><code class="uil">
+</code><code class="uil">  return (
+</code><code class="uil">    &lt;Button
+</code><code class="uil">      onClick=&#123;() =&gt; onSort(sortKey)&#125;
+</code><code class="uil">      className=&#123;sortClass.join(' ')&#125;
+</code><code class="uil">    &gt;
+</code><code class="uil">      &#123;children&#125;
+</code><code class="uil">    &lt;/Button&gt;
+</code><code class="uil">  );
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">La manera de definir el <code>class</code> es un poco torpe, ¿verdad? Hay una pequeña biblioteca ordenada para deshacerse de este. En primer lugar hay que instalarlo.</p>
+
+<p>The way to define the <code>class</code> is a bit clumsy, isn’t it? There is a neat little library to get rid of this. First you have to install it.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save classnames
+</pre></div>
+
+</figure>
+
+<p className="it">Y en segundo lugar hay que importar en la parte superior de tu <em>/ app.js src</em> archivo.</p>
+
+<p>And second you have to import it on top of your <em>src/App.js</em> file.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>import React, &#123; Component &#125; from 'react';
+import &#123; sortBy &#125; from 'lodash';
+<code class="uil">import classNames from 'classnames';
+</code> import './App.css';
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora se podes usar para definir su componente <code>className</code> con clases condicionales.</p>
+
+<p>Now you can use it to define your component <code>className</code> with conditional classes.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Sort = (&#123;
+  sortKey,
+  activeSortKey,
+  onSort,
+  children
+&#125;) =&gt; &#123;
+<code class="uil">  const sortClass = classNames(
+</code><code class="uil">    'button-inline',
+</code><code class="uil">    &#123; 'button-active': sortKey === activeSortKey &#125;
+</code><code class="uil">  );
+</code>
+  return (
+<code class="uil">    &lt;Button
+</code><code class="uil">      onClick=&#123;() =&gt; onSort(sortKey)&#125;
+</code><code class="uil">      className=&#123;sortClass&#125;
+</code><code class="uil">    &gt;
+</code>      &#123;children&#125;
+    &lt;/Button&gt;
+  );
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Una vez más, al ejecutar tus pruebas, deberías ver no superen los ensayos de instantáneas, sino también en su defecto las pruebas unitarias para el componente de la tabla. Desde que volvió a cambiar tus representaciones de componentes, podes aceptar las pruebas de instantáneas. Pero hay que fijar la unidad de prueba. En su <em>src / App.test.js</em> archivo que necesita para proporcionar un <code>sortKey</code> y el <code>isSortReverse</code> booleano para el componente de la tabla.</p>
+
+<p>Again, when you run your tests, you should see failing snapshot tests but also failing unit tests for the Table component. Since you changed again your component representations, you can accept the snapshot tests. But you have to fix the unit test. In your <em>src/App.test.js</em> file you need to provide a <code>sortKey</code> and the <code>isSortReverse</code> boolean for the Table component.</p>
+
+<figure class="code">
+  <figcaption>src/App.test.js</figcaption>
+
+<div class="highlight"><pre>...
+
+describe('Table', () =&gt; &#123;
+
+  const props = &#123;
+    list: [
+      &#123; title: '1', author: '1', num_comments: 1, points: 2, objectID: 'y' &#125;,
+      &#123; title: '2', author: '2', num_comments: 1, points: 2, objectID: 'z' &#125;,
+    ],
+<code class="uil">    sortKey: 'TITLE',
+</code><code class="uil">    isSortReverse: false,
+</code>  &#125;;
+
+  ...
+
+&#125;);
+</pre></div>
+
+</figure>
+
+<p className="it">Una vez más, podes que tenga que aceptar las pruebas instantáneas en su defecto para el componente de la tabla, ya que ya ha proporcionado apoyos para la mesa y el componente completo hace que ahora.</p>
+
+<p>Once again you might need to accept the failing snapshot tests for your Table component, because you provided props for the Table and the full component renders now.</p>
+
+<p className="it">Su interacción especie avanzada es completa ahora.</p>
+
+<p>Your advanced sort interaction is complete now.</p>
+
+<h4 id="leanpub-auto-exercises-35">Exercises:</h4>
+
+<ul>
+<li className="it">utilizar una biblioteca como <a href="http://fontawesome.io/">fuente impresionante</a> para indicar el tipo (hacia atrás)
+    </li>
+  <li>use a library like <a href="http://fontawesome.io/">Font Awesome</a> to indicate the (reverse) sort
+    <ul>
+    <li className="it">que podría ser una flecha hacia arriba o hacia abajo icono al lado de cada cabecera Ordenar</li>
+      <li>it could be an arrow up or down icon next to each Sort header</li>
+    </ul>
+  </li>
+  <li className="it">leer más acerca de la <a href="https://github.com/JedWatson/classnames">biblioteca de nombres de clases</a>
+</li>
+  <li>read more about the <a href="https://github.com/JedWatson/classnames">classnames library</a>
+</li>
+</ul>
+
+<div class="page-break"></div>
+<p className="it">Vos ha aprendido técnicas de componentes avanzados en React! Recapitulemos los últimos capítulos:</p>
+
+<p>You have learned advanced component techniques in React! Let’s recap the last chapters:</p>
+
+<ul>
+  <li>React
+    <ul>
+    <li className="it">el atributo ref referenciar nodos DOM</li>
+      <li>the ref attribute to reference DOM nodes</li>
+      <li className="it">componentes de orden superior son una forma común para construir componentes avanzados</li>
+      <li>higher order components are a common way to build advanced components</li>
+      <li className="it">aplicación de las interacciones avanzadas en React</li>
+      <li>implementation of advanced interactions in React</li>
+      <li className="it">classnames condicionales con una biblioteca de ayuda ordenada</li>
+      <li>conditional classNames with a neat helper library</li>
+    </ul>
+  </li>
+  <li>ES6
+    <ul>
+    <li className="it">descansar desestructuración para dividir los objetos y arrays</li>
+      <li>rest destructuring to split up objects and arrays</li>
+    </ul>
+  </li>
+</ul>
+
+<p className="it">podes encontrar el código fuente en el <a href="https://github.com/rwieruch/hackernews-client/tree/9456117fb67bbe98d7e3f41bbc85b4a035020e7e">repositorio oficial</a>.</p>
+
+<p>You can find the source code in the <a href="https://github.com/rwieruch/hackernews-client/tree/9456117fb67bbe98d7e3f41bbc85b4a035020e7e">official repository</a>.</p>
+
+
+
+</div>
+</body>
+</html>

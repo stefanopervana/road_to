@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Higher Order Components</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-higher-order-components">Higher Order Components</h3>
+
+<p className="it">componentes de orden superior (HOC) son un concepto avanzado en React. Hocs son un equivalente a las funciones de orden superior. Toman cualquier entrada - la mayoría de las veces un componente, sino también argumentos opcionales - y devuelven un componente como salida. El componente devuelto es una versión mejorada del componente de entrada y se podes utilizar en su JSX.</p>
+
+<p>Higher order components (HOC) are an advanced concept in React. HOCs are an equivalent to higher order functions. They take any input - most of the time a component, but also optional arguments - and return a component as output. The returned component is an enhanced version of the input component and can be used in your JSX.</p>
+
+<p className="it">Hocs se utilizan para diferentes casos de uso. pueden  prepararse propiedades, administrar el estado o alterar la representación de un componente. Un caso de uso podría ser el uso de un HOC como un ayudante para una representación condicional. Imagine que tiene un componente List, que muestra una lista de elementos o nada, ya que la lista está vacía o nula. El HOC podría proteger a distancia que la lista se hacen nada cuando no hay ninguna lista. Por otro lado, el componente List normal no tiene que molestarse más acerca de una lista inexistente. Que sólo se preocupa por la prestación de la lista.</p>
+
+<p>HOCs are used for different use cases. They can prepare properties, manage state or alter the representation of a component. One use case could be to use a HOC as a helper for a conditional rendering. Imagine you have a List component that renders a list of items or nothing, because the list is empty or null. The HOC could shield away that the list would render nothing when there is no list. On the other hand the plain List component doesn’t need to bother anymore about an non existent list. It only cares about rendering the list.</p>
+
+<p className="it">Vamos a hacer un HOC sencilla que tiene un componente como entrada y devuelve un componente. Se podes colocar en su <em>/ app.js src</em> archivo.</p>
+
+<p>Let’s do a simple HOC which takes a component as input and returns a component. You can place it in your <em>src/App.js</em> file.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kd">function</code> <code class="nx">withFoo</code><code class="p">(</code><code class="nx">Component</code><code class="p">)</code> <code class="p">&#123;</code>
+  <code class="k">return</code> <code class="kd">function</code><code class="p">(</code><code class="nx">props</code><code class="p">)</code> <code class="p">&#123;</code>
+    <code class="k">return</code> <code class="o">&lt;</code><code class="nx">Component</code> <code class="p">&#123;</code> <code class="p">...</code><code class="nx">props</code> <code class="p">&#125;</code> <code class="o">/&gt;</code><code class="p">;</code>
+  <code class="p">&#125;</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Una convención ordenada es para prefijar el nombramiento de un HOC con <code>with</code>. Dado que está utilizando JavaScript ES6, se podes expresar la HOC más concisa con una función ES6 flecha.</p>
+
+<p>One neat convention is to prefix the naming of a HOC with <code>with</code>. Since you are using JavaScript ES6, you can express the HOC more concise with an ES6 arrow function.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">withFoo</code> <code class="o">=</code> <code class="p">(</code><code class="nx">Component</code><code class="p">)</code> <code class="o">=&gt;</code> <code class="p">(</code><code class="nx">props</code><code class="p">)</code> <code class="o">=&gt;</code>
+  <code class="o">&lt;</code><code class="nx">Component</code> <code class="p">&#123;</code> <code class="p">...</code><code class="nx">props</code> <code class="p">&#125;</code> <code class="o">/&gt;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">En el ejemplo, el componente de entrada se quedaría el mismo que el componente de salida. No pasa nada. Se hace la misma instancia de componente y pasa todos los apoyos a la componente de salida. Pero eso es inútil. Vamos a mejorar el componente de salida. El componente de salida debes mostrar el componente de carga, cuando el estado de carga es verdad, de lo contrario debes mostrar el componente de entrada. Una representación condicional es un gran caso de uso para un HOC.</p>
+
+<p>In the example the input component would stay the same as the output component. Nothing happens. It renders the same component instance and passes all of the props to the output component. But that’s useless. Let’s enhance the output component. The output component should show the Loading component, when the loading state is true, otherwise it should show the input component. A conditional rendering is a great use case for a HOC.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const withLoading = (Component) =&gt; (props) =&gt;
+</code><code class="uil">  props.isLoading ? &lt;Loading /&gt; : &lt;Component &#123; ...props &#125; /&gt;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Sobre la base de la propiedad de carga se podes aplicar una prestación condicional. La función devolverá el componente de carga o el componente de entrada.</p>
+
+<p>Based on the loading property you can apply a conditional rendering. The function will return the Loading component or the input component.</p>
+
+<p className="it">En general, podes ser muy eficaz para difundir un objeto, como los puntales objeto, como entrada para un componente. Vea la diferencia en el siguiente fragmento de código.</p>
+
+<p>In general it can be very efficient to spread an object, like the props object, as input for a component. See the difference in the following code snippet.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// before you would have to destructure the props before passing them</code>
+<code class="kr">const</code> <code class="p">&#123;</code> <code class="nx">foo</code><code class="p">,</code> <code class="nx">bar</code> <code class="p">&#125;</code> <code class="o">=</code> <code class="nx">props</code><code class="p">;</code>
+<code class="o">&lt;</code><code class="nx">SomeComponent</code> <code class="nx">foo</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">foo</code><code class="p">&#125;</code> <code class="nx">bar</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">bar</code><code class="p">&#125;</code> <code class="o">/&gt;</code>
+
+<code class="c1">// but you can use the object spread operator to pass all object properties</code>
+<code class="o">&lt;</code><code class="nx">SomeComponent</code> <code class="p">&#123;</code> <code class="p">...</code><code class="nx">props</code> <code class="p">&#125;</code> <code class="o">/&gt;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Hay una pequeña cosa que se debes evitar. Se pasa todos los accesorios incluyendo la <code>isLoading</code> propiedad, mediante la difusión del objeto, en el componente de entrada. Sin embargo, el componente de entrada no se preocupa por la <code>isLoading</code> propiedad. Se podes utilizar el resto ES6 desestructuración de evitarlo.</p>
+
+<p>There is one little thing that you should avoid. You pass all the props including the <code>isLoading</code> property, by spreading the object, into the input component. However, the input component doesn’t care about the <code>isLoading</code> property. You can use the ES6 rest destructuring to avoid it.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const withLoading = (Component) =&gt; (&#123; isLoading, ...rest &#125;) =&gt;
+</code><code class="uil">  isLoading ? &lt;Loading /&gt; : &lt;Component &#123; ...rest &#125; /&gt;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Se necesita una propiedad del objeto, pero mantiene el objeto restante. Trabaja con múltiples propiedades. Es posible que ya haya leído sobre él en la <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">asignación desestructurada</a>.</p>
+
+<p>It takes one property out of the object, but keeps the remaining object. It works with multiple properties as well. You might have already read about it in the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">destructuring assignment</a>.</p>
+
+<p className="it">Ahora se podes utilizar el HOC en su JSX. Un caso de uso en la aplicación podría ser la de mostrar el botón “Más” o el componente de carga. El componente de carga ya se encapsula en el HOC, sino un componente de entrada no se encuentra. En el caso de uso de mostrar un componente de botón o un componente de la carga, el botón es el componente de entrada de la HOC. El componente de salida mejorada es un componente ButtonWithLoading.</p>
+
+<p>Now you can use the HOC in your JSX. A use case in the application could be to show either the “More” button or the Loading component. The Loading component is already encapsulated in the HOC, but an input component is missing. In the use case of showing a Button component or a Loading component, the Button is the input component of the HOC. The enhanced output component is a ButtonWithLoading component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>const Button = (&#123; onClick, className = '', children &#125;) =&gt;
+  &lt;button
+    onClick=&#123;onClick&#125;
+    className=&#123;className&#125;
+    type="button"
+  &gt;
+    &#123;children&#125;
+  &lt;/button&gt;
+
+const Loading = () =&gt;
+  &lt;div&gt;Loading ...&lt;/div&gt;
+
+const withLoading = (Component) =&gt; (&#123; isLoading, ...rest &#125;) =&gt;
+  isLoading ? &lt;Loading /&gt; : &lt;Component &#123; ...rest &#125; /&gt;
+
+<code class="uil">const ButtonWithLoading = withLoading(Button);
+</code></pre></div>
+
+</figure>
+
+<p className="it">Todo se define ahora. Como último paso, tenes que utilizar el componente ButtonWithLoading, que recibe el estado de carga como una propiedad adicional. Mientras que el HOC consume la propiedad de carga, todos los otros accesorios se pasan al componente Button.</p>
+
+<p>Everything is defined now. As a last step, you have to use the ButtonWithLoading component, which receives the loading state as an additional property. While the HOC consumes the loading property, all other props get passed to the Button component.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>class App extends Component &#123;
+
+  ...
+
+  render() &#123;
+    ...
+    return (
+      &lt;div className="page"&gt;
+        ...
+        &lt;div className="interactions"&gt;
+<code class="uil">          &lt;ButtonWithLoading
+</code><code class="uil">            isLoading=&#123;isLoading&#125;
+</code><code class="uil">            onClick=&#123;() =&gt; this.fetchSearchTopstories(searchKey, page + 1)&#125;&gt;
+</code><code class="uil">            More
+</code><code class="uil">          &lt;/ButtonWithLoading&gt;
+</code>        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  &#125;
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Al ejecutar tus pruebas de nuevo, se dará cuenta de que su prueba instantánea para el componente de la aplicación falla. Se debes mostrar el siguiente diff en la línea de comandos.</p>
+
+<p>When you run your tests again, you will notice that your snapshot test for the App component fails. It should show the following diff on the command line.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code>-     &lt;button
+-       className=""
+-       onClick=&#123;[Function]&#125;
+-       type="button"&gt;
+-       More
+-     &lt;/button&gt;
++     &lt;div&gt;
++       Loading ...
++     &lt;/div&gt;
+</pre></div>
+
+</figure>
+
+<p className="it">Podes fijar el componente de ahora, cuando se piensa que hay algo malo en ello, o podes aceptar la nueva instantánea. Debido a que usted introdujo el componente de carga en este capítulo, se podes aceptar la prueba instantánea en su defecto con <code>u</code> la línea de comandos en la prueba interactiva.</p>
+
+<p>You can either fix the component now, when you think there is something wrong about it, or can accept the new snapshot. Because you introduced the Loading component in this chapter, you can accept the failing snapshot test with <code>u</code> on the command line in the interactive test.</p>
+
+<p className="it">componentes de orden superior son una técnica avanzada en React. Tienen múltiples propósitos como mejorar la reutilización de componentes, mayor abstracción, composeability de componentes y manipulaciones de los apoyos, el estado y la vista. No se preocupe si usted no entiende inmediatamente. Se necesita tiempo para acostumbrarse a ellos.</p>
+
+<p>Higher order components are an advanced technique in React. They have multiple purposes like improved reusability of components, greater abstraction, composeability of components and manipulations of props, state and view. Don’t worry if you don’t understand them immediately. It takes time to get used to them.</p>
+
+<h4 id="leanpub-auto-exercises-34">Exercises:</h4>
+
+<ul>
+<li className="it">experimentar con la HOC que haya creado</li>
+  <li>experiment with the HOC you have created</li>
+  <li className="it">pensar en un caso de uso donde otro HOC tendría sentido
+    </li>
+
+  <li>think about a use case where another HOC would make sense
+    <ul>
+    <li className="it">implementar el HOC, si hay un caso de uso</li>
+      <li>implement the HOC, if there is a use case</li>
+    </ul>
+  </li>
+</ul>
+
+
+</div>
+</body>
+</html>
+
+
+
+ 
+      

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Code Organization with ES6 Modules</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-code-organization-with-es6-modules">Code Organization with ES6 Modules</h3>
+
+<p className="it">Vos podría preguntarse: ¿Por qué no seguimos las mejores prácticas de división de código para el <em>src / app.js</em> presentar? En el archivo que ya tenemos varios componentes que podrían ser definidas en tus propios archivos / carpetas (módulos). En aras de aprendizaje React, es práctico para mantener estas cosas en un solo lugar. Pero una vez que su React aplicación crece, se debes considerar que dividir estos componentes en varios módulos. Sólo de esa manera tus escalas de aplicación.</p>
+
+<p>You might wonder: Why didn’t we follow the best practices of code splitting for the <em>src/App.js</em> file? In the file we already have multiple components which could be defined in their own files/folders (modules). For the sake of learning React, it is practical to keep these things at one place. But once your React application grows, you should consider to split up these components into multiple modules. Only that way your application scales.</p>
+
+<p className="it">En lo que sigue voy a proponer varias estructuras de módulos que <em>podría</em> aplicarse. Yo recomendaría a aplicarlos como un ejercicio al final del libro. Para mantener el libro en sí sencilla, no voy a realizar la división de código y seguirá los siguientes capítulos con el <em>/ app.js src</em> archivo.</p>
+
+<p>In the following I will propose several module structures you <em>could</em> apply. I would recommend to apply them as an exercise at the end of the book. To keep the book itself simple, I will not perform the code splitting and will continue the following chapters with the <em>src/App.js</em> file.</p>
+
+<p className="it">Una posible estructura del módulo podría ser:</p>
+
+<p>One possible module structure could be:</p>
+
+<figure class="code">
+  <figcaption>Folder Structure</figcaption>
+
+<div class="highlight"><pre><code></code> src/
+  index.js
+  index.css
+  App.js
+  App.test.js
+  App.css
+  Button.js
+  Button.test.js
+  Button.css
+  Table.js
+  Table.test.js
+  Table.css
+  Search.js
+  Search.test.js
+  Search.css
+</pre></div>
+
+</figure>
+
+<p className="it">No se ve muy prometedor. Se podes ver una gran cantidad de nombres duplicados y sólo difiere de las extensiones. Otra estructura módulo podría ser:</p>
+
+<p>It doesn’t look too promising. You can see a lot of naming duplications and only the file extension differs. Another module structure could be:</p>
+
+<figure class="code">
+  <figcaption>Folder Structure</figcaption>
+
+<div class="highlight"><pre><code></code> src/
+  index.js
+  index.css
+  App/
+    index.js
+    test.js
+    index.css
+  Button/
+    index.js
+    test.js
+    index.css
+  Table/
+    index.js
+    test.js
+    index.css
+  Search/
+    index.js
+    test.js
+    index.css
+</pre></div>
+
+</figure>
+
+<p className="it">Se ve más limpio que antes. Un componente se define por su declaración de componentes en el archivo JavaScript de forma, sino también por su estilo y pruebas.</p>
+
+<p>It looks cleaner than before. A component is defined by its component declaration in the JavasScript file, but also by its style and tests.</p>
+
+<p className="it">Otro paso podría ser la extracción de las variables constantes desde el componente App. Estas constantes se utilizan para componer el Hacker News API URL.</p>
+
+<p>Another step could be extracting the constant variables from the App component. These constants were used to compose the Hacker News API url.</p>
+
+<figure class="code">
+  <figcaption>Folder Structure</figcaption>
+
+<div class="highlight"><pre>src/
+  index.js
+  index.css
+<code class="uil">  constants/
+</code><code class="uil">    index.js
+</code><code class="uil">  components/
+</code>    App/
+      index.js
+      test.js
+      index..css
+    Button/
+      index.js
+      test.js
+      index..css
+    ...
+</pre></div>
+
+</figure>
+
+<p className="it">Naturalmente, los módulos podrían dividirse en <em>src / constantes /</em> y <em>src / componentes /</em>.</p>
+
+<p>Naturally the modules would split up into <em>src/constants/</em> and <em>src/components/</em>.</p>
+
+<p className="it">Ahora el <em>/ constantes / index.js src</em> archivo podría ser similar al siguiente:</p>
+
+<p>Now the <em>src/constants/index.js</em> file could look like the following:</p>
+
+<figure class="code">
+  <figcaption>Code Playground: src/constants/index.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">export</code> <code class="kr">const</code> <code class="nx">DEFAULT_QUERY</code> <code class="o">=</code> <code class="s1">'redux'</code><code class="p">;</code>
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">DEFAULT_PAGE</code> <code class="o">=</code> <code class="mi">0</code><code class="p">;</code>
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">DEFAULT_HPP</code> <code class="o">=</code> <code class="s1">'100'</code><code class="p">;</code>
+
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">PATH_BASE</code> <code class="o">=</code> <code class="s1">'https://hn.algolia.com/api/v1'</code><code class="p">;</code>
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">PATH_SEARCH</code> <code class="o">=</code> <code class="s1">'/search'</code><code class="p">;</code>
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">PARAM_SEARCH</code> <code class="o">=</code> <code class="s1">'query='</code><code class="p">;</code>
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">PARAM_PAGE</code> <code class="o">=</code> <code class="s1">'page='</code><code class="p">;</code>
+<code class="kr">export</code> <code class="kr">const</code> <code class="nx">PARAM_HPP</code> <code class="o">=</code> <code class="s1">'hitsPerPage='</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">El <em>/ index.js App</em> archivo podes importar estas variables con el fin de utilizarlos.</p>
+
+<p>The <em>App/index.js</em> file could import these variables in order to use them.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: src/components/App/index.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="p">&#123;</code>
+  <code class="nx">DEFAULT_QUERY</code><code class="p">,</code>
+  <code class="nx">DEFAULT_PAGE</code><code class="p">,</code>
+  <code class="nx">DEFAULT_HPP</code><code class="p">,</code>
+
+  <code class="nx">PATH_BASE</code><code class="p">,</code>
+  <code class="nx">PATH_SEARCH</code><code class="p">,</code>
+  <code class="nx">PARAM_SEARCH</code><code class="p">,</code>
+  <code class="nx">PARAM_PAGE</code><code class="p">,</code>
+  <code class="nx">PARAM_HPP</code><code class="p">,</code>
+<code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'../constants/index.js'</code><code class="p">;</code>
+
+<code class="p">...</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Cuando se utiliza el <em>index.js</em> convención de nomenclatura, se podes omitir el nombre del archivo de la ruta relativa.</p>
+
+<p>When you use the <em>index.js</em> naming convention, you can omit the filename from the relative path.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: src/components/App/index.js</figcaption>
+
+<div class="highlight"><pre>import &#123;
+  DEFAULT_QUERY,
+  DEFAULT_PAGE,
+  DEFAULT_HPP,
+
+  PATH_BASE,
+  PATH_SEARCH,
+  PARAM_SEARCH,
+  PARAM_PAGE,
+  PARAM_HPP,
+<code class="uil">&#125; from '../constants';
+</code>
+...
+</pre></div>
+
+</figure>
+
+<p className="it">Pero lo que hay detrás de la <em>index.js</em> la nomenclatura de archivos? La convención se introdujo en el mundo Node.js. El archivo de índice es el punto de entrada a un módulo. En él se describe la API pública para el módulo. Los módulos externos sólo se les permite utilizar el <em>index.js</em> archivo para importar código compartido del módulo. Considere el siguiente compuesto por estructura de módulo para demostrar que:</p>
+
+<p>But what’s behind the <em>index.js</em> file naming? The convention was introduced in the node.js world. The index file is the entry point to a module. It describes the public API to the module. External modules are only allowed to use the <em>index.js</em> file to import shared code from the module. Consider the following made up module structure to demonstrate it:</p>
+
+<figure class="code">
+  <figcaption>Folder Structure</figcaption>
+
+<div class="highlight"><pre><code></code> src/
+  index.js
+  App/
+    index.js
+  Buttons/
+    index.js
+    SubmitButton.js
+    SaveButton.js
+    CancelButton.js
+</pre></div>
+
+</figure>
+
+<p className="it">El <em>Botones /</em> carpeta tiene múltiples componentes de botón definidos en tus archivos distintos. Cada archivo podes <code>export default</code> ponerlo a disposición de la componente específico <em>botones / index.js</em>. Los <em>botones / index.js</em> importación de archivos de todas las diferentes representaciones de los botones y los exporta como API módulo público.</p>
+
+<p>The <em>Buttons/</em> folder has multiple button components defined in its distinct files. Each file can <code>export default</code> the specific component making it available to <em>Buttons/index.js</em>. The <em>Buttons/index.js</em> file imports all different button representations and exports them as public module API.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: src/Buttons/index.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">SubmitButton</code> <code class="nx">from</code> <code class="s1">'./SubmitButton'</code><code class="p">;</code>
+<code class="kr">import</code> <code class="nx">SaveButton</code> <code class="nx">from</code> <code class="s1">'./SaveButton'</code><code class="p">;</code>
+<code class="kr">import</code> <code class="nx">CancelButton</code> <code class="nx">from</code> <code class="s1">'./CancelButton'</code><code class="p">;</code>
+
+<code class="kr">export</code> <code class="p">&#123;</code>
+  <code class="nx">SubmitButton</code><code class="p">,</code>
+  <code class="nx">SaveButton</code><code class="p">,</code>
+  <code class="nx">CancelButton</code><code class="p">,</code>
+<code class="p">&#125;;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora los <em>/ app / src index.js</em> pueden  importar los botones de la API de módulo público situado en el <em>index.js</em> archivo.</p>
+
+<p>Now the <em>src/App/index.js</em> can import the buttons from the public module API located in the <em>index.js</em> file.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: src/App/index.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="p">&#123;</code>
+  <code class="nx">SubmitButton</code><code class="p">,</code>
+  <code class="nx">SaveButton</code><code class="p">,</code>
+  <code class="nx">CancelButton</code>
+<code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'../Buttons'</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Al ir a esta limitación, sería una mala práctica para llegar a otros archivos que los <em>index.js</em> en el módulo. Sería romper las reglas de encapsulación.</p>
+
+<p>By going with this constraint, it would be a bad practice to reach into other files than the <em>index.js</em> in the module. It would break the rules of encapsulation.</p>
+
+<figure class="code">
+  <figcaption>Code Playground: src/App/index.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// bad practice, don't do it</code>
+<code class="kr">import</code> <code class="nx">SubmitButton</code> <code class="nx">from</code> <code class="s1">'../Buttons/SubmitButton'</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora ya sabe cómo se podes refactorizar tu código fuente en módulos con las limitaciones de encapsulación. Como ya he dicho, en aras de mantener el sencillo tutorial no voy a aplicar estos cambios. Sin embargo, Debes hacer la refactorización al final del libro.</p>
+
+<p>Now you know how you could refactor your source code in modules with the constraints of encapsulation. As I said, for the sake of keeping the tutorial simple I will not apply these changes. But you should do the refactoring at the end of the book.</p>
+
+<h4 id="leanpub-auto-exercises-28">Exercises:</h4>
+
+<ul>
+<li className="it">refactorizar su <em>/ app.js src</em> archivo en módulos de componentes múltiples cuando haya terminado el libro</li>
+  <li>refactor your <em>src/App.js</em> file into multiple component modules when you finished the book</li>
+</ul>
+
+
+</div>
+</body>
+</html>

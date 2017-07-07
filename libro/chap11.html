@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Installation</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-installation">Installation</h3>
+
+<p className="it">Hay varios enfoques para empezar con una aplicación React.</p>
+
+<p>There are multiple approaches to get started with React  application.</p>
+
+<p className="it">La primera de ellas es el uso de un CDN. Esto podes sonar más complicado de lo que es. Un CDN es una <a href="https://en.wikipedia.org/wiki/Content_delivery_network">red de entrega de contenido</a>. Varias compañías tienen CDN que los archivos de host en público por los usuarios. Estos archivos pueden  ser bibliotecas como React. Después de todo, una biblioteca podes ser sólo un archivo JavaScript. Se podes alojarse en algún lugar y se podes requerir en tu aplicación.</p>
+
+<p>The first one is to use a CDN. That may sound more complicated than it is. A CDN is a <a href="https://en.wikipedia.org/wiki/Content_delivery_network">content delivery network</a>. Several companies have CDNs that host files publicly for users. These files can be libraries like React. After all a library can be only one JavaScript file. It can be hosted somewhere and you can require it in your application.</p>
+
+<p className="it">Cómo utilizar un CDN para iniciarse en React? podes inline la <code>&lt;script&gt;</code> etiqueta en el código HTML que apunta a una URL de CDN. Para empezar en React necesita dos archivos (bibliotecas): <em>React</em> y <em>React-dom</em>.</p>
+
+<p>How to use a CDN to get started in React? You can inline the <code>&lt;script&gt;</code> tag in your HTML that points to a CDN url. To get started in React you need two files (libraries): <em>react</em> and <em>react-dom</em>.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="o">&lt;</code><code class="nx">script</code> <code class="nx">src</code><code class="o">=</code><code class="s2">"https://unpkg.com/react@15/dist/react.js"</code><code class="o">&gt;&lt;</code><code class="err">/script&gt;</code>
+<code class="o">&lt;</code><code class="nx">script</code> <code class="nx">src</code><code class="o">=</code><code class="s2">"https://unpkg.com/react-dom@15/dist/react-dom.js"</code><code class="o">&gt;&lt;</code><code class="err">/script&gt;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Pero ¿por qué deberías utilizar un CDN cuando se tiene NPM para instalar paquetes de node (bibliotecas)?</p>
+
+<p>But why should you use a CDN when you have npm to install node packages (libraries)?</p>
+
+<p className="it">Cuando tu aplicacióntiene un <em>package.json</em> de archivos, podes instalar <em>React</em> y <em>React-dom</em> desde la línea de comandos. El requisito es que la carpeta se inicializa como proyecto NPM con un <em>package.json</em> archivo. podes instalar varios paquetes de nodos en una línea con la npm.</p>
+
+<p>When your application has a <em>package.json</em> file, you can install <em>react</em> and <em>react-dom</em> from the command line. The requirement is that the folder is initialized as npm project with a <em>package.json</em> file. You can install multiple node packages in one line with npm.</p>
+
+<figure class="code">
+  <figcaption>Command Line</figcaption>
+
+<div class="highlight"><pre><code></code> npm install --save react react-dom
+</pre></div>
+
+</figure>
+
+<p className="it">Este enfoque se utiliza a menudo para agregar React a una aplicación existente.</p>
+
+<p>That approach is often used to add React to an existing application.</p>
+
+<p className="it">Por desgracia, eso no es todo. Tendrías que hacer frente a <a href="http://babeljs.io/">Babel</a> para que tu aplicaciónconsciente de JSX - la sintaxis React - ES6 y JavaScript. Babel transpiles tu código que los navegadores pueden  interpretar ES6 y JSX. No todos los navegadores son capaces de interpretar la sintaxis. La configuración incluye una gran cantidad de configuración y herramientas. podes ser abrumador para los principiantes React a molestar con toda la configuración.</p>
+
+<p>Unfortunately that’s not everything. You would have to deal with <a href="http://babeljs.io/">Babel</a> to make your application aware of JSX - the React syntax - and JavaScript ES6. Babel transpiles your code that browsers can interpret ES6 and JSX. Not all browsers are capable of interpreting the syntax. The setup includes a lot of configuration and tooling. It can be overwhelming for React beginners to bother with all the configuration.</p>
+
+<p className="it">Debido a esta razón, Facebook introdujo <em>crear una aplicación React</em> como un cero configuración React solución. El siguiente capítulo te mostrará cómo configurar tu aplicación.</p>
+
+<p>Because of this reason, Facebook introduced <em>create-react-app</em> as a zero-configuration React solution. The next chapter will show you how to setup your application.</p>
+
+<h4 id="leanpub-auto-exercises-2">Exercises:</h4>
+
+<ul>
+<li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/installation.html">instalaciones React</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/installation.html">React installations</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">ES6 Arrow Functions</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-es6-arrow-functions">ES6 Arrow Functions</h3>
+
+<p className="it">JavaScript ES6 introdujo las funciones de dirección. Una expresión de la función de flecha es más corta que una expresión de función.</p>
+
+<p>JavaScript ES6 introduced arrow functions. An arrow function expression is shorter than a function expression.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="c1">// function expression</code>
+<code class="kd">function</code> <code class="p">()</code> <code class="p">&#123;</code> <code class="p">...</code> <code class="p">&#125;</code><br></br>
+<br></br>
+<code class="c1">// arrow function expression</code><br></br>
+<code class="p">()</code> <code class="o">=&gt;</code> <code class="p">&#123;</code> <code class="p">...</code> <code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Pero hay que ser conscientes de tus funcionalidades. Uno de ellos es un comportamiento diferente con el <code>this</code> objeto. Una expresión función siempre define su propio <code>this</code> objeto. Las expresiones de función Flecha todavía tienen el <code>this</code> objeto del contexto circundante. No se confunda cuando se utiliza <code>this</code> en una función de la flecha.</p>
+
+<p>But you have to be aware of its functionalities. One of them is a different behavior with the <code>this</code> object. A function expression always defines its own <code>this</code> object. Arrow function expressions still have the <code>this</code> object of the enclosing context. Don’t get confused when using <code>this</code> in an arrow function.</p>
+
+<p className="it">Hay otro hecho valiosa acerca de las funciones de dirección en relación con el paréntesis. Se podes quitar el paréntesis cuando la función obtiene sólo un argumento, sino que tienen que mantenerlos cuando se pone múltiples argumentos.</p>
+
+<p>There is another valuable fact about arrow functions regarding the parenthesis. You can remove the parenthesis when the function gets only one argument, but have to keep them when it gets multiple arguments.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+<br></br>
+<div class="highlight"><pre><code></code><code class="c1">// allowed</code><br></br>
+<code class="nx">item</code> <code class="o">=&gt;</code> <code class="p">&#123;</code> <code class="p">...</code> <code class="p">&#125;</code><br></br>
+<br></br>
+<code class="c1">// allowed</code><br></br>
+<code class="p">(</code><code class="nx">item</code><code class="p">)</code> <code class="o">=&gt;</code> <code class="p">&#123;</code> <code class="p">...</code> <code class="p">&#125;</code>
+<br></br>
+<code class="c1">// not allowed</code><br></br>
+<code class="nx">item</code><code class="p">,</code> <code class="nx">key</code> <code class="o">=&gt;</code> <code class="p">&#123;</code> <code class="p">...</code> <code class="p">&#125;</code>
+<br></br>
+<code class="c1">// allowed</code><br></br>
+<code class="p">(</code><code class="nx">item</code><code class="p">,</code> <code class="nx">key</code><code class="p">)</code> <code class="o">=&gt;</code> <code class="p">&#123;</code> <code class="p">...</code> <code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Sin embargo, vamos a echar un vistazo a la <code>map</code> función. Se podes escribir de manera más concisa con una función de flecha ES6.</p>
+
+<p>However, let’s have a look at the <code>map</code> function. You can write it more concisely with an ES6 arrow function.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">&#123; list.map(item =&gt; &#123;<br></br>
+</code>  return (<br></br>
+    &lt;div key=&#123;item.objectID&#125;&gt;<br></br>
+      &lt;span&gt;<br></br>
+        &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;<br></br>
+      &lt;/span&gt;<br></br>
+      &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;<br></br>
+      &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;<br></br>
+      &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;<br></br>
+    &lt;/div&gt;<br></br>
+  );<br></br>
+&#125;)&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Además, podes quitar el <em>cuerpo del bloque</em> de la función de flecha ES6. En un <em>cuerpo concisa</em> rendimiento, implícito se une de este modo se podes quitar la instrucción de retorno. Eso va a ocurrir con más frecuencia en el libro, así que asegúrese de entender la diferencia entre un cuerpo y un cuerpo de bloque concisa.</p>
+
+<p>Additionally you can remove the <em>block body</em> of the ES6 arrow function. In a <em>concise body</em> an implicit return is attached thus you can remove the return statement. That will happen more often in the book, so be sure to understand the difference between a block body and a concise body.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">&#123; list.map(item =&gt;<br></br>
+</code>  &lt;div key=&#123;item.objectID&#125;&gt;<br></br>
+    &lt;span&gt;<br></br>
+      &lt;a href=&#123;item.url&#125;&gt;&#123;item.title&#125;&lt;/a&gt;<br></br>
+    &lt;/span&gt;<br></br>
+    &lt;span&gt;&#123;item.author&#125;&lt;/span&gt;<br></br>
+    &lt;span&gt;&#123;item.num_comments&#125;&lt;/span&gt;<br></br>
+    &lt;span&gt;&#123;item.points&#125;&lt;/span&gt;<br></br>
+  &lt;/div&gt;<br></br>
+<code class="uil">)&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Tu JSX parece más concisa y fácil de leer ahora. Se omite la declaración de la función, las llaves y la instrucción de retorno.</p>
+
+<p>Your JSX looks more concise and readable now. It omits the function statement, the curly braces and the return statement.</p>
+
+<h4 id="leanpub-auto-exercises-9">Exercises:</h4>
+
+<ul>
+<li className="it">leer más acerca de <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions">las funciones arrow de ES6</a>
+</li>
+  <li>read more about <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions">ES6 arrow functions</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

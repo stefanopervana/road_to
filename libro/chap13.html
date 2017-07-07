@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Introduction to JSX</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-introduction-to-jsx">Introduction to JSX</h3>
+
+<p className="it">Ahora se va a conocer JSX. Es la sintaxis en React. Como ya he mencionado antes, <em>crear una aplicación React</em> ya ha bootstrap una aplicación repetitivo. Todos los archivos vienen con implementaciones por defecto. Vamos a bucear en el código fuente.</p>
+
+<p>Now you will get to know JSX. It is the syntax in React. As I mentioned before, <em>create-react-app</em> has already bootstrapped a boilerplate application. All files come with default implementations. Let’s dive into the source code.</p>
+
+<p className="it">El único archivo que va a tocar en un principio será el <em>/ app.js src</em> archivo.</p>
+
+<p>The only file you will touch in the beginning will be the <em>src/App.js</em> file.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">React</code><code class="p">,</code> <code class="p">&#123;</code> <code class="nx">Component</code> <code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'react'</code><code class="p">;</code><br></br>
+<code class="kr">import</code> <code class="nx">logo</code> <code class="nx">from</code> <code class="s1">'./logo.svg'</code><code class="p">;</code><br></br>
+<code class="kr">import</code> <code class="s1">'./App.css'</code><code class="p">;</code><br></br>
+<br></br>
+<code class="kr">class</code> <code class="nx">App</code> <code class="kr">extends</code> <code class="nx">Component</code> <code class="p">&#123;</code><br></br>
+  <code class="nx">render</code><code class="p">()</code> <code class="p">&#123;</code><br></br>
+    <code class="k">return</code> <code class="p">(</code><br></br>
+      <code class="o">&lt;</code><code class="nx">div</code> <code class="nx">className</code><code class="o">=</code><code class="s2">"App"</code><code class="o">&gt;</code><br></br>
+        <code class="o">&lt;</code><code class="nx">div</code> <code class="nx">className</code><code class="o">=</code><code class="s2">"App-header"</code><code class="o">&gt;</code><br></br>
+          <code class="o">&lt;</code><code class="nx">img</code> <code class="nx">src</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">logo</code><code class="p">&#125;</code> <code class="nx">className</code><code class="o">=</code><code class="s2">"App-logo"</code> <code class="nx">alt</code><code class="o">=</code><code class="s2">"logo"</code> <code class="o">/&gt;</code><br></br>
+          <code class="o">&lt;</code><code class="nx">h2</code><code class="o">&gt;</code><code class="nx">Welcome</code> <code class="nx">to</code> <code class="nx">React</code><code class="o">&lt;</code><code class="err">/h2&gt;</code><br></br>
+        <code class="o">&lt;</code><code class="err">/div&gt;</code><br></br>
+        <code class="o">&lt;</code><code class="nx">p</code> <code class="nx">className</code><code class="o">=</code><code class="s2">"App-intro"</code><code class="o">&gt;</code><br></br>
+          <code class="nx">To</code> <code class="nx">get</code> <code class="nx">started</code><code class="p">,</code> <code class="nx">edit</code> <code class="o">&lt;</code><code class="nx">code</code><code class="o">&gt;</code><code class="nx">src</code><code class="o">/</code><code class="nx">App</code><code class="p">.</code><code class="nx">js</code><code class="o">&lt;</code><code class="err">/code&gt; and save to reload.</code><br></br>
+        <code class="o">&lt;</code><code class="err">/p&gt;</code><br></br>
+      <code class="o">&lt;</code><code class="err">/div&gt;</code><br></br>
+    <code class="p">);</code><br></br>
+  <code class="p">&#125;</code><br></br>
+<code class="p">&#125;</code><br></br>
+<br></br>
+<code class="kr">export</code> <code class="k">default</code> <code class="nx">App</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">No se deje conseguir confundido por las declaraciones de importación / exportación y declaración de la clase. Estas características ya están JavaScript ES6. Vamos a volver a los de un capítulo posterior.</p>
+
+<p>Don’t let yourself get confused by the import/export statements and class declaration. These features are already JavaScript ES6. We will revisit those in a later chapter.</p>
+
+<p className="it">En el archivo que tiene un <strong>componente de clase ES6</strong> con el nombre de la aplicación. Es una declaración de componentes. Básicamente después de haber declarado un componente, se podes utilizar como elemento de todas partes en tu aplicación. Se producirá un <strong>ejemplo</strong> de su <strong>componente</strong> o en otras palabras: el componente se crea una instancia.</p>
+
+<p>In the file you have an <strong>ES6 class component</strong> with the name App. It is a component declaration. Basically after you have declared a component, you can use it as element everywhere in your application. It will produce an <strong>instance</strong> of your <strong>component</strong> or in other words: the component gets instantiated.</p>
+
+<p className="it">El <strong>elemento</strong> que devuelve se especifica en el <code>render()</code> método. Los elementos son los componentes que están hechos. Es útil para entender las diferencias entre componentes, instancia y elemento.</p>
+
+<p>The <strong>element</strong> it returns is specified in the <code>render()</code> method. Elements are what components are made of. It is useful to understand the differences between component, instance and element.</p>
+
+<p className="it">Muy pronto se verá en que se utiliza el componente de aplicación. De lo contrario, no podría ver el resultado representado en el navegador, ¿verdad? El componente de aplicación es únicamente la declaración, pero no el uso. Se podría crear una instancia del componente en algún lugar en su JSX con <code>&lt;App /&gt;</code>.</p>
+
+<p>Pretty soon you will see where the App component is used. Otherwise you wouldn’t see the rendered output in the browser, would you? The App component is only the declaration, but not the usage. You would instantiate the component somewhere in your JSX with <code>&lt;App /&gt;</code>.</p>
+
+<p className="it">El contenido en el bloque de render se ve muy similar al HTML, pero es JSX. JSX te permite mezclar HTML y JavaScript. Es potente y confuso cuando estás acostumbrado a HTML plano. Es por eso que un buen punto de partida es usar HTML básico en su JSX. A continuación, podes empezar a incrustar expresiones de JavaScript en el medio mediante el uso de llaves.</p>
+
+<p>The content in the render block looks pretty similar to HTML, but it’s JSX. JSX allows you to mix HTML and JavaScript. It’s powerful yet confusing when you are used to plain HTML. That’s why a good starting point is to use basic HTML in your JSX. Next you can start to embed JavaScript expressions in between by using curly braces.</p>
+
+<p className="it">En primer lugar vamos a quitar todo el desorden en el archivo.</p>
+
+<p>First let’s remove all the clutter in the file.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+<br></br>
+<div class="highlight"><pre><code></code><code class="kr">import</code> <code class="nx">React</code><code class="p">,</code> <code class="p">&#123;</code> <code class="nx">Component</code> <code class="p">&#125;</code> <code class="nx">from</code> <code class="s1">'react'</code><code class="p">;</code><br></br>
+<code class="kr">import</code> <code class="s1">'./App.css'</code><code class="p">;</code><br></br>
+<br></br>
+<code class="kr">class</code> <code class="nx">App</code> <code class="kr">extends</code> <code class="nx">Component</code> <code class="p">&#123;</code><br></br>
+  <code class="nx">render</code><code class="p">()</code> <code class="p">&#123;</code><br></br>
+    <code class="k">return</code> <code class="p">(</code><br></br>
+      <code class="o">&lt;</code><code class="nx">div</code> <code class="nx">className</code><code class="o">=</code><code class="s2">"App"</code><code class="o">&gt;</code><br></br>
+        <code class="o">&lt;</code><code class="nx">h2</code><code class="o">&gt;</code><code class="nx">Welcome</code> <code class="nx">to</code> <code class="nx">React</code><code class="o">&lt;</code><code class="err">/h2&gt;</code><br></br>
+      <code class="o">&lt;</code><code class="err">/div&gt;</code><br></br>
+    <code class="p">);</code><br></br>
+  <code class="p">&#125;</code><br></br>
+<code class="p">&#125;</code><br></br>
+<br></br>
+<code class="kr">export</code> <code class="k">default</code> <code class="nx">App</code><code class="p">;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Ahora sólo regresa HTML sin JavaScript. Vamos a hacer el “Bienvenido React ” una variable. Una variable podes ser utilizado en su JSX.</p>
+
+<p>Now you only return HTML without JavaScript. Let’s make the “Welcome to React” a variable. A variable can be used in your JSX.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre>import React, &#123; Component &#125; from 'react';<br></br>
+import './App.css';<br></br>
+<br></br>
+class App extends Component &#123;<br></br>
+  render() &#123;<br></br>
+<code class="uil">    var helloWorld = 'Welcome to React';<br></br>
+</code>    return (<br></br>
+      &lt;div className="App"&gt;<br></br>
+<code class="uil">        &lt;h2&gt;&#123;helloWorld&#125;&lt;/h2&gt;<br></br>
+</code>      &lt;/div&gt;<br></br>
+    );<br></br>
+  &#125;<br></br>
+&#125;<br></br>
+<br></br>
+export default App;
+</pre></div>
+
+</figure>
+
+<p className="it">Debería funcionar cuando se inicia el programa desde la línea de comandos.</p>
+
+<p>It should work when you start your application on the command line.</p>
+
+<p className="it">Además Podes haber notado el <code>className</code> atributo. Refleja el nivel <code>class</code> de atributos en HTML. Debido a razones técnicas, JSX tuvo que sustituir a un puñado de atributos HTML internas. Podes encontrar todos los <a href="https://facebook.github.io/react/docs/dom-elements.html">atributos HTML admitidas en la documentación React</a>. En su manera de aprender React se encontrará con algunos atributos más JSX.</p>
+
+<p>Additionally you might have noticed the <code>className</code> attribute. It reflects the standard <code>class</code> attribute in HTML. Because of technical reasons, JSX had to replace a handful of internal HTML attributes. You can find all of the <a href="https://facebook.github.io/react/docs/dom-elements.html">supported HTML attributes in the React documentation</a>. On your way to learn React you will come across some more JSX attributes.</p>
+
+<h4 id="leanpub-auto-exercises-4">Exercises:</h4>
+
+<ul>
+  <li className="it">definir más variables y hacerlos en su JSX </li>
+  <li>define more variables and render them in your JSX
+    <ul>
+      <li className="it">utilizar un objeto complejo para representar un usuario con un primer nombre y apellido</li>
+      <li>use a complex object to represent an user with a first name and last name</li>
+    </ul>
+  </li>
+  <li className="it">leer más sobre <a href="https://facebook.github.io/react/docs/introducing-jsx.html">JSX</a> </li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/introducing-jsx.html">JSX</a>
+</li>
+  <li className="it">leer más sobre <a href="https://facebook.github.io/react/blog/2015/12/18/react-components-elements-and-instances.html">componentes React, elementos y las instancias</a> </li>
+  <li>read more about <a href="https://facebook.github.io/react/blog/2015/12/18/react-components-elements-and-instances.html">React components, elements and instances</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>

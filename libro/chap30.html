@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<title dir="ltr">Component Declarations</title>
+<link href="stylesheet.css" type="text/css" rel="stylesheet" />
+<meta charset="utf-8"/>
+</head>
+<body dir="ltr" class="kramdown">
+<div>
+<h3 id="leanpub-auto-component-declarations">Component Declarations</h3>
+
+<p className="it">A estas alturas ya tiene cuatro componentes de la clase ES6. Pero se podes hacer mejor. Déjeme introducir componentes funcionales sin estado como alternativa para los componentes de la clase ES6. Antes de que se refactorizar tus componentes, vamos a introducir los diferentes tipos de componentes.</p>
+
+<p>By now you have four ES6 class components. But you can do better. Let me introduce functional stateless components as alternative for ES6 class components. Before you will refactor your components, let’s introduce the different types of components.</p>
+
+<ul>
+  <li>
+<strong>Functional Stateless Components:</strong> These components are functions which get an input and return an output. The input is the props object. The output is a component instance. So far it is quite similar to an ES6 class component. However, functional stateless components are functions (functional) and they have no internal state (stateless). You cannot access the state with <code>this.state</code> because there is no <code>this</code> object. Additionally they have no lifecycle methods. You didn’t learn about lifecycle methods yet, but you already used two: <code>constructor()</code> and <code>render()</code>. Keep this fact about functional stateless components in mind, when you arrive at the lifecycle methods chapter later on.</li>
+  <li>
+<strong>ES6 Class Components:</strong> You already used this type of component declaration. In the class definition they extend from the React component. The <code>extend</code> hooks all the lifecycle methods - available in the React component API - to the component. As I mentioned, you already used two of them. Additionally you can store and manipulate state in ES6 class components.</li>
+  <li>
+<strong>React.createClass:</strong> The component declaration was used in older versions of React and still in JavaScript ES5 React applications. But <a href="https://facebook.github.io/react/blog/2015/03/10/react-v0.13.html">Facebook declared it as deprecated</a> in favor of ES6. They even added a <a href="https://facebook.github.io/react/blog/2017/04/07/react-v15.5.0.html">deprecation warning in version 15.5</a>. You will not use it in the book.</li>
+</ul>
+
+<p className="it">Pero cuándo utilizar componentes funcionales sin estado más de los componentes de clase ES6? Una regla de oro es usar componentes funcionales sin estado cuando no se necesita métodos estatales componente o componentes del ciclo de vida interna. Por lo general, se empieza a poner en práctica tus componentes como componentes funcionales sin estado. Una vez que necesita tener acceso a los métodos del estado o del ciclo de vida, lo que tiene que refactorizar a un componente de clase ES6.</p>
+
+<p>But when to use functional stateless components over ES6 class components? A rule of thumb is to use functional stateless components when you don’t need internal component state or component lifecycle methods. Usually you start to implement your components as functional stateless components. Once you need access to the state or lifecycle methods, you have to refactor it to an ES6 class component.</p>
+
+<p className="it">Volvamos a la aplicación. El componente de aplicación utiliza estado interno. Es por eso que tiene que permanecer como un componente de clase ES6. Pero los otros tres de tus componentes son de clase ES6 sin estado y sin métodos de ciclo de vida. Vamos a refactorizar juntos el componente de búsqueda de un componente funcional sin estado. La Mesa y botón del componente refactorización permanecerá como su ejercicio.</p>
+
+<p>Let’s get back to your application. The App component uses internal state. That’s why it has to stay as an ES6 class component. But the other three of your ES6 class components are stateless without lifecycle methods. Let’s refactor together the Search component to a stateless functional component. The Table and Button component refactoring will remain as your exercise.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">function Search(props) &#123;
+</code><code class="uil">  const &#123; value, onChange, children &#125; = props;
+</code><code class="uil">  return (
+</code><code class="uil">    &lt;form&gt;
+</code><code class="uil">      &#123;children&#125; &lt;input
+</code><code class="uil">        type="text"
+</code><code class="uil">        value=&#123;value&#125;
+</code><code class="uil">        onChange=&#123;onChange&#125;
+</code><code class="uil">      /&gt;
+</code><code class="uil">    &lt;/form&gt;
+</code><code class="uil">  );
+</code><code class="uil">&#125;
+</code></pre></div>
+
+</figure>
+
+<p className="it">Eso es básicamente la misma. Pero se podes hacer más sabia código en un componente sin estado funcional. Vos ya conoce la desestructuración ES6. Lo más recomendable es usarlo en la firma de la función a desestructurar los puntales.</p>
+
+<p>That’s basically it. But you can do more code wise in a functional stateless component. You already know the ES6 destructuring. The best practice is to use it in the function signature to destructure the props.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">function Search(&#123; value, onChange, children &#125;) &#123;
+</code>  return (
+    &lt;form&gt;
+      &#123;children&#125; &lt;input
+        type="text"
+        value=&#123;value&#125;
+        onChange=&#123;onChange&#125;
+      /&gt;
+    &lt;/form&gt;
+  );
+&#125;
+</pre></div>
+
+</figure>
+
+<p className="it">Pero podes mejorar. Vos ya sabe que las funciones de dirección ES6 te permiten mantener tus funciones concisa. Se podes quitar el cuerpo del bloque de la función. En un cuerpo concisa rendimiento, implícito se une de este modo se podes quitar la instrucción de retorno. Desde su componente sin estado funcional es una función, se podes mantener concisa también.</p>
+
+<p>But it can get better. You know already that ES6 arrow functions allow you to keep your functions concise. You can remove the block body of the function. In a concise body an implicit return is attached thus you can remove the return statement. Since your functional stateless component is a function, you can keep it concise as well.</p>
+
+<figure class="code">
+  <figcaption>src/App.js</figcaption>
+
+<div class="highlight"><pre><code class="uil">const Search = (&#123; value, onChange, children &#125;) =&gt;
+</code><code class="uil">  &lt;form&gt;
+</code><code class="uil">    &#123;children&#125; &lt;input
+</code><code class="uil">      type="text"
+</code><code class="uil">      value=&#123;value&#125;
+</code><code class="uil">      onChange=&#123;onChange&#125;
+</code><code class="uil">    /&gt;
+</code><code class="uil">  &lt;/form&gt;
+</code></pre></div>
+
+</figure>
+
+<p className="it">El último paso fue especialmente útil para hacer cumplir sólo para tener apoyos como entrada y un elemento como salida. Nada en el medio. Aún así, se podes <em>hacer algo</em> en el medio mediante el uso de un cuerpo de bloque en su función de flecha ES6.</p>
+
+<p>The last step was especially useful to enforce only to have props as input and an element as output. Nothing in between. Still, you could <em>do something</em> in between by using a block body in your ES6 arrow function.</p>
+
+<figure class="code">
+  <figcaption>Code Playground</figcaption>
+
+<div class="highlight"><pre><code></code><code class="kr">const</code> <code class="nx">Search</code> <code class="o">=</code> <code class="p">(&#123;</code> <code class="nx">value</code><code class="p">,</code> <code class="nx">onChange</code><code class="p">,</code> <code class="nx">children</code> <code class="p">&#125;)</code> <code class="o">=&gt;</code> <code class="p">&#123;</code>
+
+  <code class="c1">// do something</code>
+
+  <code class="k">return</code> <code class="p">(</code>
+    <code class="o">&lt;</code><code class="nx">form</code><code class="o">&gt;</code>
+      <code class="p">&#123;</code><code class="nx">children</code><code class="p">&#125;</code> <code class="o">&lt;</code><code class="nx">input</code>
+        <code class="nx">type</code><code class="o">=</code><code class="s2">"text"</code>
+        <code class="nx">value</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">value</code><code class="p">&#125;</code>
+        <code class="nx">onChange</code><code class="o">=</code><code class="p">&#123;</code><code class="nx">onChange</code><code class="p">&#125;</code>
+      <code class="o">/&gt;</code>
+    <code class="o">&lt;</code><code class="err">/form&gt;</code>
+  <code class="p">);</code>
+<code class="p">&#125;</code>
+</pre></div>
+
+</figure>
+
+<p className="it">Pero usted no lo necesita por ahora. Es por eso que se podes mantener la versión anterior sin el cuerpo del bloque.</p>
+
+<p>But you don’t need it for now. That’s why you can keep the previous version without the block body.</p>
+
+<p className="it">Ahora tenes un componente sin estado funcional de peso ligero. Una vez que se necesita el acceso a tus métodos de ciclo de vida del estado componente o internos, que te refactorearlo a un componente de clase ES6. Además hemos visto cómo JavaScript ES6 se podes utilizar en componentes React para hacerlos más elegante.</p>
+
+<p>Now you have one lightweight functional stateless component. Once you would need access to its internal component state or lifecycle methods, you would refactor it to an ES6 class component. In addition you saw how JavaScript ES6 can be used in React components to make them more elegant.</p>
+
+<h4 id="leanpub-auto-exercises-20">Exercises:</h4>
+
+<ul><li className="it">refactorizar el componente Tabla y Button a los apátridas componentes funcionales</li>
+  
+
+  <li>refactor the Table and Button component to stateless functional components</li>
+  <li className="it">leer más acerca de <a href="https://facebook.github.io/react/docs/components-and-props.html">los componentes de clase ES6 y componentes funcionales sin Estado</a>
+</li>
+  <li>read more about <a href="https://facebook.github.io/react/docs/components-and-props.html">ES6 class components and functional stateless components</a>
+</li>
+</ul>
+
+
+</div>
+</body>
+</html>
